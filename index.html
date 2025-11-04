@@ -138,13 +138,31 @@ right: 82px;
 opacity: var(--s4ImgOpacity);
 }
 
-/* S5 image LEFT */
-.s5-frame{
-top:96px; bottom:96px;
-left: 96px;
-right: calc(82px + 96px + 460px);
-opacity: var(--s5ImgOpacity);
-}
+<!-- SECTION 4 -->
+<figure class="frame s4-frame" aria-hidden="true">
+  <img id="s4-img" src="assets/section4.jpg" alt="">
+</figure>
+<section class="s4-wrap" id="s4-wrap">
+  <!-- your S4 content -->
+</section>
+
+<!-- === New full-bleed Mapbox section (mapA) === -->
+<figure class="frame mapA-frame" aria-hidden="true">
+  <div id="mapA"></div>
+</figure>
+<section class="mapA-wrap" id="mapA-wrap">
+  <!-- optional overlay text or scroll driver goes here -->
+</section>
+<!-- === End mapA section === -->
+
+<!-- SECTION 5 -->
+<figure class="frame s5-frame" aria-hidden="true">
+  <img id="s5-img" src="assets/section5.jpg" alt="">
+</figure>
+<section class="s5-wrap" id="s5-wrap">
+  <!-- your S5 content -->
+</section>
+
 
 /* gallery-B-Center (center media area) */
 .galB-center-frame{
@@ -464,7 +482,7 @@ margin:80px 0 80px 0;
 .galA-left-frame, .galB-center-frame, .galC-left-frame {
 left:20px; right:20px;
 }
-.frame.s3-frame, .frame.s8-frame, .frame.s12-frame, .frame.s15-frame {
+.frame.s3-frame, .frame.s8-frame, .frame.s12-frame, .frame.s15-frame, .frame.mapA-frame {
 left:0; right:0; top:0; bottom:0;
 }
 }
@@ -559,6 +577,18 @@ left:0; right:0; top:0; bottom:0;
     left: 50% !important;
     transform: translateX(-50%) !important;
     padding: 0 20px !important;
+}
+
+/* Full-bleed frames (edge to edge) */
+.frame.s3-frame,
+.frame.s8-frame,
+.frame.s12-frame,
+.frame.s15-frame,
+.frame.mapA-frame {
+  left: 0 !important;
+  right: 0 !important;
+  top: 0 !important;
+  bottom: 0 !important;
 }
 }
 
@@ -681,6 +711,13 @@ Fusce quis magna elit. Aenean mi tellus, fermentum eu pharetra id, fermentum non
 </div>
 </div>
 </div>
+<!-- === New full-bleed Mapbox section (mapA) === -->
+<figure class="frame mapA-frame" aria-hidden="true">
+  <div id="mapA"></div>
+</figure>
+<section class="mapA-wrap" id="mapA-wrap"></section>
+<!-- === End mapA section === -->
+
 
 <section class="s5-wrap" id="s5-wrap"></section>
 <div class="s5-overlay">
@@ -1166,6 +1203,28 @@ addEventListener('scroll', update, {passive:true});
 init();
 })();
 </script>
+
+<!-- Mapbox GL JS -->
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.0.0/mapbox-gl.js"></script>
+<link href="https://api.mapbox.com/mapbox-gl-js/v3.0.0/mapbox-gl.css" rel="stylesheet" />
+
+<script>
+mapboxgl.accessToken = 'pk.eyJ1Ijoia2F2bmkiLCJhIjoiY2s5YjBqNGY1MGV4aTNobnk0amJncWZweCJ9.gZK_r9CYmb6ZN_mZVmgjNg';
+
+const mapA = new mapboxgl.Map({
+  container: 'mapA',
+  style: 'mapbox://styles/kavni/cmhkpt4uz00et01pjheur1zc1', // Civic Green style
+  center: [34.770081, 32.079031],
+  zoom: 15.99,
+  pitch: 0,
+  bearing: 0,
+  interactive: true
+});
+
+mapA.addControl(new mapboxgl.NavigationControl({ showCompass: false }), 'top-right');
+</script>
+
+
 </body>
 </html>
 

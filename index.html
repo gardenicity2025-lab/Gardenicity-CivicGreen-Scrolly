@@ -1,12 +1,15 @@
+4-11-Gardenicity-CivicGreen-Scrolly
 <!doctype html>
 <html lang="en" data-baseline="stable-2025-10-01__rails-460px__galC-6-only">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Gardenicity — Hero → S1 → S2 → gallery-A-Left → S3 → S4 → S5 → gallery-B-Center → S8 → S9 → gallery-C-Right → S11 → S12 → S13 → S14 → S15</title>
-<style>
+<title>Gardenicity — Civic Green (with Mapbox Section)</title>
 
-/* ===== Base ===== */
+<!-- Mapbox GL -->
+<link href="https://api.mapbox.com/mapbox-gl-js/v3.0.0/mapbox-gl.css" rel="stylesheet" />
+
+<style>
 html,body{
 margin:0; padding:0; height:100%;
 background:#f8fbf2; color:#fff;
@@ -138,31 +141,29 @@ right: 82px;
 opacity: var(--s4ImgOpacity);
 }
 
-<!-- SECTION 4 -->
-<figure class="frame s4-frame" aria-hidden="true">
-  <img id="s4-img" src="assets/section4.jpg" alt="">
-</figure>
-<section class="s4-wrap" id="s4-wrap">
-  <!-- your S4 content -->
-</section>
+/* ===== mapA full-bleed (new section after S4) ===== */
+.mapA-frame{
+  top:0; right:0; bottom:0; left:0;
+  opacity:1;
+}
+.frame.mapA-frame>#mapA{
+  position:absolute;
+  top:0; left:0;
+  width:100%; height:100%;
+}
+.mapA-wrap{
+  position:relative;
+  height:280vh;
+  background:#f8fbf2;
+}
 
-<!-- === New full-bleed Mapbox section (mapA) === -->
-<figure class="frame mapA-frame" aria-hidden="true">
-  <div id="mapA"></div>
-</figure>
-<section class="mapA-wrap" id="mapA-wrap">
-  <!-- optional overlay text or scroll driver goes here -->
-</section>
-<!-- === End mapA section === -->
-
-<!-- SECTION 5 -->
-<figure class="frame s5-frame" aria-hidden="true">
-  <img id="s5-img" src="assets/section5.jpg" alt="">
-</figure>
-<section class="s5-wrap" id="s5-wrap">
-  <!-- your S5 content -->
-</section>
-
+/* S5 image LEFT */
+.s5-frame{
+top:96px; bottom:96px;
+left: 96px;
+right: calc(82px + 96px + 460px);
+opacity: var(--s5ImgOpacity);
+}
 
 /* gallery-B-Center (center media area) */
 .galB-center-frame{
@@ -486,11 +487,11 @@ left:20px; right:20px;
 left:0; right:0; top:0; bottom:0;
 }
 }
-/*
-=====================================================
-    TABLET RESPONSIVE (min-width:601px and max-width:1023px) - FINAL FIXES + DYNAMIC HERO TEXT
-=====================================================
-*/
+
+/* =====================================================
+    TABLET RESPONSIVE (min-width:601px and max-width:1023px)
+    - FINAL FIXES + DYNAMIC HERO TEXT
+===================================================== */
 @media (min-width:601px) and (max-width:1023px) {
 
 /* Hero Text Scaling (New Addition) */
@@ -579,39 +580,38 @@ left:0; right:0; top:0; bottom:0;
     padding: 0 20px !important;
 }
 
-/* Full-bleed frames (edge to edge) */
+/* 6. Full-bleed frames (edge-to-edge on tablet, incl. mapA) */
 .frame.s3-frame,
 .frame.s8-frame,
 .frame.s12-frame,
 .frame.s15-frame,
 .frame.mapA-frame {
-  left: 0 !important;
-  right: 0 !important;
-  top: 0 !important;
-  bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    top: 0 !important;
+    bottom: 0 !important;
 }
 }
-
 </style>
 </head>
 <body>
 <div class="hero-fixed" id="hero">
-<div class="hero-bg" aria-hidden="true"></div>
-<div class="hero-media" id="hero-media">
-<div class="col" id="hero-col">
-<h1 class="hero-title" id="hero-title">
-<span class="line">Gardenicity</span>
-<span class="line">Civic Green</span>
-</h1>
-<nav class="hero-links" id="hero-links" aria-label="Primary">
-<a href="https://www.megama.net">What Did Geddes See</a>
-<a href="https://www.megama.net">Growth</a>
-<a href="https://www.megama.net">Sustenance</a>
-<a href="https://www.megama.net">Leafy SDGs</a>
-<a href="https://www.megama.net">EN/עב</a>
-</nav>
-</div>
-</div>
+  <div class="hero-bg" aria-hidden="true"></div>
+  <div class="hero-media" id="hero-media">
+    <div class="col" id="hero-col">
+      <h1 class="hero-title" id="hero-title">
+        <span class="line">Gardenicity</span>
+        <span class="line">Civic Green</span>
+      </h1>
+      <nav class="hero-links" id="hero-links" aria-label="Primary">
+        <a href="https://www.megama.net">What Did Geddes See</a>
+        <a href="https://www.megama.net">Growth</a>
+        <a href="https://www.megama.net">Sustenance</a>
+        <a href="https://www.megama.net">Leafy SDGs</a>
+        <a href="https://www.megama.net">EN/עב</a>
+      </nav>
+    </div>
+  </div>
 </div>
 
 <section class="driver" id="driver"></section>
@@ -628,6 +628,14 @@ left:0; right:0; top:0; bottom:0;
 
 <figure class="frame s3-frame" aria-hidden="true"><img id="s3-img" src="assets/section3.jpg" alt=""></figure>
 <figure class="frame s4-frame" aria-hidden="true"><img id="s4-img" src="assets/section4.jpg" alt=""></figure>
+
+<!-- === New full-bleed Mapbox section (mapA) === -->
+<figure class="frame mapA-frame" aria-hidden="true">
+  <div id="mapA"></div>
+</figure>
+<section class="mapA-wrap" id="mapA-wrap"></section>
+<!-- === End mapA section === -->
+
 <figure class="frame s5-frame" aria-hidden="true"><img id="s5-img" src="assets/section5.jpg" alt=""></figure>
 
 <figure class="frame galB-center-frame" aria-hidden="true">
@@ -711,13 +719,6 @@ Fusce quis magna elit. Aenean mi tellus, fermentum eu pharetra id, fermentum non
 </div>
 </div>
 </div>
-<!-- === New full-bleed Mapbox section (mapA) === -->
-<figure class="frame mapA-frame" aria-hidden="true">
-  <div id="mapA"></div>
-</figure>
-<section class="mapA-wrap" id="mapA-wrap"></section>
-<!-- === End mapA section === -->
-
 
 <section class="s5-wrap" id="s5-wrap"></section>
 <div class="s5-overlay">
@@ -1204,26 +1205,20 @@ init();
 })();
 </script>
 
-<!-- Mapbox GL JS -->
 <script src="https://api.mapbox.com/mapbox-gl-js/v3.0.0/mapbox-gl.js"></script>
-<link href="https://api.mapbox.com/mapbox-gl-js/v3.0.0/mapbox-gl.css" rel="stylesheet" />
-
 <script>
-mapboxgl.accessToken = 'pk.eyJ1Ijoia2F2bmkiLCJhIjoiY2s5YjBqNGY1MGV4aTNobnk0amJncWZweCJ9.gZK_r9CYmb6ZN_mZVmgjNg';
-
-const mapA = new mapboxgl.Map({
-  container: 'mapA',
-  style: 'mapbox://styles/kavni/cmhkpt4uz00et01pjheur1zc1', // Civic Green style
-  center: [34.770081, 32.079031],
-  zoom: 15.99,
-  pitch: 0,
-  bearing: 0,
-  interactive: true
+mapboxgl.accessToken='pk.eyJ1Ijoia2F2bmkiLCJhIjoiY2s5YjBqNGY1MGV4aTNobnk0amJncWZweCJ9.gZK_r9CYmb6ZN_mZVmgjNg';
+const mapA=new mapboxgl.Map({
+  container:'mapA',
+  style:'mapbox://styles/kavni/cmhkpt4uz00et01pjheur1zc1',
+  center:[34.770081,32.079031],
+  zoom:15.99,
+  pitch:0,
+  bearing:0,
+  interactive:true
 });
-
-mapA.addControl(new mapboxgl.NavigationControl({ showCompass: false }), 'top-right');
+mapA.addControl(new mapboxgl.NavigationControl({showCompass:false}),'top-right');
 </script>
-
 
 </body>
 </html>

@@ -1,3 +1,4 @@
+4-11-Gardenicity-CivicGreen-Scrolly+Map
 <!doctype html>
 <html lang="en" data-baseline="stable-2025-10-01__rails-460px__galC-6-only">
 <head>
@@ -140,25 +141,27 @@ right: 82px;
 opacity: var(--s4ImgOpacity);
 }
 
-/* ===== mapA full-bleed (fixed like other frames) ===== */
+/* ===== mapA full-bleed (isolated between S4 and S5) ===== */
 .mapA-frame {
-  position: fixed !important;   /* must be fixed like all other .frame sections */
-  inset: 0;                     /* shorthand for top/right/bottom/left:0 */
-  z-index: 2;                   /* appear above S4 background */
+  position: relative !important;   /* participate in normal scroll flow */
+  width: 100%;
+  height: 100vh;                   /* fills the viewport but scrolls naturally */
+  z-index: 2;                      /* above S4, below overlays */
   opacity: 1;
-  pointer-events: none;         /* default off */
 }
+
 .frame.mapA-frame > #mapA {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  pointer-events: auto !important; /* restore zoom + pan */
+  pointer-events: auto !important; /* allow zoom/pan */
   cursor: grab;
 }
+
 .mapA-wrap {
   position: relative;
-  height: 280vh;                /* same vertical pacing as other sections */
+  height: 280vh;                   /* controls scroll pacing */
   background: #f8fbf2;
 }
 

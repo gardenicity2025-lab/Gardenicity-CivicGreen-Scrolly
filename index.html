@@ -144,52 +144,13 @@ opacity: var(--s4ImgOpacity);
 .sMapA-frame{
     top:0; right:0; bottom:0; left:0;
     opacity:var(--sMapAImgOpacity);
-    z-index: 1; 
 }
 .frame.sMapA-frame>iframe{
     width:100%; height:100%;
     object-fit:cover !important; object-position:center;
-    pointer-events: none; /* CRITICAL: Default to 'none' to allow page scroll-through */
-}
-/* Overlay to capture the click and prompt the user */
-.map-overlay {
-    position: absolute;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.4);
-    color: white;
-    display: flex;
-    flex-direction: column; /* Added to center text/small text */
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    text-align: center;
-    font-size: 24px;
-    transition: opacity 0.3s;
-    pointer-events: auto; /* CRITICAL: Must be 'auto' to capture the initial click */
-}
-.map-overlay.hidden {
-    pointer-events: none;
-    opacity: 0;
-}
-/* Button to exit map interaction and resume story */
-.exit-map-btn {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    padding: 10px 20px;
-    background: #00A86B;
-    color: white;
-    border: none;
-    cursor: pointer;
-    font-size: 16px;
-    z-index: 10;
-    opacity: 0; /* Hidden by default */
-    pointer-events: none; /* Hidden by default */
-    transition: opacity 0.3s;
-}
-.exit-map-btn.visible {
-    opacity: 1;
-    pointer-events: auto;
+    /* Removed: transform: scale(var(--sMapAScale)); */
+    /* Removed: will-change: transform; */
+    pointer-events: auto; /* Ensures map interaction is possible */
 }
 
 /* S5 image LEFT */
@@ -644,15 +605,106 @@ left:0 !important; right:0 !important;
 <figure class="frame s3-frame" aria-hidden="true"><img id="s3-img" src="assets/section3.jpg" alt=""></figure>
 <figure class="frame s4-frame" aria-hidden="true"><img id="s4-img" src="assets/section4.jpg" alt=""></figure>
 
-<figure class="frame sMapA-frame" aria-hidden="true" id="map-frame-container">
-    <iframe id="sMapA-map" src="https://api.mapbox.com/styles/v1/kavni/cmhkpt4uz00et01pjheur1zc1.html?title=false&access_token=pk.eyJ1Ijoia2F2bmkiLCJhIjoiY2s5YjBqNGY1MGV4aTNobnk0amJncWZweCJ9.gZK_r9CYmb6ZN_mZVmgjNg&zoomwheel=true#15.99/32.079031/34.770081" title="Gardenicity-Geddes-Civic-Green" style="border:none; width:100%; height:100%;" allowfullscreen></iframe>
-    
-    <div class="map-overlay" id="map-overlay">
-        <p>Click here to interact with the map (Pan/Zoom)<br><small>Scroll to continue the story.</small></p>
-    </div>
-    
-    <button class="exit-map-btn" id="exit-map-btn">Exit Map Interaction</button>
+<figure class="frame sMapA-frame" aria-hidden="true">
+    <iframe id="sMapA-map" src="https://api.mapbox.com/styles/v1/kavni/cmhkpt4uz00et01pjheur1zc1.html?title=false&access_token=pk.eyJ1Ijoia2F2bmkiLCJhIjoiY2s5YjBqNGY1MGV4aTNobnk0amJncWZweCJ9.gZK_r9CYmb6ZN_mZVmgjNg&zoomwheel=true#15.99/32.079031/34.770081" title="MapA" style="border:none; width:100%; height:100%;"></iframe>
 </figure>
+<figure class="frame s5-frame" aria-hidden="true"><img id="s5-img" src="assets/section5.jpg" alt=""></figure>
+
+<figure class="frame galB-center-frame" aria-hidden="true">
+<img id="galB-img0" src="assets/gallery-B.jpg" alt="">
+<img id="galB-img1" src="assets/gallery-B1.jpg" alt="">
+<img id="galB-img2" src="assets/gallery-B2.jpg" alt="">
+<img id="galB-img3" src="assets/gallery-B3.jpg" alt="">
+<img id="galB-img4" src="assets/gallery-B4.jpg" alt="">
+</figure>
+
+<figure class="frame s8-frame" aria-hidden="true">
+<img id="s8-img" src="assets/section8.jpg" alt="">
+</figure>
+
+<figure class="frame s9-frame" aria-hidden="true"><img id="s9-img" src="assets/section9.jpg" alt=""></figure>
+
+<figure class="frame galC-left-frame" aria-hidden="true">
+<img id="galC-img0" src="assets/gallery-C.jpg" alt="">
+<img id="galC-img1" src="assets/gallery-C1.jpg" alt="">
+<img id="galC-img2" src="assets/gallery-C2.jpg" alt="">
+<img id="galC-img3" src="assets/gallery-C3.jpg" alt="">
+<img id="galC-img4" src="assets/gallery-C4.jpg" alt="">
+<img id="galC-img5" src="assets/gallery-C5.jpg" alt="">
+</figure>
+
+<figure class="frame s11-frame" aria-hidden="true"><img id="s11-img" src="assets/section11.jpg" alt=""></figure>
+
+<figure class="frame s12-frame" aria-hidden="true">
+<img id="s12-img" src="assets/section12.jpg" alt="">
+</figure>
+
+<figure class="frame s13-frame" aria-hidden="true"><img id="s13-img" src="assets/section13.jpg" alt=""></figure>
+
+<figure class="frame s14-frame" aria-hidden="true"><img id="s14-img" src="assets/section14.jpg" alt=""></figure>
+
+<figure class="frame s15-frame" aria-hidden="true">
+<img id="s15-img" src="assets/section15.jpg" alt="">
+</figure>
+
+<section class="s1-wrap" id="s1-wrap"></section>
+<div class="s1-overlay">
+<div class="s1-rail">
+<div class="s1-text" id="s1-text">
+<p><strong>HOURS AFTER MY</strong> mother took her last breath on earth…</p>
+<p>After we opened the windows to let the spirits out…</p>
+<p>After we lit incense stick after incense stick…</p>
+<p>After we watched MMA fighters on TV in the basement…</p>
+<p>And the smoke kept rising. The chain must not be broken. **\*Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+Aliquam varius, metus nec tincidunt tincidunt, nunc erat tincidunt sapien, vel laoreet lacus nisi eget justo. Nullam ut placerat odio.
+Nulla vitae eros nec mi rutrum eleifend at nec dui. Duis ultricies consequat lobortis.
+Fusce a aliquam lorem, ac lacinia est. Praesent rutrum odio eget tellus mattis, at malesuada lorem dapibus.
+Pellentesque accumsan dui a lectus porttitor vestibulum. Nam venenatis urna elit, at condimentum eros elementum interdum. Proin sed semper nulla.
+Mauris placerat non dui at pretium. Ut aliquam tellus ipsum, non porta ex congue a.
+Vestibulum molestie egestas tellus, vitae tincidunt nibh mollis nec.
+Fusce quis magna elit. Aenean mi tellus, fermentum eu pharetra id, fermentum non turpis. **\*</p>
+</div>
+</div>
+</div>
+
+<section class="s2-wrap" id="s2-wrap"></section>
+<div class="s2-overlay">
+<div class="s2-rail">
+<div class="s2-text" id="s2-text">
+<p><strong>SECTION TWO</strong> opens as the previous memory fades…</p>
+<p>Now the perspective widens to a new frame…</p>
+<p>The city’s edge meets the garden…</p>
+<p>We follow the lines of growth and care…</p>
+<p>And learn how places hold time. **\*Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+Aliquam varius, metus nec tincidunt tincidunt, nunc erat tincidunt sapien, vel laoreet lacus nisi eget justo. Nullam ut placerat odio.
+Nulla vitae eros nec mi rutrum eleifend at nec dui. Duis ultricies consequat lobortis.
+Fusce a aliquam lorem, ac lacinia est. Praesent rutrum odio eget tellus mattis, at malesuada lorem dapibus.
+Pellentesque accumsan dui a lectus porttitor vestibulum. Nam venenatis urna elit, at condimentum eros elementum interdum. Proin sed semper nulla.
+Mauris placerat non dui at pretium. Ut aliquam tellus ipsum, non porta ex congue a.
+Vestibulum molestie egestas tellus, vitae tincidunt nibh mollis nec.
+Fusce quis magna elit. Aenean mi tellus, fermentum eu pharetra id, fermentum non turpis. **\*</p>
+</div>
+</div>
+</div>
+
+<section class="galA-left-wrap" id="galA-wrap"></section>
+
+<section class="s3-wrap" id="s3-wrap"></section>
+
+<section class="s4-wrap" id="s4-wrap"></section>
+<div class="s4-overlay">
+<div class="s4-rail">
+<div class="s4-text" id="s4-text">
+<p><strong>SECTION FOUR</strong> returns to the tight frame…</p>
+<p>Left-rail narration continues the thread…</p>
+<p>The horizontal image sits steady at right…</p>
+<p>Margins and rhythm match Section One…</p>
+<p>And the cycle of views goes on.</p>
+</div>
+</div>
+</div>
+
+<section class="sMapA-wrap" id="sMapA-wrap"></section>
 <section class="s5-wrap" id="s5-wrap"></section>
 <div class="s5-overlay">
 <div class="s5-rail">
@@ -865,44 +917,6 @@ const s15Img = document.getElementById('s15-img');
 function markS15Ready(){ root.style.setProperty('--s15Ready','1'); }
 if (s15Img && s15Img.complete && s15Img.naturalWidth > 0) markS15Ready();
 else if (s15Img) s15Img.addEventListener('load', markS15Ready, { once:true });
-
-
-/* --- NEW MAP INTERACTION HANDLERS --- */
-const sMapAFrame = document.getElementById('map-frame-container');
-const sMapAIframe = document.getElementById('sMapA-map');
-const mapOverlay = document.getElementById('map-overlay');
-const exitMapBtn = document.getElementById('exit-map-btn');
-
-function enableMapInteraction() {
-    // 1. Give control to the map iframe
-    sMapAIframe.style.pointerEvents = 'auto';
-    // 2. Hide the overlay
-    mapOverlay.classList.add('hidden');
-    // 3. Show the exit button
-    exitMapBtn.classList.add('visible');
-    // 4. Temporarily disable page scrolling (locks the view on the map)
-    document.body.style.overflow = 'hidden';
-}
-
-function disableMapInteraction() {
-    // 1. Take control back to allow page scroll through the iframe
-    sMapAIframe.style.pointerEvents = 'none';
-    // 2. Show the overlay
-    mapOverlay.classList.remove('hidden');
-    // 3. Hide the exit button
-    exitMapBtn.classList.remove('visible');
-    // 4. Re-enable page scrolling
-    document.body.style.overflow = '';
-}
-
-// 5. Attach listeners
-if (mapOverlay) {
-    mapOverlay.addEventListener('click', enableMapInteraction);
-}
-if (exitMapBtn) {
-    exitMapBtn.addEventListener('click', disableMapInteraction);
-}
-/* ------------------------------------- */
 
 
 function update(){

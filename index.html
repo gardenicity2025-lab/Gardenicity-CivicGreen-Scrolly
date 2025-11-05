@@ -80,8 +80,6 @@ display:flex; align-items:flex-end; justify-content:flex-start; overflow:hidden;
 .hero-links a:hover,.hero-links a:focus-visible{ color:#00A86B; }
 .driver{ height:200vh; }
 
-/* REMOVED: body.scroll-locked CSS block to prevent global scrolling issues */
-
 /* ===== PINNED FRAMES (UNCHANGED) ===== */
 figure.frame{ margin:0; }
 .frame{
@@ -153,6 +151,12 @@ opacity: var(--s4ImgOpacity);
     object-fit:cover !important; object-position:center;
     pointer-events: none; /* CRITICAL: Default to 'none' to allow page scroll-through */
 }
+
+/* NEW: Class to force iframe interaction when active */
+.sMapA-frame.map-is-active > iframe {
+    pointer-events: auto !important; /* Forces the iframe to be interactive */
+}
+
 /* Overlay to capture the click (NOW TRANSPARENT/INVISIBLE) */
 .map-overlay {
     position: absolute;
@@ -621,7 +625,8 @@ left:0 !important; right:0 !important;
 
 <section class="driver" id="driver"></section>
 
-<figure class="frame s1-frame" aria-hidden="true"><img id="s1-img" src="assets/section1.jpg" alt=""></figure>
+<figure class="frame s1-frame" aria-hidden="true"><img id="s1-img" src="assets/section1.jpg" alt="">
+<div class="s1-overlay">...</div></figure>
 <section class="s1-wrap" id="s1-wrap"></section>
 <div class="s1-overlay">
 <div class="s1-rail">
@@ -675,7 +680,7 @@ left:0 !important; right:0 !important;
 </div>
 
 <figure class="frame sMapA-frame" aria-hidden="true" id="map-frame-container">
-    <iframe id="sMapA-map" src="https://api.mapbox.com/styles/v1/kavni/cmhkpt4uz00et01pjheur1zc1.html?title=false&access_token=pk.eyJ1Ijoia2F2bmkiLCJhIjoiY2s5YjBqNGY1MGV4aTNobnk0amJncWZweCJ9.gZK_r9CYmb6ZN_mZVmgjNg&zoomwheel=true#15.99/32.079031/34.770081" title="Gardenicity-Geddes-Civic-Green" style="border:none; width:100%; height:100%;" allowfullscreen></iframe>
+    <iframe id="sMapA-map" src="https://api.mapbox.com/styles/v1/kavni/cmhkpt4uz00et01pjheur1zc1.html?title=false&access_token=pk.eyJ1Ijoia2F2bmkiLCJhIjoiY2s5YjBqNGY1MGV4aTNobnk0amJncWZweCJ9.gZK_r9CYmb6ZN_mZVmgjNg&zoomwheel=true#15.99/32.079031/34.770081" title="Gardenicity-Geddes-Civic-Green" style="border:none; width:100%; height:100%;" allowfullscreen allow="fullscreen"></iframe>
     
     <div class="map-overlay" id="map-overlay">
         </div>
@@ -921,36 +926,42 @@ if (s15Img && s15Img.complete && s15Img.naturalWidth > 0) markS15Ready();
 else if (s15Img) s15Img.addEventListener('load', markS15Ready, { once:true });
 
 
-/* --- NEW MAP INTERACTION HANDLERS (FIXED: Use direct overflow style) --- */
+/* --- NEW MAP INTERACTION HANDLERS (FIXED: Use CSS class for pointer-events) --- */
 
 function enableMapInteraction() {
-    // Get the elements right when the function is called
-    const sMapAIframe = document.getElementById('sMapA-map');
+    // Get the elements
+    const sMapAIframeContainer = document.getElementById('map-frame-container'); // The figure
     const mapOverlay = document.getElementById('map-overlay');
     const exitMapBtn = document.getElementById('exit-map-btn');
     
-    // Check if the body is already locked (optional check, but good practice)
+    // Check if the body is already locked
     if (document.body.style.overflow === 'hidden') return;
 
-    if (sMapAIframe) sMapAIframe.style.pointerEvents = 'auto';
+    // CRITICAL FIX: Add a class to enable interaction on the iframe via CSS
+    if (sMapAIframeContainer) sMapAIframeContainer.classList.add('map-is-active');
+
+    // Hide the overlay and show the exit button
     if (mapOverlay) mapOverlay.classList.add('hidden');
     if (exitMapBtn) exitMapBtn.classList.add('visible');
     
-    // CRITICAL FIX: Lock scroll by setting overflow style directly
+    // Lock scroll by setting overflow style directly
     document.body.style.overflow = 'hidden';
 }
 
 function disableMapInteraction() {
-    // Get the elements right when the function is called
-    const sMapAIframe = document.getElementById('sMapA-map');
+    // Get the elements
+    const sMapAIframeContainer = document.getElementById('map-frame-container');
     const mapOverlay = document.getElementById('map-overlay');
     const exitMapBtn = document.getElementById('exit-map-btn');
     
-    if (sMapAIframe) sMapAIframe.style.pointerEvents = 'none';
+    // CRITICAL FIX: Remove the class to disable interaction on the iframe via CSS
+    if (sMapAIframeContainer) sMapAIframeContainer.classList.remove('map-is-active');
+
+    // Show the overlay and hide the exit button
     if (mapOverlay) mapOverlay.classList.remove('hidden');
     if (exitMapBtn) exitMapBtn.classList.remove('visible');
     
-    // CRITICAL FIX: Unlock scroll by resetting overflow style
+    // Unlock scroll by resetting overflow style
     document.body.style.overflow = '';
 }
 /* ----------------------------------------------- */
@@ -981,7 +992,7 @@ const galC=progressOf(galCWrap);
 const s11=progressOf(s11Wrap);
 const s12=progressOf(s12Wrap);
 const s13=progressOf(s13Wrap);
-const s14=progressOf(s14Wrap); // <--- TYPO FIX: Changed s14-wrap to s14Wrap
+const s14=progressOf(s14Wrap);
 const s15=progressOf(s15Wrap);
 
 root.style.setProperty('--s1',s1.toFixed(3));

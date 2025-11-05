@@ -1,10 +1,9 @@
-4-11-Gardenicity-CivicGreen-Scrolly
 <!doctype html>
 <html lang="en" data-baseline="stable-2025-10-01__rails-460px__galC-6-only">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Gardenicity — Hero → S1 → S2 → gallery-A-Left → S3 → S4 → S5 → gallery-B-Center → S8 → S9 → gallery-C-Right → S11 → S12 → S13 → S14 → S15</title>
+<title>Gardenicity — Hero → S1 → S2 → gallery-A-Left → S3 → S4 → MapA → S5 → gallery-B-Center → S8 → S9 → gallery-C-Right → S11 → S12 → S13 → S14 → S15</title>
 <style>
 
 /* ===== Base ===== */
@@ -28,6 +27,8 @@ font-family:"Acumin Pro",system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial
 --s3:0; --s3ImgOpacity:0; --s3Scale:1;
 /* S4 */
 --s4:0; --s4Overlay:0; --s4Y:0px; --s4ImgOpacity:0;
+/* NEW MAP SECTION */
+--sMapA:0; --sMapAImgOpacity:0; --sMapAScale:1;
 /* S5 */
 --s5:0; --s5Overlay:0; --s5Y:0px; --s5ImgOpacity:0;
 /* gallery-B-Center */
@@ -54,7 +55,7 @@ font-family:"Acumin Pro",system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial
 --s15:0; --s15Overlay:0; --s15Y:0px; --s15ImgOpacity:0; --s15Scale:1; --s15Ready:0;
 }
 
-/* ===== HERO ===== */
+/* ===== HERO (unchanged) ===== */
 .hero-fixed{
 position:fixed; inset:0; z-index:3;
 opacity:var(--heroAlpha);
@@ -79,7 +80,7 @@ display:flex; align-items:flex-end; justify-content:flex-start; overflow:hidden;
 .hero-links a:hover,.hero-links a:focus-visible{ color:#00A86B; }
 .driver{ height:200vh; }
 
-/* ===== PINNED FRAMES ===== */
+/* ===== PINNED FRAMES (unchanged before S4) ===== */
 figure.frame{ margin:0; }
 .frame{
 position:fixed; z-index:1; pointer-events:none;
@@ -139,6 +140,20 @@ right: 82px;
 opacity: var(--s4ImgOpacity);
 }
 
+/* MapA full-bleed */
+.sMapA-frame{
+    top:0; right:0; bottom:0; left:0;
+    opacity:var(--sMapAImgOpacity);
+}
+.frame.sMapA-frame>iframe{
+    width:100%; height:100%;
+    object-fit:cover !important; object-position:center;
+    transform: scale(var(--sMapAScale));
+    transform-origin: center center;
+    will-change: transform;
+    pointer-events: auto; /* Enables map interaction */
+}
+
 /* S5 image LEFT */
 .s5-frame{
 top:96px; bottom:96px;
@@ -147,7 +162,7 @@ right: calc(82px + 96px + 460px);
 opacity: var(--s5ImgOpacity);
 }
 
-/* gallery-B-Center (center media area) */
+/* gallery-B-Center */
 .galB-center-frame{
 top:96px; bottom:96px; left:96px; right:82px;
 display:block;
@@ -248,6 +263,7 @@ will-change: transform;
 
 /* ===== SECTION DRIVERS ===== */
 .s1-wrap, .s2-wrap, .galA-left-wrap, .s3-wrap, .s4-wrap, .s5-wrap,
+.sMapA-wrap, /* NEW */
 .galB-center-wrap, .s8-wrap, .s9-wrap, .galC-left-wrap, .s11-wrap, .s12-wrap,
 .s13-wrap, .s14-wrap, .s15-wrap{
 position:relative; height:280vh; background:#f8fbf2;
@@ -328,8 +344,7 @@ color:#00A86B;
 }
 /*
 =====================================================
-    MOBILE RESPONSIVE (max-width:600px) - DEDICATED MOBILE VIEW
-    (Your original working mobile code)
+MOBILE RESPONSIVE (max-width:600px) - DEDICATED MOBILE VIEW
 =====================================================
 */
 @media (max-width:600px){
@@ -395,29 +410,29 @@ z-index:2;
 
 /* S15 Overlay Overrides */
 .s15-overlay {
-    background: transparent !important; 
-    max-width: 100% !important; 
-    padding: 80px 20px 80px !important; /* 80px Top/Bottom, 20px Left/Right */
-    margin: 0 auto !important;
-    position: relative !important; 
-    z-index: 5 !important; 
+background: transparent !important;
+max-width: 100% !important;
+padding: 80px 20px 80px !important; /* 80px Top/Bottom, 20px Left/Right */
+margin: 0 auto !important;
+position: relative !important;
+z-index: 5 !important;
 }
 
 /* S15 Rail Structural Reset */
 .s1-rail, .s2-rail, .s4-rail, .s5-rail,
 .s9-rail, .s11-rail, .s13-rail, .s14-rail, .s15-rail {
-    position:relative !important;
-    width:100% !important;
-    margin:0 !important;
-    left:auto !important;
-    right:auto !important;
-    transform: none !important;
+position:relative !important;
+width:100% !important;
+margin:0 !important;
+left:auto !important;
+right:auto !important;
+transform: none !important;
 }
 .s15-rail {
-    left: 0 !important;
-    right: 0 !important;
-    transform: none !important;
-    margin: 0 auto !important;
+left: 0 !important;
+right: 0 !important;
+transform: none !important;
+margin: 0 auto !important;
 }
 
 
@@ -429,69 +444,63 @@ color:#111;
 text-align:left;
 font-size:18px;
 line-height:26px;
-margin:80px 0 80px 0; 
+margin:80px 0 80px 0;
 }
 
 /* S15 Text and Link Styling */
 .s15-text {
-    color:#fff !important; 
-    text-align:center !important; 
-    padding:0 !important;
-    margin: 80px auto 80px auto !important; 
-    max-width: 100% !important;
-    width: 100% !important;
-    
-    position: relative !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
+color:#fff !important;
+text-align:center !important;
+padding:0 !important;
+margin: 80px auto 80px auto !important;
+max-width: 100% !important;
+width: 100% !important;
+
+position: relative !important;
+left: 50% !important;
+transform: translateX(-50%) !important;
 }
 
 /* S15 Link Fixes */
 .s15-text a {
-    color:#fff !important; 
-    text-decoration: none !important;
-    transition: color .2s ease; 
-    display: inline-block !important; 
-    position: relative !important; 
-    z-index: 100 !important; 
+color:#fff !important;
+text-decoration: none !important;
+transition: color .2s ease;
+display: inline-block !important;
+position: relative !important;
+z-index: 100 !important;
 }
-.s15-text a:hover, .s15-text a:focus, .s15-text a:focus-visible, .s15-text a:active { 
-    color: #00A86B !important; 
-    opacity: 1 !important; 
+.s15-text a:hover, .s15-text a:focus, .s15-text a:focus-visible, .s15-text a:active {
+color: #00A86B !important;
+opacity: 1 !important;
 }
 
 
-/* ==== GALLERIES & FULL BLEEDS (No changes) ==== */
+/* ==== GALLERIES & FULL BLEEDS (Updated to include MapA) ==== */
 .galA-left-frame, .galB-center-frame, .galC-left-frame {
 left:20px; right:20px;
 }
-.frame.s3-frame, .frame.s8-frame, .frame.s12-frame, .frame.s15-frame {
+.frame.s3-frame, .frame.s8-frame, .frame.s12-frame, .frame.s15-frame, .frame.sMapA-frame {
 left:0; right:0; top:0; bottom:0;
 }
 }
 /*
 =====================================================
-    TABLET RESPONSIVE (min-width:601px and max-width:1023px) - FINAL FIXES + DYNAMIC HERO TEXT
+TABLET RESPONSIVE (min-width:601px and max-width:1023px) - FINAL FIXES + DYNAMIC HERO TEXT
 =====================================================
 */
 @media (min-width:601px) and (max-width:1023px) {
 
 /* Hero Text Scaling (New Addition) */
 .hero-title {
-    /* Clamps font size between 80px (at 601px width) and 100px (at 1023px width) */
-    font-size: clamp(80px, 12vw, 100px) !important;
-    line-height: 1.05 !important;
-}
-/* Hero Text Scaling (Updated Addition) */
-.hero-title {
-    /* Title remains Dynamic and scales smoothly */
-    font-size: clamp(80px, 12vw, 100px) !important;
-    line-height: 1.05 !important;
+/* Title remains Dynamic and scales smoothly */
+font-size: clamp(80px, 12vw, 100px) !important;
+line-height: 1.05 !important;
 }
 .hero-links {
-    /* Links are now Static (Fixed Jump) for predictability */
-    font-size: 24px !important; 
-    line-height: 28px !important; 
+/* Links are now Static (Fixed Jump) for predictability */
+font-size: 24px !important;
+line-height: 28px !important;
 }
 
 /* Structural & Containment Fixes (From previous successful steps) */
@@ -499,73 +508,70 @@ left:0; right:0; top:0; bottom:0;
 /* 1. Ensure sections are scrollable and have background */
 .s1-wrap, .s2-wrap, .s4-wrap, .s5-wrap,
 .s9-wrap, .s11-wrap, .s13-wrap, .s14-wrap {
-    min-height: 200vh !important; 
-    background: #f8fbf2 !important;
+min-height: 200vh !important;
+background: #f8fbf2 !important;
 }
 
 /* 2. Base content wrappers are restricted and centered (Text/Overlay Column) */
 .s1-overlay, .s2-overlay, .s4-overlay, .s5-overlay,
 .s9-overlay, .s11-overlay, .s13-overlay, .s14-overlay, .s15-overlay {
-    max-width: 600px !important; 
-    padding:0 !important; 
-    margin:0 auto !important; 
-    background:#f8fbf2 !important; 
-    position: relative !important; 
-    opacity: 1 !important;
-    pointer-events: auto !important;
-    transform: none !important;
+max-width: 600px !important;
+padding:0 !important;
+margin:0 auto !important;
+background:#f8fbf2 !important;
+position: relative !important;
+opacity: 1 !important;
+pointer-events: auto !important;
+transform: none !important;
 }
 .s15-overlay {
-    background: transparent !important; 
-    padding: 80px 0 80px 0 !important;
-    z-index: 5 !important;
+background: transparent !important;
+padding: 80px 0 80px 0 !important;
+z-index: 5 !important;
 }
 
 /* 3. Section Images - Constrain them to the 600px column */
 .s1-frame, .s2-frame, .s4-frame, .s5-frame,
 .s9-frame, .s11-frame, .s13-frame, .s14-frame {
-    position: absolute !important; 
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-    width: 600px !important; 
-    margin: 0 auto !important;
-    top: 0 !important;
-    bottom: 0 !important; 
-    padding: 20px !important; 
+position: absolute !important;
+left: 50% !important;
+transform: translateX(-50%) !important;
+width: 600px !important;
+margin: 0 auto !important;
+top: 0 !important; bottom: 0 !important;
+padding: 20px !important;
 }
 
 /* 4. Text Rail and Inner Text */
-.s1-text, .s2-text, .s4-text, .s5-text,
-.s9-text, .s11-text, .s13-text, .s14-text, .s15-text {
-    padding: 0 20px !important; 
-    margin: 80px auto 80px auto !important; 
-    left: auto !important;
-    transform: none !important;
-    max-width: 100% !important;
-    width: auto !important;
-    text-align: left !important;
+.s1-text, .s2-text, .s4-text, .s5-text, .s9-text, .s11-text, .s13-text, .s14-text, .s15-text {
+padding: 0 20px !important;
+margin: 80px auto 80px auto !important;
+left: auto !important;
+transform: none !important;
+max-width: 100% !important;
+width: auto !important;
+text-align: left !important;
 }
-
 /* S15 Text (Centering Fix) */
 .s15-text {
-    text-align: center !important;
-    color: #fff !important;
-    left: 50% !important; 
-    transform: translateX(-50%) !important;
+text-align: center !important;
+color: #fff !important;
+left: 50% !important;
+transform: translateX(-50%) !important;
 }
 
-/* 5. Gallery Frames: Constrain them to the 600px column (for future proofing) */
+/* 5. Galleries and Full-bleed remain full-bleed */
 .galA-left-frame, .galB-center-frame, .galC-left-frame {
-    width: 600px !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-    padding: 0 20px !important;
+/* No change, they naturally expand to fill the area around the text rail */
+}
+.frame.s3-frame, .frame.s8-frame, .frame.s12-frame, .frame.s15-frame, .frame.sMapA-frame {
+left:0 !important; right:0 !important;
 }
 }
-
 </style>
 </head>
 <body>
+
 <div class="hero-fixed" id="hero">
 <div class="hero-bg" aria-hidden="true"></div>
 <div class="hero-media" id="hero-media">
@@ -599,6 +605,10 @@ left:0; right:0; top:0; bottom:0;
 
 <figure class="frame s3-frame" aria-hidden="true"><img id="s3-img" src="assets/section3.jpg" alt=""></figure>
 <figure class="frame s4-frame" aria-hidden="true"><img id="s4-img" src="assets/section4.jpg" alt=""></figure>
+
+<figure class="frame sMapA-frame" aria-hidden="true">
+    <iframe id="sMapA-map" src="https://api.mapbox.com/styles/v1/kavni/cmhkpt4uz00et01pjheur1zc1.html?title=false&access_token=pk.eyJ1Ijoia2F2bmkiLCJhIjoiY2s5YjBqNGY1MGV4aTNobnk0amJncWZweCJ9.gZK_r9CYmb6ZN_mZVmgjNg&zoomwheel=false#15.99/32.079031/34.770081" title="MapA" style="border:none; width:100%; height:100%;"></iframe>
+</figure>
 <figure class="frame s5-frame" aria-hidden="true"><img id="s5-img" src="assets/section5.jpg" alt=""></figure>
 
 <figure class="frame galB-center-frame" aria-hidden="true">
@@ -646,7 +656,13 @@ left:0; right:0; top:0; bottom:0;
 <p>After we opened the windows to let the spirits out…</p>
 <p>After we lit incense stick after incense stick…</p>
 <p>After we watched MMA fighters on TV in the basement…</p>
-<p>And the smoke kept rising. The chain must not be broken. **\*Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam varius, metus nec tincidunt tincidunt, nunc erat tincidunt sapien, vel laoreet lacus nisi eget justo. Nullam ut placerat odio. Nulla vitae eros nec mi rutrum eleifend at nec dui. Duis ultricies consequat lobortis. Fusce a aliquam lorem, ac lacinia est. Praesent rutrum odio eget tellus mattis, at malesuada lorem dapibus. Pellentesque accumsan dui a lectus porttitor vestibulum. Nam venenatis urna elit, at condimentum eros elementum interdum. Proin sed semper nulla. Mauris placerat non dui at pretium. Ut aliquam tellus ipsum, non porta ex congue a. Vestibulum molestie egestas tellus, vitae tincidunt nibh mollis nec.
+<p>And the smoke kept rising. The chain must not be broken. **\*Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+Aliquam varius, metus nec tincidunt tincidunt, nunc erat tincidunt sapien, vel laoreet lacus nisi eget justo. Nullam ut placerat odio.
+Nulla vitae eros nec mi rutrum eleifend at nec dui. Duis ultricies consequat lobortis.
+Fusce a aliquam lorem, ac lacinia est. Praesent rutrum odio eget tellus mattis, at malesuada lorem dapibus.
+Pellentesque accumsan dui a lectus porttitor vestibulum. Nam venenatis urna elit, at condimentum eros elementum interdum. Proin sed semper nulla.
+Mauris placerat non dui at pretium. Ut aliquam tellus ipsum, non porta ex congue a.
+Vestibulum molestie egestas tellus, vitae tincidunt nibh mollis nec.
 Fusce quis magna elit. Aenean mi tellus, fermentum eu pharetra id, fermentum non turpis. **\*</p>
 </div>
 </div>
@@ -660,7 +676,13 @@ Fusce quis magna elit. Aenean mi tellus, fermentum eu pharetra id, fermentum non
 <p>Now the perspective widens to a new frame…</p>
 <p>The city’s edge meets the garden…</p>
 <p>We follow the lines of growth and care…</p>
-<p>And learn how places hold time. **\*Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam varius, metus nec tincidunt tincidunt, nunc erat tincidunt sapien, vel laoreet lacus nisi eget justo. Nullam ut placerat odio. Nulla vitae eros nec mi rutrum eleifend at nec dui. Duis ultricies consequat lobortis. Fusce a aliquam lorem, ac lacinia est. Praesent rutrum odio eget tellus mattis, at malesuada lorem dapibus. Pellentesque accumsan dui a lectus porttitor vestibulum. Nam venenatis urna elit, at condimentum eros elementum interdum. Proin sed semper nulla. Mauris placerat non dui at pretium. Ut aliquam tellus ipsum, non porta ex congue a. Vestibulum molestie egestas tellus, vitae tincidunt nibh mollis nec.
+<p>And learn how places hold time. **\*Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+Aliquam varius, metus nec tincidunt tincidunt, nunc erat tincidunt sapien, vel laoreet lacus nisi eget justo. Nullam ut placerat odio.
+Nulla vitae eros nec mi rutrum eleifend at nec dui. Duis ultricies consequat lobortis.
+Fusce a aliquam lorem, ac lacinia est. Praesent rutrum odio eget tellus mattis, at malesuada lorem dapibus.
+Pellentesque accumsan dui a lectus porttitor vestibulum. Nam venenatis urna elit, at condimentum eros elementum interdum. Proin sed semper nulla.
+Mauris placerat non dui at pretium. Ut aliquam tellus ipsum, non porta ex congue a.
+Vestibulum molestie egestas tellus, vitae tincidunt nibh mollis nec.
 Fusce quis magna elit. Aenean mi tellus, fermentum eu pharetra id, fermentum non turpis. **\*</p>
 </div>
 </div>
@@ -683,6 +705,7 @@ Fusce quis magna elit. Aenean mi tellus, fermentum eu pharetra id, fermentum non
 </div>
 </div>
 
+<section class="sMapA-wrap" id="sMapA-wrap"></section>
 <section class="s5-wrap" id="s5-wrap"></section>
 <div class="s5-overlay">
 <div class="s5-rail">
@@ -763,7 +786,8 @@ Fusce quis magna elit. Aenean mi tellus, fermentum eu pharetra id, fermentum non
 <p><strong>Gardenicity</strong> Writing, Design, Curation:<br>
 Megama/Rebecca Sternberg, Keren Avni</p>
 <p><strong>Photo Credits:</strong><br>
-1 - Survey of Israel (MAPI); 2-10, 15-25 - Matson (G. Eric and Edith) Photograph Collection, LOC; 11-14 - NLI Boris Carmi; 26 - Tomer Appelbaum</p>
+1 - Survey of Israel (MAPI); 2-10, 15-25 - Matson (G. Eric and Edith) Photograph Collection, LOC;
+11-14 - NLI Boris Carmi; 26 - Tomer Appelbaum</p>
 <p>
 <a href="https://www.megama.net" target="_blank">Gardencity what did Geddes See?</a><br>
 <a href="https://www.megama.net" target="_blank">Civic Green</a><br>
@@ -821,6 +845,7 @@ const s2Wrap=document.getElementById('s2-wrap');
 const galAWrap=document.getElementById('galA-wrap');
 const s3Wrap=document.getElementById('s3-wrap');
 const s4Wrap=document.getElementById('s4-wrap');
+const sMapAWrap=document.getElementById('sMapA-wrap'); /* NEW */
 const s5Wrap=document.getElementById('s5-wrap');
 const galBWrap=document.getElementById('galB-wrap');
 const s8Wrap=document.getElementById('s8-wrap');
@@ -911,6 +936,7 @@ const s2=progressOf(s2Wrap);
 const galA=progressOf(galAWrap);
 const s3=progressOf(s3Wrap);
 const s4=progressOf(s4Wrap);
+const sMapA=progressOf(sMapAWrap); /* NEW */
 const s5=progressOf(s5Wrap);
 const galB=progressOf(galBWrap);
 const s8=progressOf(s8Wrap);
@@ -927,6 +953,7 @@ root.style.setProperty('--s2',s2.toFixed(3));
 root.style.setProperty('--galA',galA.toFixed(3));
 root.style.setProperty('--s3',s3.toFixed(3));
 root.style.setProperty('--s4',s4.toFixed(3));
+root.style.setProperty('--sMapA',sMapA.toFixed(3)); /* NEW */
 root.style.setProperty('--s5',s5.toFixed(3));
 root.style.setProperty('--galB',galB.toFixed(3));
 root.style.setProperty('--s8',s8.toFixed(3));
@@ -969,6 +996,7 @@ root.style.setProperty('--s15Y',(s15StartY+(s15EndY-s15StartY)*easePow(s15Raw,E)
 
 /* End zooms (full-bleed S3, S8, S12, S15) */
 const s3ZoomRaw = clamp((s3 - 0.82) / 0.18, 0, 1); root.style.setProperty('--s3Scale', (1 + 0.08 * easeInOutCubic(s3ZoomRaw)).toFixed(3));
+const sMapAZoomRaw = clamp((sMapA - 0.82) / 0.18, 0, 1); root.style.setProperty('--sMapAScale', (1 + 0.08 * easeInOutCubic(sMapAZoomRaw)).toFixed(3)); /* NEW */
 const s8ZoomRaw = clamp((s8 - 0.82) / 0.18, 0, 1); root.style.setProperty('--s8Scale', (1 + 0.08 * easeInOutCubic(s8ZoomRaw)).toFixed(3));
 const s12ZoomRaw = clamp((s12 - 0.82) / 0.18, 0, 1);root.style.setProperty('--s12Scale', (1 + 0.08 * easeInOutCubic(s12ZoomRaw)).toFixed(3));
 const s15ZoomRaw = clamp((s15 - 0.82) / 0.18, 0, 1);root.style.setProperty('--s15Scale', (1 + 0.08 * easeInOutCubic(s15ZoomRaw)).toFixed(3));
@@ -1003,12 +1031,15 @@ const x34 = clamp(s4/FADE_FRAC, 0, 1);
 let s4Alpha = x34;
 const s3AlphaOut = s3Alpha * (1 - x34);
 
-/* S4 → S5 */
-const textBottomS4 = (parseFloat(getComputedStyle(root).getPropertyValue('--s4Y'))||0) + s4Text.scrollHeight;
-const gateS4S5 = (textBottomS4 <= window.innerHeight * LEAD_FRAC) || (s4 >= 0.999);
-const x45 = clamp(s5/FADE_FRAC, 0, 1);
-let s5Alpha = gateS4S5 ? x45 : 0;
-if (gateS4S5) s4Alpha = s4Alpha * (1 - x45);
+/* S4 → MapA */ /* MODIFIED */
+const x4MapA = clamp(sMapA/FADE_FRAC, 0, 1);
+const sMapAAlpha = x4MapA;
+s4Alpha = s4Alpha * (1 - x4MapA);
+
+/* MapA → S5 */ /* MODIFIED */
+const xMapA5 = clamp(s5/FADE_FRAC, 0, 1);
+let s5Alpha = xMapA5;
+const sMapAAlphaOut = sMapAAlpha * (1 - xMapA5);
 
 /* S5 → gallery-B */
 const textBottomS5 = (parseFloat(getComputedStyle(root).getPropertyValue('--s5Y'))||0) + s5Text.scrollHeight;
@@ -1041,7 +1072,7 @@ const xC11 = clamp(s11/FADE_FRAC, 0, 1);
 let s11Alpha = xC11;
 const galCOut = (1 - xC11);
 
-/* S11 → S12 (full-bleed), load-gated */
+/* S11 → S12 (full-bleed, load-gated) */
 const x11_12 = clamp(s12/FADE_FRAC, 0, 1);
 const s12Group = (getComputedStyle(root).getPropertyValue('--s12Ready')==='1') ? x11_12 : 0;
 s11Alpha = s11Alpha * ((getComputedStyle(root).getPropertyValue('--s12Ready')==='1') ? (1 - x11_12) : 1);
@@ -1063,8 +1094,8 @@ const x14_15 = clamp(s15/FADE_FRAC, 0, 1);
 const s15Group = (getComputedStyle(root).getPropertyValue('--s15Ready')==='1') ? x14_15 : 0;
 s14Alpha = s14Alpha * ((getComputedStyle(root).getPropertyValue('--s15Ready')==='1') ? (1 - x14_15) : 1);
 
-/* ===== Internal galleries ===== */
-/* gallery-A (4 imgs, stepped crossfade) — unchanged */
+/* ===== Internal galleries (unchanged) ===== */
+/* gallery-A (4 imgs, stepped crossfade) */
 const INTERNAL_START_A = FADE_FRAC;
 const tA = clamp((galA - INTERNAL_START_A) / (1 - INTERNAL_START_A), 0, 1);
 const A_FADE = 0.22; /* fade segment between images */
@@ -1088,7 +1119,7 @@ root.style.setProperty('--galAImg1Opacity', (a1 * galAGroup2 * galAOut2).toFixed
 root.style.setProperty('--galAImg2Opacity', (a2 * galAGroup2 * galAOut2).toFixed(3));
 root.style.setProperty('--galAImg3Opacity', (a3 * galAGroup2 * galAOut2).toFixed(3));
 
-/* gallery-B (5 imgs, stepped crossfade) — unchanged */
+/* gallery-B (5 imgs, stepped crossfade) */
 const INTERNAL_START_B = FADE_FRAC;
 const tB = clamp(((galB - INTERNAL_START_B) / (1 - INTERNAL_START_B)) * 1.25, 0, 1);
 const B_FADE = 0.22, B_HOLD = (1 - 4*B_FADE)/5 * 1.25;
@@ -1113,7 +1144,7 @@ root.style.setProperty('--galBImg2Opacity', (b2 * galBGroup2 * galBOut2).toFixed
 root.style.setProperty('--galBImg3Opacity', (b3 * galBGroup2 * galBOut2).toFixed(3));
 root.style.setProperty('--galBImg4Opacity', (b4 * galBGroup2 * galBOut2).toFixed(3));
 
-/* gallery-C (now 6 imgs, stepped crossfade; minimal change) */
+/* gallery-C (now 6 imgs, stepped crossfade) */
 const INTERNAL_START_C = FADE_FRAC;
 const tC = clamp(((galC - INTERNAL_START_C) / (1 - INTERNAL_START_C)) * 1.5, 0, 1);
 const C_FADE = 0.22, C_HOLD = (1 - 5*C_FADE)/6 * 1.25; /* match style of B */
@@ -1145,6 +1176,7 @@ root.style.setProperty('--s1ImgOpacity', s1Alpha.toFixed(3));
 root.style.setProperty('--s2ImgOpacity', s2Alpha.toFixed(3));
 root.style.setProperty('--s3ImgOpacity', s3AlphaOut.toFixed(3));
 root.style.setProperty('--s4ImgOpacity', s4Alpha.toFixed(3));
+root.style.setProperty('--sMapAImgOpacity', sMapAAlphaOut.toFixed(3)); /* NEW */
 root.style.setProperty('--s5ImgOpacity', s5Alpha.toFixed(3));
 root.style.setProperty('--s8ImgOpacity', s8AlphaOut.toFixed(3));
 root.style.setProperty('--s9ImgOpacity', s9Alpha.toFixed(3));
@@ -1159,15 +1191,14 @@ async function init(){
 if(document.fonts && document.fonts.ready){ try{ await document.fonts.ready; }catch(e){} }
 measureHero();
 measureS1(); measureS2(); measureS4(); measureS5(); measureS9(); measureS11(); measureS13(); measureS14(); measureS15();
-update();
-addEventListener('load',  ()=>{ measureHero(); measureS1(); measureS2(); measureS4(); measureS5(); measureS9(); measureS11(); measureS13(); measureS14(); measureS15(); update(); });
+addEventListener('load',  ()=>{ measureHero(); measureS1(); measureS2(); measureS4(); measureS5(); measureS9(); measureS11(); measureS13(); measureS14(); measureS15(); update(); }, { once:true });
 addEventListener('resize',  ()=>{ measureHero(); measureS1(); measureS2(); measureS4(); measureS5(); measureS9(); measureS11(); measureS13(); measureS14(); measureS15(); update(); });
 addEventListener('scroll', update, {passive:true});
+update();
 }
 init();
 })();
 </script>
 </body>
 </html>
-
 

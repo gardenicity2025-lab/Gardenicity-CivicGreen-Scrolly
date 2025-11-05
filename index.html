@@ -55,11 +55,14 @@ font-family:"Acumin Pro",system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial
 --s15:0; --s15Overlay:0; --s15Y:0px; --s15ImgOpacity:0; --s15Scale:1; --s15Ready:0;
 }
 
-/* NEW: Class to force scroll lock (more robust than inline style) */
+/* 🚨 CRITICAL FIX: Class to force scroll lock (now compatible with JS top offset) */
 body.body-locked {
     overflow: hidden !important;
-    position: fixed; /* Helps ensure 100% viewport coverage */
-    inset: 0;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    /* 'top' is now managed via JavaScript using body.style.top for scroll restoration */
 }
 
 /* ===== HERO (UNCHANGED) ===== */
@@ -152,6 +155,7 @@ opacity: var(--s4ImgOpacity);
     top:0; right:0; bottom:0; left:0;
     opacity:var(--sMapAImgOpacity);
     z-index: 1; 
+    background-color: yellow; /* DIAGNOSTIC: Makes the frame visible if the map fails to load */
 }
 .frame.sMapA-frame>iframe{
     width:100%; height:100%;
@@ -687,7 +691,14 @@ left:0 !important; right:0 !important;
 </div>
 
 <figure class="frame sMapA-frame" aria-hidden="true" id="map-frame-container">
-    <iframe id="sMapA-map" src="https://api.mapbox.com/styles/v1/kavni/cmhkpt4uz00et01pjheur1zc1.html?title=false&access_token=pk.eyJ1Ijoia2F2bmkiLCJhIjoiY2s5YjBqNGY1MGV4aTNobnk0amJncWZweCJ9.gZK_r9CYmb6ZN_mZVmgjNg&zoomwheel=true#15.99/32.079031/34.770081" title="Gardenicity-Geddes-Civic-Green" style="border:none; width:100%; height:100%;" allowfullscreen allow="fullscreen"></iframe>
+    <iframe id="sMapA-map" 
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.422319973278!2d-73.98801848459427!3d40.74844007932649!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c259a9ac1c1d8b%3A0x7d976077977ab4b5!2sEmpire%20State%20Building!5e0!3m2!1sen!2sus!4v1636153202568!5m2!1sen!2sus"
+        title="Diagnostic Map Embed" 
+        style="border:none; width:100%; height:100%;" 
+        allowfullscreen 
+        allow="fullscreen"
+        loading="lazy"
+    ></iframe>
     
     <div class="map-overlay" id="map-overlay">
         </div>
@@ -939,22 +950,29 @@ const sMapAIframeContainer = document.getElementById('map-frame-container');
 const mapOverlay = document.getElementById('map-overlay');
 const exitMapBtn = document.getElementById('exit-map-btn');
 const mapIframe = document.getElementById('sMapA-map');
+let scrollPos = 0; // State variable to hold scroll position
 
 function enableMapInteraction() {
     // Check if the body is already locked
     if (document.body.classList.contains('body-locked')) return;
 
-    // CRITICAL FIX 1: Use a class to manage scroll lock
-    document.body.classList.add('body-locked');
+    // 🚨 FIX 1: Save the current scroll position
+    scrollPos = window.scrollY;
 
-    // CRITICAL FIX 2: Add a class to enable interaction on the iframe via CSS
+    // CRITICAL FIX 2: Use a class to manage scroll lock
+    document.body.classList.add('body-locked');
+    
+    // CRITICAL FIX 3: Apply negative top offset to maintain visible position
+    document.body.style.top = `-${scrollPos}px`;
+
+    // Add a class to enable interaction on the iframe via CSS
     if (sMapAIframeContainer) sMapAIframeContainer.classList.add('map-is-active');
 
     // Hide the overlay and show the exit button
     if (mapOverlay) mapOverlay.classList.add('hidden');
     if (exitMapBtn) exitMapBtn.classList.add('visible');
     
-    // NEW FIX: Explicitly focus the iframe to ensure it receives input
+    // Explicitly focus the iframe
     if (mapIframe) mapIframe.focus();
 }
 
@@ -962,14 +980,20 @@ function disableMapInteraction() {
     // CRITICAL FIX 1: Remove the class to unlock scroll
     document.body.classList.remove('body-locked');
     
-    // CRITICAL FIX 2: Remove the class to disable interaction on the iframe via CSS
+    // CRITICAL FIX 2: Clear the inline style
+    document.body.style.top = '';
+
+    // CRITICAL FIX 3: Restore the original scroll position
+    window.scrollTo(0, scrollPos);
+    
+    // Remove the class to disable interaction on the iframe via CSS
     if (sMapAIframeContainer) sMapAIframeContainer.classList.remove('map-is-active');
 
     // Show the overlay and hide the exit button
     if (mapOverlay) mapOverlay.classList.remove('hidden');
     if (exitMapBtn) exitMapBtn.classList.remove('visible');
     
-    // Optional: Restore focus to the window/body to allow scroll events to re-register immediately
+    // Restore focus to the window/body
     window.focus();
 }
 

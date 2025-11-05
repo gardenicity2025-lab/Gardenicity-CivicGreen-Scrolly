@@ -28,7 +28,7 @@ font-family:"Acumin Pro",system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial
 /* S4 */
 --s4:0; --s4Overlay:0; --s4Y:0px; --s4ImgOpacity:0;
 /* NEW MAP SECTION */
---sMapA:0; --sMapAImgOpacity:0; --sMapAScale:1;
+--sMapA:0; --sMapAImgOpacity:0; /* --sMapAScale removed */
 /* S5 */
 --s5:0; --s5Overlay:0; --s5Y:0px; --s5ImgOpacity:0;
 /* gallery-B-Center */
@@ -148,10 +148,9 @@ opacity: var(--s4ImgOpacity);
 .frame.sMapA-frame>iframe{
     width:100%; height:100%;
     object-fit:cover !important; object-position:center;
-    transform: scale(var(--sMapAScale));
-    transform-origin: center center;
-    will-change: transform;
-    pointer-events: auto; /* Enables map interaction */
+    /* Removed: transform: scale(var(--sMapAScale)); */
+    /* Removed: will-change: transform; */
+    pointer-events: auto; /* Ensures map interaction is possible */
 }
 
 /* S5 image LEFT */
@@ -607,7 +606,7 @@ left:0 !important; right:0 !important;
 <figure class="frame s4-frame" aria-hidden="true"><img id="s4-img" src="assets/section4.jpg" alt=""></figure>
 
 <figure class="frame sMapA-frame" aria-hidden="true">
-    <iframe id="sMapA-map" src="https://api.mapbox.com/styles/v1/kavni/cmhkpt4uz00et01pjheur1zc1.html?title=false&access_token=pk.eyJ1Ijoia2F2bmkiLCJhIjoiY2s5YjBqNGY1MGV4aTNobnk0amJncWZweCJ9.gZK_r9CYmb6ZN_mZVmgjNg&zoomwheel=false#15.99/32.079031/34.770081" title="MapA" style="border:none; width:100%; height:100%;"></iframe>
+    <iframe id="sMapA-map" src="https://api.mapbox.com/styles/v1/kavni/cmhkpt4uz00et01pjheur1zc1.html?title=false&access_token=pk.eyJ1Ijoia2F2bmkiLCJhIjoiY2s5YjBqNGY1MGV4aTNobnk0amJncWZweCJ9.gZK_r9CYmb6ZN_mZVmgjNg#15.99/32.079031/34.770081" title="MapA" style="border:none; width:100%; height:100%;"></iframe>
 </figure>
 <figure class="frame s5-frame" aria-hidden="true"><img id="s5-img" src="assets/section5.jpg" alt=""></figure>
 
@@ -996,7 +995,7 @@ root.style.setProperty('--s15Y',(s15StartY+(s15EndY-s15StartY)*easePow(s15Raw,E)
 
 /* End zooms (full-bleed S3, S8, S12, S15) */
 const s3ZoomRaw = clamp((s3 - 0.82) / 0.18, 0, 1); root.style.setProperty('--s3Scale', (1 + 0.08 * easeInOutCubic(s3ZoomRaw)).toFixed(3));
-const sMapAZoomRaw = clamp((sMapA - 0.82) / 0.18, 0, 1); root.style.setProperty('--sMapAScale', (1 + 0.08 * easeInOutCubic(sMapAZoomRaw)).toFixed(3)); /* NEW */
+/* MapA: Scale calculation removed per user request */
 const s8ZoomRaw = clamp((s8 - 0.82) / 0.18, 0, 1); root.style.setProperty('--s8Scale', (1 + 0.08 * easeInOutCubic(s8ZoomRaw)).toFixed(3));
 const s12ZoomRaw = clamp((s12 - 0.82) / 0.18, 0, 1);root.style.setProperty('--s12Scale', (1 + 0.08 * easeInOutCubic(s12ZoomRaw)).toFixed(3));
 const s15ZoomRaw = clamp((s15 - 0.82) / 0.18, 0, 1);root.style.setProperty('--s15Scale', (1 + 0.08 * easeInOutCubic(s15ZoomRaw)).toFixed(3));
@@ -1031,12 +1030,12 @@ const x34 = clamp(s4/FADE_FRAC, 0, 1);
 let s4Alpha = x34;
 const s3AlphaOut = s3Alpha * (1 - x34);
 
-/* S4 → MapA */ /* MODIFIED */
+/* S4 → MapA */
 const x4MapA = clamp(sMapA/FADE_FRAC, 0, 1);
 const sMapAAlpha = x4MapA;
 s4Alpha = s4Alpha * (1 - x4MapA);
 
-/* MapA → S5 */ /* MODIFIED */
+/* MapA → S5 */
 const xMapA5 = clamp(s5/FADE_FRAC, 0, 1);
 let s5Alpha = xMapA5;
 const sMapAAlphaOut = sMapAAlpha * (1 - xMapA5);

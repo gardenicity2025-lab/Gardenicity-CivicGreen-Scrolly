@@ -925,39 +925,33 @@ if (s15Img && s15Img.complete && s15Img.naturalWidth > 0) markS15Ready();
 else if (s15Img) s15Img.addEventListener('load', markS15Ready, { once:true });
 
 
-/* --- NEW MAP INTERACTION HANDLERS (REFINED) --- */
-const sMapAIframe = document.getElementById('sMapA-map');
-const mapOverlay = document.getElementById('map-overlay');
-const exitMapBtn = document.getElementById('exit-map-btn');
+/* --- NEW MAP INTERACTION HANDLERS (CRITICAL FIX: Find elements on call) --- */
 
 function enableMapInteraction() {
-    // 1. Give control to the map iframe
+    // CRITICAL: Get the elements right when the function is called
+    const sMapAIframe = document.getElementById('sMapA-map');
+    const mapOverlay = document.getElementById('map-overlay');
+    const exitMapBtn = document.getElementById('exit-map-btn');
+    
+    // Check if the body is already locked
+    if (document.body.classList.contains('scroll-locked')) return;
+
     if (sMapAIframe) sMapAIframe.style.pointerEvents = 'auto';
-    // 2. Hide the transparent overlay (disables click capture)
     if (mapOverlay) mapOverlay.classList.add('hidden');
-    // 3. Show the exit button
     if (exitMapBtn) exitMapBtn.classList.add('visible');
-    // 4. Temporarily disable page scrolling using a CSS Class - LESS LIKELY TO CONFLICT
     document.body.classList.add('scroll-locked');
 }
 
 function disableMapInteraction() {
-    // 1. Take control back to allow page scroll through the iframe
+    // CRITICAL: Get the elements right when the function is called
+    const sMapAIframe = document.getElementById('sMapA-map');
+    const mapOverlay = document.getElementById('map-overlay');
+    const exitMapBtn = document.getElementById('exit-map-btn');
+    
     if (sMapAIframe) sMapAIframe.style.pointerEvents = 'none';
-    // 2. Show the transparent overlay (re-enables click capture)
     if (mapOverlay) mapOverlay.classList.remove('hidden');
-    // 3. Hide the exit button
     if (exitMapBtn) exitMapBtn.classList.remove('visible');
-    // 4. Re-enable page scrolling
     document.body.classList.remove('scroll-locked');
-}
-
-// 5. Attach listeners (will be run again in init via DOMContentLoaded)
-if (mapOverlay) {
-    mapOverlay.addEventListener('click', enableMapInteraction);
-}
-if (exitMapBtn) {
-    exitMapBtn.addEventListener('click', disableMapInteraction);
 }
 /* ----------------------------------------------- */
 
@@ -987,7 +981,7 @@ const galC=progressOf(galCWrap);
 const s11=progressOf(s11Wrap);
 const s12=progressOf(s12Wrap);
 const s13=progressOf(s13Wrap);
-const s14=progressOf(s14Wrap);
+const s14=progressOf(s14-wrap);
 const s15=progressOf(s15Wrap);
 
 root.style.setProperty('--s1',s1.toFixed(3));
@@ -1233,10 +1227,13 @@ if(document.fonts && document.fonts.ready){ try{ await document.fonts.ready; }ca
 measureHero();
 measureS1(); measureS2(); measureS4(); measureS5(); measureS9(); measureS11(); measureS13(); measureS14(); measureS15();
 
-// CRITICAL FIX: Re-attach map listeners after DOM is loaded for robustness.
+// CRITICAL FIX: Attach map listeners only AFTER DOM is loaded.
+// This ensures 'mapOverlay' and 'exitMapBtn' have been fully parsed from the HTML.
 addEventListener('DOMContentLoaded', () => {
+    // Find the elements safely inside the DOMContentLoaded block
     const mapOverlay = document.getElementById('map-overlay');
     const exitMapBtn = document.getElementById('exit-map-btn');
+    
     if (mapOverlay) {
         mapOverlay.addEventListener('click', enableMapInteraction);
     }

@@ -926,13 +926,14 @@ if (s15Img && s15Img.complete && s15Img.naturalWidth > 0) markS15Ready();
 else if (s15Img) s15Img.addEventListener('load', markS15Ready, { once:true });
 
 
-/* --- NEW MAP INTERACTION HANDLERS (FIXED: Use CSS class for pointer-events) --- */
+/* --- MAP INTERACTION HANDLERS (FIXED: Added iframe focus) --- */
 
 function enableMapInteraction() {
     // Get the elements
     const sMapAIframeContainer = document.getElementById('map-frame-container'); // The figure
     const mapOverlay = document.getElementById('map-overlay');
     const exitMapBtn = document.getElementById('exit-map-btn');
+    const mapIframe = document.getElementById('sMapA-map'); // Get the iframe element
     
     // Check if the body is already locked
     if (document.body.style.overflow === 'hidden') return;
@@ -946,6 +947,9 @@ function enableMapInteraction() {
     
     // Lock scroll by setting overflow style directly
     document.body.style.overflow = 'hidden';
+
+    // NEW FIX: Explicitly focus the iframe to ensure it receives input
+    if (mapIframe) mapIframe.focus();
 }
 
 function disableMapInteraction() {
@@ -1074,23 +1078,23 @@ const galAOut = (1 - xA3);
 
 /* S3 → S4 */
 const x34 = clamp(s4/FADE_FRAC, 0, 1);
-let s4Alpha = x34;
 const s3AlphaOut = s3Alpha * (1 - x34);
+const s4In = x34;
 
-/* S4 → MapA */
+/* S4 → MapA (FIXED: Use product for clean crossfade) */
 const x4MapA = clamp(sMapA/FADE_FRAC, 0, 1);
-const sMapAAlphaIn = x4MapA; // Map A Fades IN as S4 Fades OUT
-s4Alpha = s4Alpha * (1 - x4MapA);
+let s4Alpha = s4In * (1 - x4MapA); // S4 In * S4 Out
+let sMapAAlphaIn = x4MapA;
 
-/* MapA → S5 */
+/* MapA → S5 (FIXED: Use product for clean crossfade) */
 const xMapA5 = clamp(s5/FADE_FRAC, 0, 1);
-let s5Alpha = xMapA5; // S5 Fades IN
-const sMapAAlphaOut = sMapAAlphaIn * (1 - xMapA5); // Map A Fades OUT as S5 Fades IN
+const sMapAAlphaOut = sMapAAlphaIn * (1 - xMapA5); // MapA In * MapA Out
 
 /* S5 → gallery-B */
 const textBottomS5 = (parseFloat(getComputedStyle(root).getPropertyValue('--s5Y'))||0) + s5Text.scrollHeight;
 const gateS5B = (textBottomS5 <= window.innerHeight * LEAD_FRAC) || (s5 >= 0.999);
 const x5B = clamp(galB/FADE_FRAC, 0, 1);
+let s5Alpha = xMapA5; // S5 In
 let galBGroup = 0;
 if (gateS5B && getComputedStyle(root).getPropertyValue('--galBReady')==='1') galBGroup = x5B;
 if (gateS5B) s5Alpha = s5Alpha * (1 - x5B);
@@ -1222,7 +1226,7 @@ root.style.setProperty('--s1ImgOpacity', s1Alpha.toFixed(3));
 root.style.setProperty('--s2ImgOpacity', s2Alpha.toFixed(3));
 root.style.setProperty('--s3ImgOpacity', s3AlphaOut.toFixed(3));
 root.style.setProperty('--s4ImgOpacity', s4Alpha.toFixed(3));
-root.style.setProperty('--sMapAImgOpacity', sMapAAlphaOut.toFixed(3)); /* NEW */
+root.style.setProperty('--sMapAImgOpacity', sMapAAlphaOut.toFixed(3)); /* FIXED */
 root.style.setProperty('--s5ImgOpacity', s5Alpha.toFixed(3));
 root.style.setProperty('--s8ImgOpacity', s8AlphaOut.toFixed(3));
 root.style.setProperty('--s9ImgOpacity', s9Alpha.toFixed(3));
@@ -1238,20 +1242,16 @@ if(document.fonts && document.fonts.ready){ try{ await document.fonts.ready; }ca
 measureHero();
 measureS1(); measureS2(); measureS4(); measureS5(); measureS9(); measureS11(); measureS13(); measureS14(); measureS15();
 
-// CRITICAL FIX: Attach map listeners only AFTER DOM is loaded.
-addEventListener('DOMContentLoaded', () => {
-    // Find the elements safely inside the DOMContentLoaded block
-    const mapOverlay = document.getElementById('map-overlay');
-    const exitMapBtn = document.getElementById('exit-map-btn');
-    
-    if (mapOverlay) {
-        mapOverlay.addEventListener('click', enableMapInteraction);
-    }
-    if (exitMapBtn) {
-        exitMapBtn.addEventListener('click', disableMapInteraction);
-    }
-}, { once: true });
+// NEW FIX: Attach map listeners directly when the script runs (at end of body)
+const mapOverlay = document.getElementById('map-overlay');
+const exitMapBtn = document.getElementById('exit-map-btn');
 
+if (mapOverlay) {
+    mapOverlay.addEventListener('click', enableMapInteraction);
+}
+if (exitMapBtn) {
+    exitMapBtn.addEventListener('click', disableMapInteraction);
+}
 
 addEventListener('load',  ()=>{ measureHero(); measureS1(); measureS2(); measureS4(); measureS5(); measureS9(); measureS11(); measureS13(); measureS14(); measureS15(); update(); }, { once:true });
 addEventListener('resize',  ()=>{ measureHero(); measureS1(); measureS2(); measureS4(); measureS5(); measureS9(); measureS11(); measureS13(); measureS14(); measureS15(); update(); });

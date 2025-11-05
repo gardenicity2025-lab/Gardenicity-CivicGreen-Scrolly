@@ -1,3 +1,4 @@
+4-11-Gardenicity-CivicGreen-Scrolly+Map
 <!doctype html>
 <html lang="en" data-baseline="stable-2025-10-01__rails-460px__galC-6-only">
 <head>
@@ -29,6 +30,8 @@ font-family:"Acumin Pro",system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial
 --s3:0; --s3ImgOpacity:0; --s3Scale:1;
 /* S4 */
 --s4:0; --s4Overlay:0; --s4Y:0px; --s4ImgOpacity:0;
+/* mapA (full bleed between S4 and S5) */
+--mapA:0; --mapAOpacity:0;
 /* S5 */
 --s5:0; --s5Overlay:0; --s5Y:0px; --s5ImgOpacity:0;
 /* gallery-B-Center */
@@ -140,27 +143,24 @@ right: 82px;
 opacity: var(--s4ImgOpacity);
 }
 
-/* ===== mapA full-bleed (isolated between S4 and S5) ===== */
+/* ===== mapA full-bleed (scroll-controlled like other frames) ===== */
 .mapA-frame {
-  position: relative !important;   /* participate in normal scroll flow */
-  width: 100%;
-  height: 100vh;                   /* fills the viewport but scrolls naturally */
-  z-index: 2;                      /* above S4, below overlays */
-  opacity: 1;
+  position: fixed;
+  inset: 0;
+  opacity: var(--mapAOpacity, 0); /* will be animated by JS */
+  z-index: 2;
 }
-
 .frame.mapA-frame > #mapA {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  pointer-events: auto !important; /* allow zoom/pan */
+  pointer-events: auto !important;
   cursor: grab;
 }
-
 .mapA-wrap {
   position: relative;
-  height: 280vh;                   /* controls scroll pacing */
+  height: 280vh;
   background: #f8fbf2;
 }
 
@@ -865,6 +865,7 @@ const s2Wrap=document.getElementById('s2-wrap');
 const galAWrap=document.getElementById('galA-wrap');
 const s3Wrap=document.getElementById('s3-wrap');
 const s4Wrap=document.getElementById('s4-wrap');
+const mapAWrap=document.getElementById('mapA-wrap');
 const s5Wrap=document.getElementById('s5-wrap');
 const galBWrap=document.getElementById('galB-wrap');
 const s8Wrap=document.getElementById('s8-wrap');
@@ -955,6 +956,7 @@ const s2=progressOf(s2Wrap);
 const galA=progressOf(galAWrap);
 const s3=progressOf(s3Wrap);
 const s4=progressOf(s4Wrap);
+const mapA=progressOf(mapAWrap);
 const s5=progressOf(s5Wrap);
 const galB=progressOf(galBWrap);
 const s8=progressOf(s8Wrap);
@@ -971,6 +973,7 @@ root.style.setProperty('--s2',s2.toFixed(3));
 root.style.setProperty('--galA',galA.toFixed(3));
 root.style.setProperty('--s3',s3.toFixed(3));
 root.style.setProperty('--s4',s4.toFixed(3));
+root.style.setProperty('--mapA',mapA.toFixed(3));
 root.style.setProperty('--s5',s5.toFixed(3));
 root.style.setProperty('--galB',galB.toFixed(3));
 root.style.setProperty('--s8',s8.toFixed(3));
@@ -1047,12 +1050,40 @@ const x34 = clamp(s4/FADE_FRAC, 0, 1);
 let s4Alpha = x34;
 const s3AlphaOut = s3Alpha * (1 - x34);
 
-/* S4 → S5 */
+/* =====================================================
+   S4 → mapA → S5 TRANSITION + FRAME OPACITIES (mapA integrated)
+===================================================== */
+
+/* S4 → mapA */
 const textBottomS4 = (parseFloat(getComputedStyle(root).getPropertyValue('--s4Y'))||0) + s4Text.scrollHeight;
-const gateS4S5 = (textBottomS4 <= window.innerHeight * LEAD_FRAC) || (s4 >= 0.999);
-const x45 = clamp(s5/FADE_FRAC, 0, 1);
-let s5Alpha = gateS4S5 ? x45 : 0;
-if (gateS4S5) s4Alpha = s4Alpha * (1 - x45);
+const gateS4Map = (textBottomS4 <= window.innerHeight * LEAD_FRAC) || (s4 >= 0.999);
+const x4Map = clamp(mapA / FADE_FRAC, 0, 1);
+let mapAAlpha = gateS4Map ? x4Map : 0;
+if (gateS4Map) s4Alpha = s4Alpha * (1 - x4Map);
+
+/* mapA → S5 */
+const textBottomMap = window.innerHeight * LEAD_FRAC;
+const gateMapS5 = (mapA >= 0.999);
+const xMap5 = clamp(s5 / FADE_FRAC, 0, 1);
+let s5Alpha = gateMapS5 ? xMap5 : 0;
+if (gateMapS5) mapAAlpha = mapAAlpha * (1 - xMap5);
+
+/* ===== Apply section frame opacities ===== */
+root.style.setProperty('--s1ImgOpacity', s1Alpha.toFixed(3));
+root.style.setProperty('--s2ImgOpacity', s2Alpha.toFixed(3));
+root.style.setProperty('--s3ImgOpacity', s3AlphaOut.toFixed(3));
+root.style.setProperty('--s4ImgOpacity', s4Alpha.toFixed(3));
+root.style.setProperty('--mapAOpacity', mapAAlpha.toFixed(3));   // 🌿 new map fade controller
+root.style.setProperty('--s5ImgOpacity', s5Alpha.toFixed(3));
+root.style.setProperty('--s8ImgOpacity', s8AlphaOut.toFixed(3));
+root.style.setProperty('--s9ImgOpacity', s9Alpha.toFixed(3));
+root.style.setProperty('--s11ImgOpacity', s11Alpha.toFixed(3));
+root.style.setProperty('--s12ImgOpacity', s12AlphaOut2.toFixed(3));
+root.style.setProperty('--s13ImgOpacity', s13Alpha.toFixed(3));
+root.style.setProperty('--s14ImgOpacity', s14Alpha.toFixed(3));
+root.style.setProperty('--s15ImgOpacity', s15Group.toFixed(3));
+
+
 
 /* S5 → gallery-B */
 const textBottomS5 = (parseFloat(getComputedStyle(root).getPropertyValue('--s5Y'))||0) + s5Text.scrollHeight;
@@ -1189,6 +1220,7 @@ root.style.setProperty('--s1ImgOpacity', s1Alpha.toFixed(3));
 root.style.setProperty('--s2ImgOpacity', s2Alpha.toFixed(3));
 root.style.setProperty('--s3ImgOpacity', s3AlphaOut.toFixed(3));
 root.style.setProperty('--s4ImgOpacity', s4Alpha.toFixed(3));
+root.style.setProperty('--mapAOpacity', mapAAlpha.toFixed(3)); 
 root.style.setProperty('--s5ImgOpacity', s5Alpha.toFixed(3));
 root.style.setProperty('--s8ImgOpacity', s8AlphaOut.toFixed(3));
 root.style.setProperty('--s9ImgOpacity', s9Alpha.toFixed(3));
@@ -1229,4 +1261,3 @@ mapA.addControl(new mapboxgl.NavigationControl({showCompass:false}),'top-right')
 
 </body>
 </html>
-

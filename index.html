@@ -6,7 +6,7 @@
 <title>Gardenicity — Hero → S1 → S2 → gallery-A-Left → S3 → S4 → MapA → S5 → gallery-B-Center → S8 → S9 → gallery-C-Right → S11 → S12 → S13 → S14 → S15</title>
 <style>
 
-/* ===== Base ===== */
+/* ===== Base (UNCHANGED) ===== */
 html,body{
 margin:0; padding:0; height:100%;
 background:#f8fbf2; color:#fff;
@@ -28,7 +28,7 @@ font-family:"Acumin Pro",system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial
 /* S4 */
 --s4:0; --s4Overlay:0; --s4Y:0px; --s4ImgOpacity:0;
 /* NEW MAP SECTION */
---sMapA:0; --sMapAImgOpacity:0; /* --sMapAScale removed */
+--sMapA:0; --sMapAImgOpacity:0;
 /* S5 */
 --s5:0; --s5Overlay:0; --s5Y:0px; --s5ImgOpacity:0;
 /* gallery-B-Center */
@@ -55,7 +55,7 @@ font-family:"Acumin Pro",system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial
 --s15:0; --s15Overlay:0; --s15Y:0px; --s15ImgOpacity:0; --s15Scale:1; --s15Ready:0;
 }
 
-/* ===== HERO (unchanged) ===== */
+/* ===== HERO (UNCHANGED) ===== */
 .hero-fixed{
 position:fixed; inset:0; z-index:3;
 opacity:var(--heroAlpha);
@@ -80,7 +80,13 @@ display:flex; align-items:flex-end; justify-content:flex-start; overflow:hidden;
 .hero-links a:hover,.hero-links a:focus-visible{ color:#00A86B; }
 .driver{ height:200vh; }
 
-/* ===== PINNED FRAMES (unchanged before S4) ===== */
+/* --- REFINED FIX: CLASS-DRIVEN SCROLL LOCK --- */
+body.scroll-locked {
+    overflow: hidden !important;
+}
+/* ---------------------------------------------- */
+
+/* ===== PINNED FRAMES (UNCHANGED) ===== */
 figure.frame{ margin:0; }
 .frame{
 position:fixed; z-index:1; pointer-events:none;
@@ -140,17 +146,56 @@ right: 82px;
 opacity: var(--s4ImgOpacity);
 }
 
-/* MapA full-bleed */
+/* MapA full-bleed - CRITICAL STYLES */
 .sMapA-frame{
     top:0; right:0; bottom:0; left:0;
     opacity:var(--sMapAImgOpacity);
+    z-index: 1; 
 }
 .frame.sMapA-frame>iframe{
     width:100%; height:100%;
     object-fit:cover !important; object-position:center;
-    /* Removed: transform: scale(var(--sMapAScale)); */
-    /* Removed: will-change: transform; */
-    pointer-events: auto; /* Ensures map interaction is possible */
+    pointer-events: none; /* CRITICAL: Default to 'none' to allow page scroll-through */
+}
+/* Overlay to capture the click and prompt the user */
+.map-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    text-align: center;
+    font-size: 24px;
+    transition: opacity 0.3s;
+    pointer-events: auto; /* CRITICAL: Must be 'auto' to capture the initial click */
+}
+.map-overlay.hidden {
+    pointer-events: none;
+    opacity: 0;
+}
+/* Button to exit map interaction and resume story */
+.exit-map-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    background: #00A86B;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    z-index: 10;
+    opacity: 0; /* Hidden by default */
+    pointer-events: none; /* Hidden by default */
+    transition: opacity 0.3s;
+}
+.exit-map-btn.visible {
+    opacity: 1;
+    pointer-events: auto;
 }
 
 /* S5 image LEFT */
@@ -260,7 +305,7 @@ transform-origin: center center;
 will-change: transform;
 }
 
-/* ===== SECTION DRIVERS ===== */
+/* ===== SECTION DRIVERS (MapA added) ===== */
 .s1-wrap, .s2-wrap, .galA-left-wrap, .s3-wrap, .s4-wrap, .s5-wrap,
 .sMapA-wrap, /* NEW */
 .galB-center-wrap, .s8-wrap, .s9-wrap, .galC-left-wrap, .s11-wrap, .s12-wrap,
@@ -268,7 +313,7 @@ will-change: transform;
 position:relative; height:280vh; background:#f8fbf2;
 }
 
-/* ===== TEXT OVERLAYS (rails) ===== */
+/* ===== TEXT OVERLAYS (rails - UNCHANGED) ===== */
 .s1-overlay, .s2-overlay, .s4-overlay, .s5-overlay, .s9-overlay, .s11-overlay, .s13-overlay, .s14-overlay, .s15-overlay{
 position:fixed; inset:0; z-index:2; pointer-events:none;
 }
@@ -301,7 +346,7 @@ position:absolute; top:0; bottom:0; right:96px; width:460px; overflow:hidden;
 .s13-text{ transform:translateY(var(--s13Y)); color:#111; }
 .s14-text{ transform:translateY(var(--s14Y)); color:#111; text-align:left; }
 
-/* ===== S15: CENTER COLUMN OVERLAY (centered text) ===== */
+/* S15: CENTER COLUMN OVERLAY */
 .s15-rail{
 position:absolute; top:0; bottom:0;
 left:50%; transform:translateX(-50%);
@@ -317,7 +362,7 @@ margin:0 0 14px 0; font-size:20px; line-height:28px;
 }
 .after{ min-height:120vh; }
 
-/* ===== PATCH: Enable S15 links only in S15 ===== */
+/* PATCH: Enable S15 links only in S15 */
 .s15-overlay{
 z-index:3;
 pointer-events:none;
@@ -341,11 +386,8 @@ z-index:5;
 .s15-text a:focus-visible{
 color:#00A86B;
 }
-/*
-=====================================================
-MOBILE RESPONSIVE (max-width:600px) - DEDICATED MOBILE VIEW
-=====================================================
-*/
+
+/* ===== MOBILE/TABLET RESPONSIVE (UNCHANGED) ===== */
 @media (max-width:600px){
 body {
 margin:0;
@@ -483,11 +525,6 @@ left:20px; right:20px;
 left:0; right:0; top:0; bottom:0;
 }
 }
-/*
-=====================================================
-TABLET RESPONSIVE (min-width:601px and max-width:1023px) - FINAL FIXES + DYNAMIC HERO TEXT
-=====================================================
-*/
 @media (min-width:601px) and (max-width:1023px) {
 
 /* Hero Text Scaling (New Addition) */
@@ -593,7 +630,32 @@ left:0 !important; right:0 !important;
 <section class="driver" id="driver"></section>
 
 <figure class="frame s1-frame" aria-hidden="true"><img id="s1-img" src="assets/section1.jpg" alt=""></figure>
+<section class="s1-wrap" id="s1-wrap"></section>
+<div class="s1-overlay">
+<div class="s1-rail">
+<div class="s1-text" id="s1-text">
+<p><strong>SECTION ONE</strong> starts the story…</p>
+<p>The image holds the right field of view…</p>
+<p>While the narrative occupies the left margin…</p>
+<p>With a fixed cadence and pace…</p>
+<p>The story unfolds.</p>
+</div>
+</div>
+</div>
+
 <figure class="frame s2-frame" aria-hidden="true"><img id="s2-img" src="assets/section2.jpg" alt=""></figure>
+<section class="s2-wrap" id="s2-wrap"></section>
+<div class="s2-overlay">
+<div class="s2-rail">
+<div class="s2-text" id="s2-text">
+<p><strong>SECTION TWO</strong> flips the script…</p>
+<p>Now the image holds the left field of view…</p>
+<p>While the narrative occupies the right margin…</p>
+<p>A simple mirror of the previous rhythm…</p>
+<p>For a change in perspective.</p>
+</div>
+</div>
+</div>
 
 <figure class="frame galA-left-frame" aria-hidden="true">
 <img id="galA-img0" src="assets/gallery-A.jpg" alt="">
@@ -601,110 +663,37 @@ left:0 !important; right:0 !important;
 <img id="galA-img2" src="assets/gallery-A2.jpg" alt="">
 <img id="galA-img3" src="assets/gallery-A3.jpg" alt="">
 </figure>
-
-<figure class="frame s3-frame" aria-hidden="true"><img id="s3-img" src="assets/section3.jpg" alt=""></figure>
-<figure class="frame s4-frame" aria-hidden="true"><img id="s4-img" src="assets/section4.jpg" alt=""></figure>
-
-<figure class="frame sMapA-frame" aria-hidden="true">
-    <iframe id="sMapA-map" src="https://api.mapbox.com/styles/v1/kavni/cmhkpt4uz00et01pjheur1zc1.html?title=false&access_token=pk.eyJ1Ijoia2F2bmkiLCJhIjoiY2s5YjBqNGY1MGV4aTNobnk0amJncWZweCJ9.gZK_r9CYmb6ZN_mZVmgjNg&zoomwheel=true#15.99/32.079031/34.770081" title="MapA" style="border:none; width:100%; height:100%;"></iframe>
-</figure>
-<figure class="frame s5-frame" aria-hidden="true"><img id="s5-img" src="assets/section5.jpg" alt=""></figure>
-
-<figure class="frame galB-center-frame" aria-hidden="true">
-<img id="galB-img0" src="assets/gallery-B.jpg" alt="">
-<img id="galB-img1" src="assets/gallery-B1.jpg" alt="">
-<img id="galB-img2" src="assets/gallery-B2.jpg" alt="">
-<img id="galB-img3" src="assets/gallery-B3.jpg" alt="">
-<img id="galB-img4" src="assets/gallery-B4.jpg" alt="">
-</figure>
-
-<figure class="frame s8-frame" aria-hidden="true">
-<img id="s8-img" src="assets/section8.jpg" alt="">
-</figure>
-
-<figure class="frame s9-frame" aria-hidden="true"><img id="s9-img" src="assets/section9.jpg" alt=""></figure>
-
-<figure class="frame galC-left-frame" aria-hidden="true">
-<img id="galC-img0" src="assets/gallery-C.jpg" alt="">
-<img id="galC-img1" src="assets/gallery-C1.jpg" alt="">
-<img id="galC-img2" src="assets/gallery-C2.jpg" alt="">
-<img id="galC-img3" src="assets/gallery-C3.jpg" alt="">
-<img id="galC-img4" src="assets/gallery-C4.jpg" alt="">
-<img id="galC-img5" src="assets/gallery-C5.jpg" alt="">
-</figure>
-
-<figure class="frame s11-frame" aria-hidden="true"><img id="s11-img" src="assets/section11.jpg" alt=""></figure>
-
-<figure class="frame s12-frame" aria-hidden="true">
-<img id="s12-img" src="assets/section12.jpg" alt="">
-</figure>
-
-<figure class="frame s13-frame" aria-hidden="true"><img id="s13-img" src="assets/section13.jpg" alt=""></figure>
-
-<figure class="frame s14-frame" aria-hidden="true"><img id="s14-img" src="assets/section14.jpg" alt=""></figure>
-
-<figure class="frame s15-frame" aria-hidden="true">
-<img id="s15-img" src="assets/section15.jpg" alt="">
-</figure>
-
-<section class="s1-wrap" id="s1-wrap"></section>
-<div class="s1-overlay">
-<div class="s1-rail">
-<div class="s1-text" id="s1-text">
-<p><strong>HOURS AFTER MY</strong> mother took her last breath on earth…</p>
-<p>After we opened the windows to let the spirits out…</p>
-<p>After we lit incense stick after incense stick…</p>
-<p>After we watched MMA fighters on TV in the basement…</p>
-<p>And the smoke kept rising. The chain must not be broken. **\*Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-Aliquam varius, metus nec tincidunt tincidunt, nunc erat tincidunt sapien, vel laoreet lacus nisi eget justo. Nullam ut placerat odio.
-Nulla vitae eros nec mi rutrum eleifend at nec dui. Duis ultricies consequat lobortis.
-Fusce a aliquam lorem, ac lacinia est. Praesent rutrum odio eget tellus mattis, at malesuada lorem dapibus.
-Pellentesque accumsan dui a lectus porttitor vestibulum. Nam venenatis urna elit, at condimentum eros elementum interdum. Proin sed semper nulla.
-Mauris placerat non dui at pretium. Ut aliquam tellus ipsum, non porta ex congue a.
-Vestibulum molestie egestas tellus, vitae tincidunt nibh mollis nec.
-Fusce quis magna elit. Aenean mi tellus, fermentum eu pharetra id, fermentum non turpis. **\*</p>
-</div>
-</div>
-</div>
-
-<section class="s2-wrap" id="s2-wrap"></section>
-<div class="s2-overlay">
-<div class="s2-rail">
-<div class="s2-text" id="s2-text">
-<p><strong>SECTION TWO</strong> opens as the previous memory fades…</p>
-<p>Now the perspective widens to a new frame…</p>
-<p>The city’s edge meets the garden…</p>
-<p>We follow the lines of growth and care…</p>
-<p>And learn how places hold time. **\*Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-Aliquam varius, metus nec tincidunt tincidunt, nunc erat tincidunt sapien, vel laoreet lacus nisi eget justo. Nullam ut placerat odio.
-Nulla vitae eros nec mi rutrum eleifend at nec dui. Duis ultricies consequat lobortis.
-Fusce a aliquam lorem, ac lacinia est. Praesent rutrum odio eget tellus mattis, at malesuada lorem dapibus.
-Pellentesque accumsan dui a lectus porttitor vestibulum. Nam venenatis urna elit, at condimentum eros elementum interdum. Proin sed semper nulla.
-Mauris placerat non dui at pretium. Ut aliquam tellus ipsum, non porta ex congue a.
-Vestibulum molestie egestas tellus, vitae tincidunt nibh mollis nec.
-Fusce quis magna elit. Aenean mi tellus, fermentum eu pharetra id, fermentum non turpis. **\*</p>
-</div>
-</div>
-</div>
-
 <section class="galA-left-wrap" id="galA-wrap"></section>
 
+<figure class="frame s3-frame" aria-hidden="true"><img id="s3-img" src="assets/section3.jpg" alt=""></figure>
 <section class="s3-wrap" id="s3-wrap"></section>
 
+<figure class="frame s4-frame" aria-hidden="true"><img id="s4-img" src="assets/section4.jpg" alt=""></figure>
 <section class="s4-wrap" id="s4-wrap"></section>
 <div class="s4-overlay">
 <div class="s4-rail">
 <div class="s4-text" id="s4-text">
-<p><strong>SECTION FOUR</strong> returns to the tight frame…</p>
-<p>Left-rail narration continues the thread…</p>
-<p>The horizontal image sits steady at right…</p>
-<p>Margins and rhythm match Section One…</p>
-<p>And the cycle of views goes on.</p>
+<p><strong>SECTION FOUR</strong> continues the close frame…</p>
+<p>The left rail carries the narration forward…</p>
+<p>On the right, the image steadies the scene…</p>
+<p>Margins, rhythm, and pacing mirror Section One…</p>
+<p>So the story breathes in familiar cadence.</p>
 </div>
 </div>
 </div>
 
+<figure class="frame sMapA-frame" aria-hidden="true" id="map-frame-container">
+    <iframe id="sMapA-map" src="https://api.mapbox.com/styles/v1/kavni/cmhkpt4uz00et01pjheur1zc1.html?title=false&access_token=pk.eyJ1Ijoia2F2bmkiLCJhIjoiY2s5YjBqNGY1MGV4aTNobnk0amJncWZweCJ9.gZK_r9CYmb6ZN_mZVmgjNg&zoomwheel=true#15.99/32.079031/34.770081" title="Gardenicity-Geddes-Civic-Green" style="border:none; width:100%; height:100%;" allowfullscreen></iframe>
+    
+    <div class="map-overlay" id="map-overlay">
+        <p>Click here to interact with the map (Pan/Zoom)<br><small>Scroll to continue the story.</small></p>
+    </div>
+    
+    <button class="exit-map-btn" id="exit-map-btn">Exit Map Interaction</button>
+</figure>
 <section class="sMapA-wrap" id="sMapA-wrap"></section>
+
+<figure class="frame s5-frame" aria-hidden="true"><img id="s5-img" src="assets/section5.jpg" alt=""></figure>
 <section class="s5-wrap" id="s5-wrap"></section>
 <div class="s5-overlay">
 <div class="s5-rail">
@@ -718,10 +707,19 @@ Fusce quis magna elit. Aenean mi tellus, fermentum eu pharetra id, fermentum non
 </div>
 </div>
 
+<figure class="frame galB-center-frame" aria-hidden="true">
+<img id="galB-img0" src="assets/gallery-B.jpg" alt="">
+<img id="galB-img1" src="assets/gallery-B1.jpg" alt="">
+<img id="galB-img2" src="assets/gallery-B2.jpg" alt="">
+<img id="galB-img3" src="assets/gallery-B3.jpg" alt="">
+<img id="galB-img4" src="assets/gallery-B4.jpg" alt="">
+</figure>
 <section class="galB-center-wrap" id="galB-wrap"></section>
 
+<figure class="frame s8-frame" aria-hidden="true"><img id="s8-img" src="assets/section8.jpg" alt=""></figure>
 <section class="s8-wrap" id="s8-wrap"></section>
 
+<figure class="frame s9-frame" aria-hidden="true"><img id="s9-img" src="assets/section9.jpg" alt=""></figure>
 <section class="s9-wrap" id="s9-wrap"></section>
 <div class="s9-overlay">
 <div class="s9-rail">
@@ -735,8 +733,17 @@ Fusce quis magna elit. Aenean mi tellus, fermentum eu pharetra id, fermentum non
 </div>
 </div>
 
+<figure class="frame galC-left-frame" aria-hidden="true">
+<img id="galC-img0" src="assets/gallery-C.jpg" alt="">
+<img id="galC-img1" src="assets/gallery-C1.jpg" alt="">
+<img id="galC-img2" src="assets/gallery-C2.jpg" alt="">
+<img id="galC-img3" src="assets/gallery-C3.jpg" alt="">
+<img id="galC-img4" src="assets/gallery-C4.jpg" alt="">
+<img id="galC-img5" src="assets/gallery-C5.jpg" alt="">
+</figure>
 <section class="galC-left-wrap" id="galC-wrap"></section>
 
+<figure class="frame s11-frame" aria-hidden="true"><img id="s11-img" src="assets/section11.jpg" alt=""></figure>
 <section class="s11-wrap" id="s11-wrap"></section>
 <div class="s11-overlay">
 <div class="s11-rail">
@@ -750,8 +757,10 @@ Fusce quis magna elit. Aenean mi tellus, fermentum eu pharetra id, fermentum non
 </div>
 </div>
 
+<figure class="frame s12-frame" aria-hidden="true"><img id="s12-img" src="assets/section12.jpg" alt=""></figure>
 <section class="s12-wrap" id="s12-wrap"></section>
 
+<figure class="frame s13-frame" aria-hidden="true"><img id="s13-img" src="assets/section13.jpg" alt=""></figure>
 <section class="s13-wrap" id="s13-wrap"></section>
 <div class="s13-overlay">
 <div class="s13-rail">
@@ -765,6 +774,7 @@ Fusce quis magna elit. Aenean mi tellus, fermentum eu pharetra id, fermentum non
 </div>
 </div>
 
+<figure class="frame s14-frame" aria-hidden="true"><img id="s14-img" src="assets/section14.jpg" alt=""></figure>
 <section class="s14-wrap" id="s14-wrap"></section>
 <div class="s14-overlay">
 <div class="s14-rail">
@@ -778,6 +788,7 @@ Fusce quis magna elit. Aenean mi tellus, fermentum eu pharetra id, fermentum non
 </div>
 </div>
 
+<figure class="frame s15-frame" aria-hidden="true"><img id="s15-img" src="assets/section15.jpg" alt=""></figure>
 <section class="s15-wrap" id="s15-wrap"></section>
 <div class="s15-overlay">
 <div class="s15-rail">
@@ -919,6 +930,44 @@ if (s15Img && s15Img.complete && s15Img.naturalWidth > 0) markS15Ready();
 else if (s15Img) s15Img.addEventListener('load', markS15Ready, { once:true });
 
 
+/* --- NEW MAP INTERACTION HANDLERS (REFINED) --- */
+const sMapAFrame = document.getElementById('map-frame-container');
+const sMapAIframe = document.getElementById('sMapA-map');
+const mapOverlay = document.getElementById('map-overlay');
+const exitMapBtn = document.getElementById('exit-map-btn');
+
+function enableMapInteraction() {
+    // 1. Give control to the map iframe
+    sMapAIframe.style.pointerEvents = 'auto';
+    // 2. Hide the overlay
+    mapOverlay.classList.add('hidden');
+    // 3. Show the exit button
+    exitMapBtn.classList.add('visible');
+    // 4. Temporarily disable page scrolling using a CSS Class - LESS LIKELY TO CONFLICT
+    document.body.classList.add('scroll-locked');
+}
+
+function disableMapInteraction() {
+    // 1. Take control back to allow page scroll through the iframe
+    sMapAIframe.style.pointerEvents = 'none';
+    // 2. Show the overlay
+    mapOverlay.classList.remove('hidden');
+    // 3. Hide the exit button
+    exitMapBtn.classList.remove('visible');
+    // 4. Re-enable page scrolling
+    document.body.classList.remove('scroll-locked');
+}
+
+// 5. Attach listeners
+if (mapOverlay) {
+    mapOverlay.addEventListener('click', enableMapInteraction);
+}
+if (exitMapBtn) {
+    exitMapBtn.addEventListener('click', disableMapInteraction);
+}
+/* ----------------------------------------------- */
+
+
 function update(){
 /* HERO choreography */
 const p=progressOf(driver);
@@ -995,7 +1044,6 @@ root.style.setProperty('--s15Y',(s15StartY+(s15EndY-s15StartY)*easePow(s15Raw,E)
 
 /* End zooms (full-bleed S3, S8, S12, S15) */
 const s3ZoomRaw = clamp((s3 - 0.82) / 0.18, 0, 1); root.style.setProperty('--s3Scale', (1 + 0.08 * easeInOutCubic(s3ZoomRaw)).toFixed(3));
-/* MapA: Scale calculation removed per user request */
 const s8ZoomRaw = clamp((s8 - 0.82) / 0.18, 0, 1); root.style.setProperty('--s8Scale', (1 + 0.08 * easeInOutCubic(s8ZoomRaw)).toFixed(3));
 const s12ZoomRaw = clamp((s12 - 0.82) / 0.18, 0, 1);root.style.setProperty('--s12Scale', (1 + 0.08 * easeInOutCubic(s12ZoomRaw)).toFixed(3));
 const s15ZoomRaw = clamp((s15 - 0.82) / 0.18, 0, 1);root.style.setProperty('--s15Scale', (1 + 0.08 * easeInOutCubic(s15ZoomRaw)).toFixed(3));
@@ -1032,13 +1080,13 @@ const s3AlphaOut = s3Alpha * (1 - x34);
 
 /* S4 → MapA */
 const x4MapA = clamp(sMapA/FADE_FRAC, 0, 1);
-const sMapAAlpha = x4MapA;
+const sMapAAlphaIn = x4MapA; // Map A Fades IN as S4 Fades OUT
 s4Alpha = s4Alpha * (1 - x4MapA);
 
 /* MapA → S5 */
 const xMapA5 = clamp(s5/FADE_FRAC, 0, 1);
-let s5Alpha = xMapA5;
-const sMapAAlphaOut = sMapAAlpha * (1 - xMapA5);
+let s5Alpha = xMapA5; // S5 Fades IN
+const sMapAAlphaOut = sMapAAlphaIn * (1 - xMapA5); // Map A Fades OUT as S5 Fades IN
 
 /* S5 → gallery-B */
 const textBottomS5 = (parseFloat(getComputedStyle(root).getPropertyValue('--s5Y'))||0) + s5Text.scrollHeight;

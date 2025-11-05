@@ -55,6 +55,13 @@ font-family:"Acumin Pro",system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial
 --s15:0; --s15Overlay:0; --s15Y:0px; --s15ImgOpacity:0; --s15Scale:1; --s15Ready:0;
 }
 
+/* NEW: Class to force scroll lock (more robust than inline style) */
+body.body-locked {
+    overflow: hidden !important;
+    position: fixed; /* Helps ensure 100% viewport coverage */
+    inset: 0;
+}
+
 /* ===== HERO (UNCHANGED) ===== */
 .hero-fixed{
 position:fixed; inset:0; z-index:3;
@@ -888,7 +895,7 @@ function measureS2(){ const vh=window.innerHeight; const h=s2Text.scrollHeight; 
 function measureS4(){ const vh=window.innerHeight; const h=s4Text.scrollHeight; s4StartY=vh; s4EndY=-h; root.style.setProperty('--s4Y', s4StartY+'px'); }
 function measureS5(){ const vh=window.innerHeight; const h=s5Text.scrollHeight; s5StartY=vh; s5EndY=-h; root.style.setProperty('--s5Y', s5StartY+'px'); }
 function measureS9(){ const vh=window.innerHeight; const h=s9Text.scrollHeight; s9StartY=vh; s9EndY=-h; root.style.setProperty('--s9Y', s9StartY+'px'); }
-function measureS11(){ const vh=window.innerHeight; const h=s11Text.scrollHeight; s11StartY=vh; s11EndY=-h; root.style.setProperty('--s11Y', s11StartY+'px'); }
+function measureS11(){ const vh=window.innerHeight; const h=s11Text.scrollHeight; s11StartY=vh; s11EndY=-h; root.style.setProperty('--s11Y',(s11StartY+(s11EndY-s11StartY)*easePow(s11Raw,E))+'px'); }
 function measureS13(){ const vh=window.innerHeight; const h=s13Text.scrollHeight; s13StartY=vh; s13EndY=-h; root.style.setProperty('--s13Y', s13StartY+'px'); }
 function measureS14(){ const vh=window.innerHeight; const h=s14Text.scrollHeight; s14StartY=vh; s14EndY=-h; root.style.setProperty('--s14Y', s14StartY+'px'); }
 function measureS15(){ const vh=window.innerHeight; const h=s15Text.scrollHeight; s15StartY=vh; s15EndY=-h; root.style.setProperty('--s15Y', s15StartY+'px'); }
@@ -926,47 +933,50 @@ if (s15Img && s15Img.complete && s15Img.naturalWidth > 0) markS15Ready();
 else if (s15Img) s15Img.addEventListener('load', markS15Ready, { once:true });
 
 
-/* --- MAP INTERACTION HANDLERS (FIXED: Added iframe focus) --- */
+/* --- MAP INTERACTION HANDLERS (FIXED: Refactored scroll lock and added Escape) --- */
+
+const sMapAIframeContainer = document.getElementById('map-frame-container');
+const mapOverlay = document.getElementById('map-overlay');
+const exitMapBtn = document.getElementById('exit-map-btn');
+const mapIframe = document.getElementById('sMapA-map');
 
 function enableMapInteraction() {
-    // Get the elements
-    const sMapAIframeContainer = document.getElementById('map-frame-container'); // The figure
-    const mapOverlay = document.getElementById('map-overlay');
-    const exitMapBtn = document.getElementById('exit-map-btn');
-    const mapIframe = document.getElementById('sMapA-map'); // Get the iframe element
-    
     // Check if the body is already locked
-    if (document.body.style.overflow === 'hidden') return;
+    if (document.body.classList.contains('body-locked')) return;
 
-    // CRITICAL FIX: Add a class to enable interaction on the iframe via CSS
+    // CRITICAL FIX 1: Use a class to manage scroll lock
+    document.body.classList.add('body-locked');
+
+    // CRITICAL FIX 2: Add a class to enable interaction on the iframe via CSS
     if (sMapAIframeContainer) sMapAIframeContainer.classList.add('map-is-active');
 
     // Hide the overlay and show the exit button
     if (mapOverlay) mapOverlay.classList.add('hidden');
     if (exitMapBtn) exitMapBtn.classList.add('visible');
     
-    // Lock scroll by setting overflow style directly
-    document.body.style.overflow = 'hidden';
-
     // NEW FIX: Explicitly focus the iframe to ensure it receives input
     if (mapIframe) mapIframe.focus();
 }
 
 function disableMapInteraction() {
-    // Get the elements
-    const sMapAIframeContainer = document.getElementById('map-frame-container');
-    const mapOverlay = document.getElementById('map-overlay');
-    const exitMapBtn = document.getElementById('exit-map-btn');
+    // CRITICAL FIX 1: Remove the class to unlock scroll
+    document.body.classList.remove('body-locked');
     
-    // CRITICAL FIX: Remove the class to disable interaction on the iframe via CSS
+    // CRITICAL FIX 2: Remove the class to disable interaction on the iframe via CSS
     if (sMapAIframeContainer) sMapAIframeContainer.classList.remove('map-is-active');
 
     // Show the overlay and hide the exit button
     if (mapOverlay) mapOverlay.classList.remove('hidden');
     if (exitMapBtn) exitMapBtn.classList.remove('visible');
     
-    // Unlock scroll by resetting overflow style
-    document.body.style.overflow = '';
+    // Optional: Restore focus to the window/body to allow scroll events to re-register immediately
+    window.focus();
+}
+
+function handleEscapeKey(event) {
+    if (event.key === 'Escape' && document.body.classList.contains('body-locked')) {
+        disableMapInteraction();
+    }
 }
 /* ----------------------------------------------- */
 
@@ -1242,16 +1252,15 @@ if(document.fonts && document.fonts.ready){ try{ await document.fonts.ready; }ca
 measureHero();
 measureS1(); measureS2(); measureS4(); measureS5(); measureS9(); measureS11(); measureS13(); measureS14(); measureS15();
 
-// NEW FIX: Attach map listeners directly when the script runs (at end of body)
-const mapOverlay = document.getElementById('map-overlay');
-const exitMapBtn = document.getElementById('exit-map-btn');
-
+// Attach map listeners directly when the script runs (at end of body)
 if (mapOverlay) {
     mapOverlay.addEventListener('click', enableMapInteraction);
 }
 if (exitMapBtn) {
     exitMapBtn.addEventListener('click', disableMapInteraction);
 }
+// NEW: Add Escape key listener for accessibility/UX
+document.addEventListener('keydown', handleEscapeKey);
 
 addEventListener('load',  ()=>{ measureHero(); measureS1(); measureS2(); measureS4(); measureS5(); measureS9(); measureS11(); measureS13(); measureS14(); measureS15(); update(); }, { once:true });
 addEventListener('resize',  ()=>{ measureHero(); measureS1(); measureS2(); measureS4(); measureS5(); measureS9(); measureS11(); measureS13(); measureS14(); measureS15(); update(); });

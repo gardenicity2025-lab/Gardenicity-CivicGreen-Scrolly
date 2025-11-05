@@ -157,21 +157,17 @@ opacity: var(--s4ImgOpacity);
     object-fit:cover !important; object-position:center;
     pointer-events: none; /* CRITICAL: Default to 'none' to allow page scroll-through */
 }
-/* Overlay to capture the click and prompt the user */
+/* Overlay to capture the click (NOW TRANSPARENT/INVISIBLE) */
 .map-overlay {
     position: absolute;
     inset: 0;
-    background: rgba(0, 0, 0, 0.4);
-    color: white;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    background: transparent; /* TRANSPARENT BACKGROUND */
+    color: transparent; /* Ensure any accidental text is invisible */
+    display: block; /* Use block for simple, full coverage */
     cursor: pointer;
-    text-align: center;
-    font-size: 24px;
     transition: opacity 0.3s;
     pointer-events: auto; /* CRITICAL: Must be 'auto' to capture the initial click */
+    z-index: 2; /* Must be above the iframe (z-index 1) */
 }
 .map-overlay.hidden {
     pointer-events: none;
@@ -686,8 +682,7 @@ left:0 !important; right:0 !important;
     <iframe id="sMapA-map" src="https://api.mapbox.com/styles/v1/kavni/cmhkpt4uz00et01pjheur1zc1.html?title=false&access_token=pk.eyJ1Ijoia2F2bmkiLCJhIjoiY2s5YjBqNGY1MGV4aTNobnk0amJncWZweCJ9.gZK_r9CYmb6ZN_mZVmgjNg&zoomwheel=true#15.99/32.079031/34.770081" title="Gardenicity-Geddes-Civic-Green" style="border:none; width:100%; height:100%;" allowfullscreen></iframe>
     
     <div class="map-overlay" id="map-overlay">
-        <p>Click here to interact with the map (Pan/Zoom)<br><small>Scroll to continue the story.</small></p>
-    </div>
+        </div>
     
     <button class="exit-map-btn" id="exit-map-btn">Exit Map Interaction</button>
 </figure>
@@ -931,34 +926,33 @@ else if (s15Img) s15Img.addEventListener('load', markS15Ready, { once:true });
 
 
 /* --- NEW MAP INTERACTION HANDLERS (REFINED) --- */
-const sMapAFrame = document.getElementById('map-frame-container');
 const sMapAIframe = document.getElementById('sMapA-map');
 const mapOverlay = document.getElementById('map-overlay');
 const exitMapBtn = document.getElementById('exit-map-btn');
 
 function enableMapInteraction() {
     // 1. Give control to the map iframe
-    sMapAIframe.style.pointerEvents = 'auto';
-    // 2. Hide the overlay
-    mapOverlay.classList.add('hidden');
+    if (sMapAIframe) sMapAIframe.style.pointerEvents = 'auto';
+    // 2. Hide the transparent overlay (disables click capture)
+    if (mapOverlay) mapOverlay.classList.add('hidden');
     // 3. Show the exit button
-    exitMapBtn.classList.add('visible');
+    if (exitMapBtn) exitMapBtn.classList.add('visible');
     // 4. Temporarily disable page scrolling using a CSS Class - LESS LIKELY TO CONFLICT
     document.body.classList.add('scroll-locked');
 }
 
 function disableMapInteraction() {
     // 1. Take control back to allow page scroll through the iframe
-    sMapAIframe.style.pointerEvents = 'none';
-    // 2. Show the overlay
-    mapOverlay.classList.remove('hidden');
+    if (sMapAIframe) sMapAIframe.style.pointerEvents = 'none';
+    // 2. Show the transparent overlay (re-enables click capture)
+    if (mapOverlay) mapOverlay.classList.remove('hidden');
     // 3. Hide the exit button
-    exitMapBtn.classList.remove('visible');
+    if (exitMapBtn) exitMapBtn.classList.remove('visible');
     // 4. Re-enable page scrolling
     document.body.classList.remove('scroll-locked');
 }
 
-// 5. Attach listeners
+// 5. Attach listeners (will be run again in init via DOMContentLoaded)
 if (mapOverlay) {
     mapOverlay.addEventListener('click', enableMapInteraction);
 }
@@ -1238,6 +1232,20 @@ async function init(){
 if(document.fonts && document.fonts.ready){ try{ await document.fonts.ready; }catch(e){} }
 measureHero();
 measureS1(); measureS2(); measureS4(); measureS5(); measureS9(); measureS11(); measureS13(); measureS14(); measureS15();
+
+// CRITICAL FIX: Re-attach map listeners after DOM is loaded for robustness.
+addEventListener('DOMContentLoaded', () => {
+    const mapOverlay = document.getElementById('map-overlay');
+    const exitMapBtn = document.getElementById('exit-map-btn');
+    if (mapOverlay) {
+        mapOverlay.addEventListener('click', enableMapInteraction);
+    }
+    if (exitMapBtn) {
+        exitMapBtn.addEventListener('click', disableMapInteraction);
+    }
+}, { once: true });
+
+
 addEventListener('load',  ()=>{ measureHero(); measureS1(); measureS2(); measureS4(); measureS5(); measureS9(); measureS11(); measureS13(); measureS14(); measureS15(); update(); }, { once:true });
 addEventListener('resize',  ()=>{ measureHero(); measureS1(); measureS2(); measureS4(); measureS5(); measureS9(); measureS11(); measureS13(); measureS14(); measureS15(); update(); });
 addEventListener('scroll', update, {passive:true});

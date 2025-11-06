@@ -1219,6 +1219,23 @@ update();
 init();
 })();
 </script>
+<script>
+/* === Hybrid fix: give and take pointer control === */
+const mapFrame = document.querySelector('.sMapA-frame');
+
+function toggleMapPointer() {
+  if (!mapFrame) return;
+  const rect = mapFrame.getBoundingClientRect();
+  const visible = rect.top < window.innerHeight && rect.bottom > 0;
+  mapFrame.style.pointerEvents = visible ? 'auto' : 'none';
+}
+
+// run on scroll and resize
+window.addEventListener('scroll', toggleMapPointer, { passive: true });
+window.addEventListener('resize', toggleMapPointer);
+toggleMapPointer(); // initial check
+</script>
+
 </body>
 </html>
 

@@ -20,6 +20,8 @@ html, body {
   font-family: "Acumin Pro", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
 }
 
+
+
 :root{
 /* HERO */
 --shift:0px; --titleOpacity:0; --linksOpacity:0; --heroAlpha:1; --heroBlur:0;
@@ -88,7 +90,7 @@ display:flex; align-items:flex-end; justify-content:flex-start; overflow:hidden;
 .hero-links a:hover,.hero-links a:focus-visible{ color:#00A86B; }
 .driver{ height:200vh; }
 
-/* ===== PINNED FRAMES (unified fix for map + scroll) ===== */
+/* ===== PINNED FRAMES (merged Nov-5 scroll + Nov-6 map) ===== */
 figure.frame { margin: 0; }
 
 .frame {
@@ -98,6 +100,7 @@ figure.frame { margin: 0; }
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  /*  🚫 do NOT set pointer-events:none here — allow wheel scroll to bubble  */
 }
 
 /* Enable MapA iframe interactivity */
@@ -107,16 +110,13 @@ figure.frame { margin: 0; }
   z-index: 4 !important;
 }
 
-/* When frames (any) fade out, free the scroll */
-.frame[style*="opacity: 0"],
-.frame[style*="opacity:0"] {
+/* When MapA fades out, release mouse control */
+.sMapA-frame[style*="opacity: 0"],
+.sMapA-frame[style*="opacity:0"] {
   pointer-events: none !important;
 }
 
-/* Safety: allow wheel scrolling when map hidden */
-.sMapA-frame:not([style*="opacity: 1"]) {
-  pointer-events: none !important;
-}
+
 
 .frame img{ width:100%; height:100%; object-fit:contain; display:block; }
 
@@ -1231,23 +1231,32 @@ init();
 })();
 </script>
 <script>
-/* === FINAL SAFETY PATCH: restore mousewheel scroll globally === */
-window.addEventListener('wheel', e => {
-  // If the event target is not inside the visible map iframe, force scroll
-  const map = document.getElementById('sMapA-map');
-  const rect = map.getBoundingClientRect();
-  const insideMap = (
-    e.clientX >= rect.left &&
-    e.clientX <= rect.right &&
-    e.clientY >= rect.top &&
-    e.clientY <= rect.bottom &&
-    getComputedStyle(map.parentElement).opacity > 0.1
-  );
-  if (!insideMap) window.scrollBy(0, e.deltaY);
-}, { passive: true });
+/* === FINAL FIX: restore mouse scroll globally & toggle map pointer === */
+(function(){
+  const mapFrame = document.querySelector('.sMapA-frame');
+  const mapIframe = document.getElementById('sMapA-map');
+
+  window.addEventListener('scroll', () => {
+    if (!mapFrame || !mapIframe) return;
+    const rect = mapFrame.getBoundingClientRect();
+    const visible = rect.bottom > 100 && rect.top < window.innerHeight - 100;
+    // only enable pointer events when map is actually in view
+    mapIframe.style.pointerEvents = visible ? 'auto' : 'none';
+  }, { passive: true });
+
+  // ensure wheel scroll always works outside visible map
+  window.addEventListener('wheel', e => {
+    const rect = mapFrame?.getBoundingClientRect?.() || {top:0,bottom:0,left:0,right:0};
+    const insideMap = (
+      e.clientX >= rect.left &&
+      e.clientX <= rect.right &&
+      e.clientY >= rect.top &&
+      e.clientY <= rect.bottom
+    );
+    if (!insideMap) return; // let normal scroll occur
+  }, { passive: true });
+})();
 </script>
-
-
 </body>
 </html>
 

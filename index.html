@@ -87,6 +87,12 @@ figure.frame{ margin:0; }
 position:fixed; z-index:1; pointer-events:none;
 display:flex; align-items:center; justify-content:center; overflow:hidden;
 }
+/* === Enable interactivity for MapA frame === */
+.frame.sMapA-frame,
+.frame.sMapA-frame iframe {
+  pointer-events: auto !important;
+  z-index: 5 !important; /* above other fixed frames */
+}
 .frame img{ width:100%; height:100%; object-fit:contain; display:block; }
 
 /* S1 image RIGHT (text left) */
@@ -615,14 +621,7 @@ left:0 !important; right:0 !important;
 <figure class="frame s4-frame" aria-hidden="true"><img id="s4-img" src="assets/section4.jpg" alt=""></figure>
 
 <!-- === MAP A SECTION (Interactive Mapbox Studio iframe) === -->
-<section id="sMapA-wrap" class="text-section">
-  <div class="text-rail">
-    <h2>Urban Canopy Density</h2>
-    <p>
-      The interactive map below allows you to explore canopy coverage and density patterns across Geddes’ Tel Aviv plan.
-    </p>
-  </div>
-</section>
+<section class="sMapA-wrap" id="sMapA-wrap"></section>
 
 <figure class="frame sMapA-frame">
   <iframe
@@ -634,6 +633,8 @@ left:0 !important; right:0 !important;
     loading="lazy">
   </iframe>
 </figure>
+
+
 
 <figure class="frame s5-frame" aria-hidden="true"><img id="s5-img" src="assets/section5.jpg" alt=""></figure>
 

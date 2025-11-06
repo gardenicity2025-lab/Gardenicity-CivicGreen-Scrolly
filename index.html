@@ -99,6 +99,26 @@ display:flex; align-items:center; justify-content:center; overflow:hidden;
   pointer-events: none !important;
 }
 
+/* === SAFETY FIX: allow wheel scrolling outside visible map === */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 3;              /* below the map (z-index: 4) but above other frames */
+  pointer-events: none;    /* don't block clicks */
+}
+
+.sMapA-frame:not([style*="opacity: 1"]) {
+  pointer-events: none !important;  /* when hidden or partially faded, release control */
+}
+
+/* === GLOBAL FIX: restore mousewheel scrolling through fixed frames === */
+.frame[style*="opacity: 0"],
+.frame[style*="opacity:0"] {
+  pointer-events: none !important;
+}
+
+
 
 .frame img{ width:100%; height:100%; object-fit:contain; display:block; }
 

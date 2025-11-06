@@ -155,7 +155,7 @@ opacity: var(--s4ImgOpacity);
     width:100%; height:100%;
 }
 
-/* 🟢 NEW: Map Interaction Cue Styling */
+/* Map Interaction Cue Styling (Modified: Now advises to use drag/buttons) */
 #map-interaction-cue{
     position: absolute;
     top: 50%;
@@ -171,7 +171,7 @@ opacity: var(--s4ImgOpacity);
     z-index: 10; 
     opacity: 0;
     transition: opacity 0.5s;
-    pointer-events: none; /* Must be none so you can drag the map underneath */
+    pointer-events: none; 
 }
 /* Show the cue when the map is fully visible (or nearly so) */
 .sMapA-frame[style*="opacity: 1"] #map-interaction-cue {
@@ -474,7 +474,7 @@ width:500px;
 <figure class="frame sMapA-frame" aria-hidden="true" id="map-frame-container">
     <div id="sMapA-map" style="width:100%; height:100%;"></div>
     <div id="map-interaction-cue">
-        Hold **Ctrl** (or **Cmd**) and scroll to zoom in/out on the map.
+        Use the **+ / -** buttons to zoom. Click and drag to pan.
     </div>
 </figure>
 
@@ -985,7 +985,7 @@ if(document.fonts && document.fonts.ready){ try{ await document.fonts.ready; }ca
 measureHero();
 measureS1(); measureS2(); measureS4(); measureS5(); measureS9(); measureS11(); measureS13(); measureS14(); measureS15();
 
-// 🟢 Initialize Mapbox GL JS map with cooperative scroll
+// 🟢 Initialize Mapbox GL JS map with scroll-to-zoom DISABLED
 if (typeof mapboxgl !== 'undefined') {
     mapboxgl.accessToken = 'pk.eyJ1Ijoia2F2bmkiLCJhIjoiY2s5YjBqNGY1MGV4aTNobnk0amJncWZweCJ9.gZK_r9CYmb6ZN_mZVmgjNg';
     
@@ -997,12 +997,12 @@ if (typeof mapboxgl !== 'undefined') {
         pitch: 0, 
         bearing: 0,
         interactive: true,
-        // CRITICAL FIX: cooperative mode enables scrollZoom only when Ctrl/Cmd is held
-        scrollZoom: 'cooperative', 
+        // ULTIMATE FIX: This prevents the map from blocking the page scroll
+        scrollZoom: false, // <--- THE GUARANTEED FIX
         dragPan: true,        
     });
 
-    // Add optional Navigation control
+    // Add Navigation control for user to zoom/rotate with buttons
     map.addControl(new mapboxgl.NavigationControl({ visualizePitch: true }), 'top-right');
     
     // Optional: Add a subtle visual cue for interaction

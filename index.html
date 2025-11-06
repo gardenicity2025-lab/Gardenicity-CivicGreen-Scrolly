@@ -1230,6 +1230,24 @@ update();
 init();
 })();
 </script>
+<script>
+/* === FINAL SAFETY PATCH: restore mousewheel scroll globally === */
+window.addEventListener('wheel', e => {
+  // If the event target is not inside the visible map iframe, force scroll
+  const map = document.getElementById('sMapA-map');
+  const rect = map.getBoundingClientRect();
+  const insideMap = (
+    e.clientX >= rect.left &&
+    e.clientX <= rect.right &&
+    e.clientY >= rect.top &&
+    e.clientY <= rect.bottom &&
+    getComputedStyle(map.parentElement).opacity > 0.1
+  );
+  if (!insideMap) window.scrollBy(0, e.deltaY);
+}, { passive: true });
+</script>
+
+
 </body>
 </html>
 

@@ -1,3 +1,4 @@
+6-11-2025 MapshowingScroll-Working-Mouse Working?
 <!doctype html>
 <html lang="en" data-baseline="stable-2025-10-01__rails-460px__galC-6-only">
 <head>
@@ -92,6 +93,12 @@ display:flex; align-items:center; justify-content:center; overflow:hidden;
   pointer-events: auto !important;
   z-index: 4 !important;
 }
+/* === Fix: release scroll when map is offscreen or transparent === */
+.sMapA-frame[style*="opacity: 0"],
+.sMapA-frame[style*="opacity:0"] {
+  pointer-events: none !important;
+}
+
 
 .frame img{ width:100%; height:100%; object-fit:contain; display:block; }
 
@@ -1207,3 +1214,5 @@ init();
 </script>
 </body>
 </html>
+
+

@@ -117,20 +117,28 @@ figure.frame { margin: 0; }
   z-index: 10 !important;
 }
 
+/* === Diagnostic visual overlay (temporary) === */
+.sMapA-frame.active {
+  outline: 3px solid limegreen;
+}
+
 .frame img {
   width: 100%;
   height: 100%;
   object-fit: contain;
   display: block;
 }
-+
+
 /* S1 image RIGHT (text left) */
-.s1-frame{
-top:96px; bottom:96px;
-left: calc(96px + 460px + 96px);
-right: 82px;
-opacity: var(--s1ImgOpacity);
+.s1-frame {
+  top: 96px;
+  bottom: 96px;
+  left: calc(96px + 460px + 96px);
+  right: 82px;
+  opacity: var(--s1ImgOpacity);
 }
+
+
 
 /* S2 image LEFT (mirror) */
 .s2-frame{
@@ -1243,7 +1251,7 @@ init();
 })();
 </script>
 <script>
-/* === MapA hybrid scroll + interactivity toggle (v2) === */
+/* === MapA hybrid scroll + interactivity toggle — diagnostic version === */
 const mapFrame = document.querySelector('.sMapA-frame');
 const mapIframe = mapFrame?.querySelector('iframe');
 const mapWrap = document.querySelector('.sMapA-wrap');
@@ -1251,33 +1259,23 @@ const mapWrap = document.querySelector('.sMapA-wrap');
 function toggleMapPointer() {
   if (!mapFrame || !mapIframe || !mapWrap) return;
 
+  // check visibility based on moving wrapper, not the fixed frame
   const rect = mapWrap.getBoundingClientRect();
-  const visible = rect.top < window.innerHeight * 0.7 && rect.bottom > window.innerHeight * 0.3;
+  const visible = rect.top < window.innerHeight * 0.8 && rect.bottom > window.innerHeight * 0.2;
 
   if (visible) {
     mapIframe.style.pointerEvents = 'auto';
     mapFrame.style.pointerEvents = 'auto';
     mapFrame.classList.add('active');
+    console.log("MapA ACTIVE");
   } else {
     mapIframe.style.pointerEvents = 'none';
     mapFrame.style.pointerEvents = 'none';
     mapFrame.classList.remove('active');
+    console.log("MapA INACTIVE");
   }
 }
 
-window.addEventListener('blur', () => {
-  mapIframe.style.pointerEvents = 'none';
-  mapFrame.classList.remove('active');
-});
-
-window.addEventListener('scroll', toggleMapPointer, { passive: true });
-window.addEventListener('resize', toggleMapPointer);
-toggleMapPointer();
-</script>
-
-
-
-// Safety: reset when page loses focus
 window.addEventListener('blur', () => {
   if (mapIframe) mapIframe.style.pointerEvents = 'none';
   if (mapFrame) mapFrame.style.pointerEvents = 'none';
@@ -1288,6 +1286,8 @@ window.addEventListener('scroll', toggleMapPointer, { passive: true });
 window.addEventListener('resize', toggleMapPointer);
 toggleMapPointer();
 </script>
+
+
 
 
 

@@ -1,4 +1,4 @@
-7-11-2025 Mapshowingbutnotscrolling
+7-11-2025 Interactive map, No mouse scroll
 <!doctype html>
 <html lang="en" data-baseline="stable-2025-10-01__rails-460px__galC-6-only">
 <head>
@@ -88,23 +88,22 @@ display:flex; align-items:flex-end; justify-content:flex-start; overflow:hidden;
 .driver{ height:200vh; }
 
 /* ===== PINNED FRAMES (unchanged before S4) ===== */
-figure.frame{ margin:0; }
-.frame{
-position:fixed; z-index:1; pointer-events:none;
-display:flex; align-items:center; justify-content:center; overflow:hidden;
+figure.frame { margin: 0; }
+
+.frame {
+  position: fixed;
+  z-index: 1;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
 }
+
 /* === Enable MapA iframe interactivity only when visible === */
 .sMapA-frame iframe {
   pointer-events: none; /* start disabled so scrolling works normally */
   z-index: 4;
-}
-
-
-/* === Enable MapA iframe interactivity === */
-.sMapA-frame,
-.sMapA-frame iframe {
-  pointer-events: auto !important;
-  z-index: 4 !important;
 }
 
 /* === Disable map interaction when faded === */
@@ -112,8 +111,14 @@ display:flex; align-items:center; justify-content:center; overflow:hidden;
 .sMapA-frame[style*="opacity:0"] {
   pointer-events: none !important;
 }
-.frame img{ width:100%; height:100%; object-fit:contain; display:block; }
 
+.frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
++
 /* S1 image RIGHT (text left) */
 .s1-frame{
 top:96px; bottom:96px;
@@ -176,7 +181,7 @@ opacity: var(--s4ImgOpacity);
     object-fit:cover !important; object-position:center;
     /* Removed: transform: scale(var(--sMapAScale)); */
     /* Removed: will-change: transform; */
-    pointer-events: auto; /* Ensures map interaction is possible */
+    pointer-events: none; /* Ensures map interaction is possible */
 }
 
 /* S5 image LEFT */
@@ -1233,21 +1238,35 @@ init();
 })();
 </script>
 <script>
+/* === Final hybrid scroll + map fix === */
 const mapFrame = document.querySelector('.sMapA-frame');
 const mapIframe = mapFrame?.querySelector('iframe');
 
 function toggleMapPointer() {
   if (!mapFrame || !mapIframe) return;
+
+  // Check if the map section is within the viewport
   const rect = mapFrame.getBoundingClientRect();
   const visible = rect.top < window.innerHeight && rect.bottom > 0;
+
+  // Enable map interaction only while visible
   mapIframe.style.pointerEvents = visible ? 'auto' : 'none';
+  mapFrame.style.pointerEvents = visible ? 'auto' : 'none';
 }
+
+// Safety: if the map holds focus and the user scrolls away or switches tab
+window.addEventListener('blur', () => {
+  if (mapIframe) mapIframe.style.pointerEvents = 'none';
+  if (mapFrame) mapFrame.style.pointerEvents = 'none';
+});
+
+// Listen for scroll and resize events
 window.addEventListener('scroll', toggleMapPointer, { passive: true });
 window.addEventListener('resize', toggleMapPointer);
+
+// Initial state check
 toggleMapPointer();
 </script>
-
-
 
 </body>
 </html>

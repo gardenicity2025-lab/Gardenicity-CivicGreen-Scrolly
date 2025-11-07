@@ -111,33 +111,32 @@ figure.frame { margin: 0; }
   left: 0;
   opacity: var(--sMapAImgOpacity);
   z-index: 4;
+  pointer-events: auto !important; /* enable interactivity for Mapbox canvas */
 }
 
-/* === Map iframe === */
-.sMapA-frame iframe {
+/* === Map container (replaces old iframe rules) === */
+#sMapA-map {
   width: 100%;
   height: 100%;
   object-fit: cover !important;
   object-position: center;
   border: none;
-  /* starts disabled; JS enables when visible */
-  pointer-events: none;
 }
 
-/* === When map active (visible) === */
-.sMapA-frame.active iframe {
-  pointer-events: auto;
-  z-index: 10 !important;
-}
-
-/* Optional debug outline */
-.sMapA-frame.active {
-  outline: 3px solid limegreen;
+/* === Ensure Mapbox GL canvas receives input === */
+.sMapA-frame canvas,
+.sMapA-frame .mapboxgl-canvas {
+  pointer-events: auto !important;
 }
 
 /* === Disable map when faded === */
 .sMapA-frame[style*="opacity:0"] {
   pointer-events: none !important;
+}
+
+/* === When map active (visible) === */
+.sMapA-frame.active {
+  z-index: 10 !important;
 }
 
 /* S1 image RIGHT (text left) */
@@ -1308,6 +1307,7 @@ toggleMapPointer();
 
 <!-- === Initialize MapA with zoom-out handoff === -->
 <script>
+<script>
 document.addEventListener('DOMContentLoaded', () => {
   mapboxgl.accessToken =
     'pk.eyJ1Ijoia2F2bmkiLCJhIjoiY2s5YjBqNGY1MGV4aTNobnk0amJncWZweCJ9.gZK_r9CYmb6ZN_mZVmgjNg';
@@ -1320,6 +1320,9 @@ document.addEventListener('DOMContentLoaded', () => {
     scrollZoom: true,
     interactive: true,
   });
+
+  // ✅ Add zoom + rotation controls
+  map.addControl(new mapboxgl.NavigationControl());
 
   const mapFrame = document.querySelector('.sMapA-frame');
   const nextSection = document.querySelector('.s5-frame');
@@ -1340,3 +1343,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
 </body>
 </html>
+
+

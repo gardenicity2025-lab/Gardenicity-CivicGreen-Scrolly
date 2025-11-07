@@ -1318,8 +1318,11 @@ toggleMapPointer();
 
 
 <script>
+<!-- === Initialize MapA with zoom-out handoff === -->
+<script>
 document.addEventListener('DOMContentLoaded', () => {
-  mapboxgl.accessToken = 'pk.eyJ1Ijoia2F2bmkiLCJhIjoiY2s5YjBqNGY1MGV4aTNobnk0amJncWZweCJ9.gZK_r9CYmb6ZN_mZVmgjNg';
+  mapboxgl.accessToken =
+    'pk.eyJ1Ijoia2F2bmkiLCJhIjoiY2s5YjBqNGY1MGV4aTNobnk0amJncWZweCJ9.gZK_r9CYmb6ZN_mZVmgjNg';
 
   const map = new mapboxgl.Map({
     container: 'sMapA-map',
@@ -1330,24 +1333,12 @@ document.addEventListener('DOMContentLoaded', () => {
     interactive: true,
   });
 
-  // ✅ Add zoom buttons
   map.addControl(new mapboxgl.NavigationControl());
-
-  const mapFrame = document.querySelector('.sMapA-frame');
-  const nextSection = document.querySelector('.s5-frame');
-
-  map.on('zoom', () => {
-    const z = map.getZoom();
-    if (z <= 13.5) {
-      map.scrollZoom.disable();
-      mapFrame.style.pointerEvents = 'none';
-      nextSection.scrollIntoView({ behavior: 'smooth' });
-    }
-  });
-
-  mapFrame.addEventListener('mouseenter', () => map.scrollZoom.enable());
-  mapFrame.addEventListener('mouseleave', () => map.scrollZoom.disable());
 });
+</script>
+</body>
+</html>
+
 </script>
 
 </body>

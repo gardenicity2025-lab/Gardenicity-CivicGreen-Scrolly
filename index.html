@@ -672,20 +672,10 @@ body, html {
 <figure class="frame s3-frame" aria-hidden="true"><img id="s3-img" src="assets/section3.jpg" alt=""></figure>
 <figure class="frame s4-frame" aria-hidden="true"><img id="s4-img" src="assets/section4.jpg" alt=""></figure>
 
-<figure class="frame sMapA-frame">
-  <iframe
-    id="sMapA-map"
-    src="https://api.mapbox.com/styles/v1/kavni/cmhkpt4uz00et01pjheur1zc1.html?title=false&scrollZoom=false&access_token=pk.eyJ1Ijoia2F2bmkiLCJhIjoiY2s5YjBqNGY1MGV4aTNobnk0amJncWZweCJ9.gZK_r9CYmb6ZN_mZVmgjNg#15.99/32.079031/34.770081"
-    title="MapA"
-    style="border:none;width:100%;height:100%;"
-    allowfullscreen
-    loading="lazy">
-  </iframe>
+<figure class="frame sMapA-frame" aria-hidden="true">
+    <iframe id="sMapA-map" src="https://api.mapbox.com/styles/v1/kavni/cmhkpt4uz00et01pjheur1zc1.html?title=false&access_token=pk.eyJ1Ijoia2F2bmkiLCJhIjoiY2s5YjBqNGY1MGV4aTNobnk0amJncWZweCJ9.gZK_r9CYmb6ZN_mZVmgjNg&zoomwheel=true#15.99/32.079031/34.770081" title="MapA" style="border:none; width:100%; height:100%;"></iframe>
 </figure>
-
-<figure class="frame s5-frame" aria-hidden="true">
-  <img id="s5-img" src="assets/section5.jpg" alt="">
-</figure>
+<figure class="frame s5-frame" aria-hidden="true"><img id="s5-img" src="assets/section5.jpg" alt=""></figure>
 
 <figure class="frame galB-center-frame" aria-hidden="true">
 <img id="galB-img0" src="assets/gallery-B.jpg" alt="">
@@ -1326,65 +1316,10 @@ window.addEventListener('resize', toggleMapPointer);
 toggleMapPointer();
 </script>
 
-<!-- === Mapbox wheel zoom control (prevent infinite zoom while scrolling out) === -->
-<script>
-window.addEventListener('DOMContentLoaded', () => {
-  const mapIframe = document.getElementById('sMapA-map');
-  if (!mapIframe) return;
-
-  // Disable scroll zoom by default
-  mapIframe.addEventListener('load', () => {
-    try {
-      const map = mapIframe.contentWindow?.mapboxMap || null;
-      if (map && map.scrollZoom) map.scrollZoom.disable();
-    } catch (e) {}
-  });
-
-  // Re-enable zoom only when mouse is directly over the map
-  mapIframe.addEventListener('mouseenter', () => {
-    try {
-      const map = mapIframe.contentWindow?.mapboxMap || null;
-      if (map && map.scrollZoom) map.scrollZoom.enable();
-    } catch (e) {}
-  });
-
-  // Disable again on leave (so scrolling down exits smoothly)
-  mapIframe.addEventListener('mouseleave', () => {
-    try {
-      const map = mapIframe.contentWindow?.mapboxMap || null;
-      if (map && map.scrollZoom) map.scrollZoom.disable();
-    } catch (e) {}
-  });
-});
-</script>
-
-<!-- === MapA zoom-out release (scroll handoff to next section) === -->
-<script>
-(function(){
-  const mapFrame = document.querySelector('.sMapA-frame');
-  const mapIframe = document.getElementById('sMapA-map');
-  const nextSection = document.querySelector('.s5-frame');
-  let wheelAccumulator = 0;
-
-  window.addEventListener('wheel', (e) => {
-    // Only run when MapA is active
-    if (!mapFrame.classList.contains('active')) return;
-
-    // Track downward scrolling (zoom-out)
-    if (e.deltaY > 0) { wheelAccumulator += e.deltaY; } else { wheelAccumulator = 0; }
-
-    // Once the user scrolls down enough, release and jump to next section
-    if (wheelAccumulator > 500) {
-      mapFrame.classList.remove('active');
-      mapIframe.style.pointerEvents = 'none';
-      mapFrame.style.pointerEvents = 'none';
-      wheelAccumulator = 0;
-      // Smoothly scroll to section 5
-      if (nextSection) nextSection.scrollIntoView({ behavior: 'smooth' });
-    }
-  }, { passive: true });
-})();
-</script>
-
 </body>
 </html>
+
+
+
+
+

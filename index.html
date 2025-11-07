@@ -7,6 +7,14 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Gardenicity — Hero → S1 → S2 → gallery-A-Left → S3 → S4 → MapA → S5 → gallery-B-Center → S8 → S9 → gallery-C-Right → S11 → S12 → S13 → S14 → S15</title>
+
+<!-- === Mapbox GL JS library and stylesheet === -->
+<link
+  href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css"
+  rel="stylesheet"
+/>
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
+
 <style>
 
 /* ===== Base ===== */
@@ -1307,10 +1315,11 @@ toggleMapPointer();
 
 <!-- === Initialize MapA with zoom-out handoff === -->
 <script>
+
+
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-  mapboxgl.accessToken =
-    'pk.eyJ1Ijoia2F2bmkiLCJhIjoiY2s5YjBqNGY1MGV4aTNobnk0amJncWZweCJ9.gZK_r9CYmb6ZN_mZVmgjNg';
+  mapboxgl.accessToken = 'pk.eyJ1Ijoia2F2bmkiLCJhIjoiY2s5YjBqNGY1MGV4aTNobnk0amJncWZweCJ9.gZK_r9CYmb6ZN_mZVmgjNg';
 
   const map = new mapboxgl.Map({
     container: 'sMapA-map',
@@ -1321,7 +1330,7 @@ document.addEventListener('DOMContentLoaded', () => {
     interactive: true,
   });
 
-  // ✅ Add zoom + rotation controls
+  // ✅ Add zoom buttons
   map.addControl(new mapboxgl.NavigationControl());
 
   const mapFrame = document.querySelector('.sMapA-frame');

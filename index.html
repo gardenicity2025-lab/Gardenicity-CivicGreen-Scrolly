@@ -1,4 +1,5 @@
-7-11-2025 mapboxgl attempt
+7-11-2025 Mouse and Map scrolling problem with existing map
+✅ Step 1 — Switch from iframe to inline Mapbox GL JS
 
 <!doctype html>
 <html lang="en" data-baseline="stable-2025-10-01__rails-460px__galC-6-only">
@@ -675,11 +676,9 @@ body, html {
 
 <!-- === MAP A SECTION (Interactive Mapbox GL JS) === -->
 <figure class="frame sMapA-frame">
-  <!-- Map container for Mapbox GL JS -->
-  <div id="sMapA-map" style="width:100%; height:100%;"></div>
+  <div id="sMapA-map" style="width:100%;height:100%;background:#dfe8e1;"></div>
 </figure>
 
-<!-- The next image section stays the same -->
 <figure class="frame s5-frame" aria-hidden="true">
   <img id="s5-img" src="assets/section5.jpg" alt="">
 </figure>
@@ -1288,28 +1287,6 @@ init();
 })();
 </script>
 
-<!-- === MapA hybrid scroll + interactivity toggle (final tuned) === -->
-<script>
-const mapFrame = document.querySelector('.sMapA-frame');
-const mapIframe = mapFrame?.querySelector('iframe');
-const mapSection = document.querySelector('#sMapA-wrap');
-
-function toggleMapPointer() {
-  if (!mapFrame || !mapIframe || !mapSection) return;
-  const rect = mapSection.getBoundingClientRect();
-  const visible = rect.top < window.innerHeight * 0.8 && rect.bottom > window.innerHeight * 0.2;
-
-  // Toggle interactivity only while MapA section is in view
-  if (visible) {
-    mapFrame.classList.add('active');
-    mapIframe.style.pointerEvents = 'auto';
-    mapFrame.style.pointerEvents = 'auto';
-  } else {
-    mapFrame.classList.remove('active');
-    mapIframe.style.pointerEvents = 'none';
-    mapFrame.style.pointerEvents = 'none';
-  }
-}
 
 // Safety reset if user tabs away or iframe keeps focus
 window.addEventListener('blur', () => {
@@ -1326,38 +1303,39 @@ toggleMapPointer();
 </script>
 
 <!-- === Load Mapbox GL JS library (must come first) === -->
-<script src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
 <link href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css" rel="stylesheet" />
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
 
 <!-- === Initialize MapA with zoom-out handoff === -->
 <script>
-mapboxgl.accessToken = 'pk.eyJ1Ijoia2F2bmkiLCJhIjoiY2s5YjBqNGY1MGV4aTNobnk0amJncWZweCJ9.gZK_r9CYmb6ZN_mZVmgjNg';
+document.addEventListener('DOMContentLoaded', () => {
+  mapboxgl.accessToken =
+    'pk.eyJ1Ijoia2F2bmkiLCJhIjoiY2s5YjBqNGY1MGV4aTNobnk0amJncWZweCJ9.gZK_r9CYmb6ZN_mZVmgjNg';
 
-const map = new mapboxgl.Map({
-  container: 'sMapA-map',
-  style: 'mapbox://styles/kavni/cmhkpt4uz00et01pjheur1zc1',
-  center: [34.77, 32.08], // Tel Aviv
-  zoom: 15.99,
-  scrollZoom: true,
-  interactive: true,
+  const map = new mapboxgl.Map({
+    container: 'sMapA-map',
+    style: 'mapbox://styles/kavni/cmhkpt4uz00et01pjheur1zc1',
+    center: [34.77, 32.08],
+    zoom: 15.99,
+    scrollZoom: true,
+    interactive: true,
+  });
+
+  const mapFrame = document.querySelector('.sMapA-frame');
+  const nextSection = document.querySelector('.s5-frame');
+
+  map.on('zoom', () => {
+    const z = map.getZoom();
+    if (z <= 13.5) {
+      map.scrollZoom.disable();
+      mapFrame.style.pointerEvents = 'none';
+      nextSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  });
+
+  mapFrame.addEventListener('mouseenter', () => map.scrollZoom.enable());
+  mapFrame.addEventListener('mouseleave', () => map.scrollZoom.disable());
 });
-
-const mapFrame = document.querySelector('.sMapA-frame');
-const nextSection = document.querySelector('.s5-frame');
-
-// Watch zoom level — release scroll when zoomed out past threshold
-map.on('zoom', () => {
-  const z = map.getZoom();
-  if (z <= 13.5) {
-    map.scrollZoom.disable();
-    mapFrame.style.pointerEvents = 'none';
-    nextSection.scrollIntoView({ behavior: 'smooth' });
-  }
-});
-
-// Enable/disable scroll zoom only while hovered
-mapFrame.addEventListener('mouseenter', () => map.scrollZoom.enable());
-mapFrame.addEventListener('mouseleave', () => map.scrollZoom.disable());
 </script>
 
 </body>

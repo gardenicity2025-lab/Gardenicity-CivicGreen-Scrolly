@@ -1358,11 +1358,33 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 
+<!-- === MapA zoom-out release (scroll handoff to next section) === -->
+<script>
+(function(){
+  const mapFrame = document.querySelector('.sMapA-frame');
+  const mapIframe = document.getElementById('sMapA-map');
+  const nextSection = document.querySelector('.s5-frame');
+  let wheelAccumulator = 0;
+
+  window.addEventListener('wheel', (e) => {
+    // Only run when MapA is active
+    if (!mapFrame.classList.contains('active')) return;
+
+    // Track downward scrolling (zoom-out)
+    if (e.deltaY > 0) { wheelAccumulator += e.deltaY; } else { wheelAccumulator = 0; }
+
+    // Once the user scrolls down enough, release and jump to next section
+    if (wheelAccumulator > 500) {
+      mapFrame.classList.remove('active');
+      mapIframe.style.pointerEvents = 'none';
+      mapFrame.style.pointerEvents = 'none';
+      wheelAccumulator = 0;
+      // Smoothly scroll to section 5
+      if (nextSection) nextSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, { passive: true });
+})();
+</script>
+
 </body>
 </html>
-
-
-
-
-
-

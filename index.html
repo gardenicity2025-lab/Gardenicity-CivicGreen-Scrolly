@@ -613,12 +613,28 @@ transform: translateX(-50%) !important;
 
 /* 5. Galleries and Full-bleed remain full-bleed */
 .galA-left-frame, .galB-center-frame, .galC-left-frame {
-/* No change, they naturally expand to fill the area around the text rail */
+  /* No change, they naturally expand to fill the area around the text rail */
 }
+
 .frame.s3-frame, .frame.s8-frame, .frame.s12-frame, .frame.s15-frame, .frame.sMapA-frame {
-left:0 !important; right:0 !important;
+  left: 0 !important;
+  right: 0 !important;
 }
+
+/* === Global scroll restore === */
+body, html {
+  overscroll-behavior: auto;
 }
+
+/* Prevent invisible fixed frames (like MapA when faded) from blocking mouse scroll */
+.frame[style*="opacity:0"],
+.frame[style*="opacity: 0"] {
+  pointer-events: none !important;
+}
+
+</style>
+
+
 </style>
 </head>
 <body>
@@ -1264,7 +1280,7 @@ init();
 })();
 </script>
 
-<!-- === MapA hybrid scroll + interactivity toggle === -->
+<!-- === MapA hybrid scroll + interactivity toggle (final tuned) === -->
 <script>
 const mapFrame = document.querySelector('.sMapA-frame');
 const mapIframe = mapFrame?.querySelector('iframe');
@@ -1275,15 +1291,27 @@ function toggleMapPointer() {
   const rect = mapSection.getBoundingClientRect();
   const visible = rect.top < window.innerHeight * 0.8 && rect.bottom > window.innerHeight * 0.2;
 
+  // Toggle interactivity only while MapA section is in view
   if (visible) {
     mapFrame.classList.add('active');
+    mapIframe.style.pointerEvents = 'auto';
+    mapFrame.style.pointerEvents = 'auto';
   } else {
     mapFrame.classList.remove('active');
+    mapIframe.style.pointerEvents = 'none';
+    mapFrame.style.pointerEvents = 'none';
   }
 }
 
-// Reset if map retains focus
-window.addEventListener('blur', () => mapFrame?.classList.remove('active'));
+// Safety reset if user tabs away or iframe keeps focus
+window.addEventListener('blur', () => {
+  if (mapIframe) mapIframe.style.pointerEvents = 'none';
+  if (mapFrame) {
+    mapFrame.classList.remove('active');
+    mapFrame.style.pointerEvents = 'none';
+  }
+});
+
 window.addEventListener('scroll', toggleMapPointer, { passive: true });
 window.addEventListener('resize', toggleMapPointer);
 toggleMapPointer();
@@ -1291,6 +1319,8 @@ toggleMapPointer();
 
 </body>
 </html>
+
+
 
 
 

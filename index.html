@@ -100,9 +100,22 @@ figure.frame { margin: 0; }
   overflow: hidden;
 }
 
-/* === Enable MapA iframe interactivity only when visible === */
+/* === MapA: allow interactivity only when visible === */
+.sMapA-frame {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  opacity: var(--sMapAImgOpacity);
+}
+
+/* Let JS toggle pointer events dynamically */
 .sMapA-frame iframe {
-  pointer-events: none; /* start disabled so scrolling works normally */
+  width: 100%;
+  height: 100%;
+  object-fit: cover !important;
+  object-position: center;
+  pointer-events: inherit !important; /* ✅ inherit from parent so JS can control */
   z-index: 4;
 }
 
@@ -122,6 +135,7 @@ figure.frame { margin: 0; }
   outline: 3px solid limegreen;
 }
 
+/* Default image frames */
 .frame img {
   width: 100%;
   height: 100%;
@@ -1251,35 +1265,33 @@ init();
 })();
 </script>
 <script>
-/* === MapA hybrid scroll + interactivity toggle — diagnostic version === */
+/* === MapA hybrid scroll + interactivity toggle (final) === */
 const mapFrame = document.querySelector('.sMapA-frame');
 const mapIframe = mapFrame?.querySelector('iframe');
-const mapWrap = document.querySelector('.sMapA-wrap');
+const mapSection = document.querySelector('#sMapA-wrap');
 
 function toggleMapPointer() {
-  if (!mapFrame || !mapIframe || !mapWrap) return;
+  if (!mapFrame || !mapIframe || !mapSection) return;
 
-  // check visibility based on moving wrapper, not the fixed frame
-  const rect = mapWrap.getBoundingClientRect();
+  // detect when the scrollable section is roughly in viewport
+  const rect = mapSection.getBoundingClientRect();
   const visible = rect.top < window.innerHeight * 0.8 && rect.bottom > window.innerHeight * 0.2;
 
   if (visible) {
     mapIframe.style.pointerEvents = 'auto';
     mapFrame.style.pointerEvents = 'auto';
     mapFrame.classList.add('active');
-    console.log("MapA ACTIVE");
   } else {
     mapIframe.style.pointerEvents = 'none';
     mapFrame.style.pointerEvents = 'none';
     mapFrame.classList.remove('active');
-    console.log("MapA INACTIVE");
   }
 }
 
+// safety: reset if user clicks into map then scrolls away or switches tab
 window.addEventListener('blur', () => {
   if (mapIframe) mapIframe.style.pointerEvents = 'none';
-  if (mapFrame) mapFrame.style.pointerEvents = 'none';
-  mapFrame?.classList.remove('active');
+  if (mapFrame) mapFrame.classList.remove('active');
 });
 
 window.addEventListener('scroll', toggleMapPointer, { passive: true });
@@ -1287,10 +1299,7 @@ window.addEventListener('resize', toggleMapPointer);
 toggleMapPointer();
 </script>
 
-
-
-
-
+ pointer-events: none; 
 </body>
 </html>
 

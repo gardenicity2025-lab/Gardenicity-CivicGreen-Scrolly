@@ -1,4 +1,4 @@
-5-11-2025 Mapshowingbutnotscrolling
+7-11-2025 Mapshowingbutnotscrolling
 <!doctype html>
 <html lang="en" data-baseline="stable-2025-10-01__rails-460px__galC-6-only">
 <head>
@@ -8,11 +8,17 @@
 <style>
 
 /* ===== Base ===== */
-html,body{
-margin:0; padding:0; height:100%;
-background:#f8fbf2; color:#fff;
-font-family:"Acumin Pro",system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+html, body {
+  margin: 0;
+  padding: 0;
+  height: auto;
+  min-height: 100%;
+  overflow-y: scroll;
+  background: #f8fbf2;
+  color: #fff;
+  font-family: "Acumin Pro", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
 }
+
 :root{
 /* HERO */
 --shift:0px; --titleOpacity:0; --linksOpacity:0; --heroAlpha:1; --heroBlur:0;
@@ -87,6 +93,13 @@ figure.frame{ margin:0; }
 position:fixed; z-index:1; pointer-events:none;
 display:flex; align-items:center; justify-content:center; overflow:hidden;
 }
+/* === Enable MapA iframe interactivity only when visible === */
+.sMapA-frame iframe {
+  pointer-events: none; /* start disabled so scrolling works normally */
+  z-index: 4;
+}
+
+
 /* === Enable MapA iframe interactivity === */
 .sMapA-frame,
 .sMapA-frame iframe {
@@ -1220,21 +1233,21 @@ init();
 })();
 </script>
 <script>
-/* === Hybrid fix: give and take pointer control === */
 const mapFrame = document.querySelector('.sMapA-frame');
+const mapIframe = mapFrame?.querySelector('iframe');
 
 function toggleMapPointer() {
-  if (!mapFrame) return;
+  if (!mapFrame || !mapIframe) return;
   const rect = mapFrame.getBoundingClientRect();
   const visible = rect.top < window.innerHeight && rect.bottom > 0;
-  mapFrame.style.pointerEvents = visible ? 'auto' : 'none';
+  mapIframe.style.pointerEvents = visible ? 'auto' : 'none';
 }
-
-// run on scroll and resize
 window.addEventListener('scroll', toggleMapPointer, { passive: true });
 window.addEventListener('resize', toggleMapPointer);
-toggleMapPointer(); // initial check
+toggleMapPointer();
 </script>
+
+
 
 </body>
 </html>

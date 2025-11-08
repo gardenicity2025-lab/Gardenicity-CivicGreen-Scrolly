@@ -1,4 +1,4 @@
-8-11-25-iFrame-Map-Partial-Scroll
+8-11-25-iFrame-Map-Scroll-Partila Mouse
 <!doctype html>
 <html lang="en" data-baseline="stable-2025-10-01__rails-460px__galC-6-only">
 <head>
@@ -1279,7 +1279,7 @@ init();
 })();
 </script>
 
-<!-- === MapA hybrid scroll + interactivity toggle + instant handoff === -->
+<!-- === MapA hybrid scroll + interactivity toggle + safe single-scroll handoff === -->
 <script>
 const mapFrame = document.querySelector('.sMapA-frame');
 const mapIframe = mapFrame?.querySelector('iframe');
@@ -1291,42 +1291,47 @@ function toggleMapPointer() {
   const rect = mapSection.getBoundingClientRect();
   const visible = rect.top < window.innerHeight * 0.8 && rect.bottom > window.innerHeight * 0.2;
 
-  // Toggle interactivity only while MapA section is in view
   if (visible) {
     mapFrame.classList.add('active');
     mapIframe.style.pointerEvents = 'auto';
-    mapFrame.style.pointerEvents = 'auto';
   } else {
     mapFrame.classList.remove('active');
     mapIframe.style.pointerEvents = 'none';
-    mapFrame.style.pointerEvents = 'none';
   }
 }
 
-// === Controlled handoff from MapA to next section (1 scroll, any direction) ===
+// === Controlled handoff (fires only when map is fully visible) ===
 (() => {
   if (!mapFrame || !mapIframe || !nextSection) return;
+  let canExit = false;
+  let hasExited = false;
+
+  // Observe opacity changes of the MapA frame
+  const observer = new MutationObserver(() => {
+    const style = window.getComputedStyle(mapFrame);
+    const opacity = parseFloat(style.opacity) || 0;
+    canExit = opacity > 0.98; // only when map fully visible
+  });
+  observer.observe(mapFrame, { attributes: true, attributeFilter: ['style'] });
 
   mapIframe.addEventListener('wheel', (e) => {
-    // Trigger on any strong wheel movement up or down
-    if (Math.abs(e.deltaY) > 10) {
-      mapIframe.style.pointerEvents = 'none'; // release focus immediately
+    if (!canExit || hasExited) return;
+    if (e.deltaY > 30) { // deliberate downward scroll
+      hasExited = true;
+      mapIframe.style.pointerEvents = 'none';
       nextSection.scrollIntoView({ behavior: 'smooth' });
-      // re-enable map after small delay so user can scroll back up
       setTimeout(() => {
+        hasExited = false;
         mapIframe.style.pointerEvents = 'auto';
-      }, 1000);
+      }, 1200);
     }
   }, { passive: true });
 })();
 
-// Safety reset if user tabs away or iframe keeps focus
+// Reset map when focus changes
 window.addEventListener('blur', () => {
-  if (mapIframe) mapIframe.style.pointerEvents = 'none';
-  if (mapFrame) {
-    mapFrame.classList.remove('active');
-    mapFrame.style.pointerEvents = 'none';
-  }
+  mapFrame?.classList.remove('active');
+  mapIframe?.style && (mapIframe.style.pointerEvents = 'none');
 });
 
 window.addEventListener('scroll', toggleMapPointer, { passive: true });
@@ -1336,8 +1341,3 @@ toggleMapPointer();
 
 </body>
 </html>
-
-
-
-
-

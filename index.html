@@ -1279,12 +1279,11 @@ init();
 })();
 </script>
 
-<!-- === MapA hybrid scroll + interactivity toggle + safe single-scroll handoff === -->
+<!-- === MapA scroll + interactivity control (production clean) === -->
 <script>
 const mapFrame = document.querySelector('.sMapA-frame');
 const mapIframe = mapFrame?.querySelector('iframe');
 const mapSection = document.querySelector('#sMapA-wrap');
-const nextSection = document.querySelector('#s5-wrap');
 
 function toggleMapPointer() {
   if (!mapFrame || !mapIframe || !mapSection) return;
@@ -1300,38 +1299,10 @@ function toggleMapPointer() {
   }
 }
 
-// === Controlled handoff (fires only when map is fully visible) ===
-(() => {
-  if (!mapFrame || !mapIframe || !nextSection) return;
-  let canExit = false;
-  let hasExited = false;
-
-  // Observe opacity changes of the MapA frame
-  const observer = new MutationObserver(() => {
-    const style = window.getComputedStyle(mapFrame);
-    const opacity = parseFloat(style.opacity) || 0;
-    canExit = opacity > 0.98; // only when map fully visible
-  });
-  observer.observe(mapFrame, { attributes: true, attributeFilter: ['style'] });
-
-  mapIframe.addEventListener('wheel', (e) => {
-    if (!canExit || hasExited) return;
-    if (e.deltaY > 30) { // deliberate downward scroll
-      hasExited = true;
-      mapIframe.style.pointerEvents = 'none';
-      nextSection.scrollIntoView({ behavior: 'smooth' });
-      setTimeout(() => {
-        hasExited = false;
-        mapIframe.style.pointerEvents = 'auto';
-      }, 1200);
-    }
-  }, { passive: true });
-})();
-
-// Reset map when focus changes
+// reset map interactivity when window loses focus
 window.addEventListener('blur', () => {
-  mapFrame?.classList.remove('active');
-  mapIframe?.style && (mapIframe.style.pointerEvents = 'none');
+  if (mapIframe) mapIframe.style.pointerEvents = 'none';
+  if (mapFrame) mapFrame.classList.remove('active');
 });
 
 window.addEventListener('scroll', toggleMapPointer, { passive: true });
@@ -1341,3 +1312,11 @@ toggleMapPointer();
 
 </body>
 </html>
+
+
+
+
+
+
+
+

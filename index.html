@@ -1,4 +1,4 @@
-8-11-25 Restored-iFrame-Map-Working-No Exit
+8-11-25-iFrame-Map-Partial-Scroll
 <!doctype html>
 <html lang="en" data-baseline="stable-2025-10-01__rails-460px__galC-6-only">
 <head>
@@ -1279,7 +1279,7 @@ init();
 })();
 </script>
 
-<!-- === MapA hybrid scroll + interactivity toggle + controlled handoff === -->
+<!-- === MapA hybrid scroll + interactivity toggle + instant handoff === -->
 <script>
 const mapFrame = document.querySelector('.sMapA-frame');
 const mapIframe = mapFrame?.querySelector('iframe');
@@ -1303,25 +1303,19 @@ function toggleMapPointer() {
   }
 }
 
-// === Controlled handoff from MapA to next section ===
+// === Controlled handoff from MapA to next section (1 scroll, any direction) ===
 (() => {
   if (!mapFrame || !mapIframe || !nextSection) return;
-  let scrollCount = 0;
-  const MAX_SCROLLS = 2; // number of wheel scrolls before handoff
 
   mapIframe.addEventListener('wheel', (e) => {
-    if (e.deltaY > 0) {
-      scrollCount++;
-      if (scrollCount >= MAX_SCROLLS) {
-        scrollCount = 0;
-        mapIframe.style.pointerEvents = 'none'; // release focus
-        nextSection.scrollIntoView({ behavior: 'smooth' });
-        setTimeout(() => {
-          mapIframe.style.pointerEvents = 'auto'; // restore for upward scrolls
-        }, 900);
-      }
-    } else {
-      scrollCount = 0; // reset if scrolling up
+    // Trigger on any strong wheel movement up or down
+    if (Math.abs(e.deltaY) > 10) {
+      mapIframe.style.pointerEvents = 'none'; // release focus immediately
+      nextSection.scrollIntoView({ behavior: 'smooth' });
+      // re-enable map after small delay so user can scroll back up
+      setTimeout(() => {
+        mapIframe.style.pointerEvents = 'auto';
+      }, 1000);
     }
   }, { passive: true });
 })();
@@ -1342,3 +1336,8 @@ toggleMapPointer();
 
 </body>
 </html>
+
+
+
+
+

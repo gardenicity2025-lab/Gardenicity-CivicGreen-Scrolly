@@ -1393,7 +1393,13 @@ root.style.setProperty('--s1ImgOpacity', s1Alpha.toFixed(3));
 root.style.setProperty('--s2ImgOpacity', s2Alpha.toFixed(3));
 root.style.setProperty('--s3ImgOpacity', s3AlphaOut.toFixed(3));
 root.style.setProperty('--s4ImgOpacity', s4Alpha.toFixed(3));
-root.style.setProperty('--sMapAImgOpacity', sMapAAlphaOut.toFixed(3)); /* NEW */
+
+/* NEW — GeddesPlan frame opacity */
+root.style.setProperty('--geddesplanImgOpacity', geddesAlphaOut.toFixed(3));
+
+/* MapA opacity (already correct) */
+root.style.setProperty('--sMapAImgOpacity', sMapAAlphaOut.toFixed(3));
+
 root.style.setProperty('--s5ImgOpacity', s5Alpha.toFixed(3));
 root.style.setProperty('--s8ImgOpacity', s8AlphaOut.toFixed(3));
 root.style.setProperty('--s9ImgOpacity', s9Alpha.toFixed(3));
@@ -1402,7 +1408,7 @@ root.style.setProperty('--s12ImgOpacity', s12AlphaOut2.toFixed(3));
 root.style.setProperty('--s13ImgOpacity', s13Alpha.toFixed(3));
 root.style.setProperty('--s14ImgOpacity', s14Alpha.toFixed(3));
 root.style.setProperty('--s15ImgOpacity', s15Group.toFixed(3));
-}
+
 
 async function init() {
   if (document.fonts && document.fonts.ready) {

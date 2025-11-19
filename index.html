@@ -1,4 +1,5 @@
-19-11-25-Chatgpt-Geddes-Section- Civic Green - Map Scroll
+17-11-25
+Civic Green - Map Scroll
 <!doctype html>
 <html lang="en" data-baseline="stable-2025-10-01__rails-460px__galC-6-only">
 <head>
@@ -182,52 +183,6 @@ transform: scale(var(--s3Scale));
 transform-origin: center center;
 will-change: transform;
 }
-/* ===== GEDDESPLAN (mirrors S2: image left, text right) ===== */
-
-.geddesplan-frame {
-    top: 96px;
-    bottom: 96px;
-    left: 96px;
-    right: calc(82px + 96px + 460px);
-    opacity: var(--geddesplanImgOpacity, 0);
-    position: fixed;
-    z-index: 1;
-    pointer-events: none;
-}
-
-.geddesplan-overlay {
-    position: fixed;
-    inset: 0;
-    z-index: 2;
-    pointer-events: none;
-    opacity: var(--geddesplanOverlay, 0);
-}
-
-.geddesplan-rail {
-    position: absolute;
-    top: 0; bottom: 0;
-    right: 96px;
-    width: 460px;
-    overflow: hidden;
-}
-
-.geddesplan-text {
-    transform: translateY(var(--geddesplanY, 0px));
-    color: #111;
-}
-
-.geddesplan-text p {
-    margin: 0 0 14px 0;
-    font-size: 20px;
-    line-height: 28px;
-}
-
-.geddesplan-wrap {
-    position: relative;
-    height: 280vh;
-    background: #f8fbf2;
-}
-/* ============================================================ */
 
 /* S4 image RIGHT */
 .s4-frame{
@@ -801,28 +756,6 @@ Fusce quis magna elit. Aenean mi tellus, fermentum eu pharetra id, fermentum non
 </div>
 
 <section class="galA-left-wrap" id="galA-wrap"></section>
-<!-- ========== GEDDESPLAN ========== -->
-<figure class="frame geddesplan-frame" aria-hidden="true">
-    <img id="geddesplan-img" src="assets/geddesplan.jpg" alt="">
-</figure>
-
-<section class="geddesplan-wrap" id="geddesplan-wrap"></section>
-
-<div class="geddesplan-overlay">
-    <div class="geddesplan-rail">
-        <div class="geddesplan-text" id="geddesplan-text">
-            <p><strong>GEDDES PLAN</strong> — As one of the few built manifestations
-            of Geddes’ social-evolutionary ideas, Tel-Aviv’s layout warrants closer inspection…</p>
-
-            <p>It provided a non-determinant, adaptive and resilient development framework,
-            introducing a design strategy that has exhibited relative competitive-strength
-            despite the plan’s small size, provincial location and the absence of any
-            local architectural precedent.</p>
-        </div>
-    </div>
-</div>
-<!-- ================================ -->
-
 
 <section class="s3-wrap" id="s3-wrap"></section>
 
@@ -977,8 +910,6 @@ return clamp(-r.top/total,0,1);
 const s1Wrap=document.getElementById('s1-wrap');
 const s2Wrap=document.getElementById('s2-wrap');
 const galAWrap=document.getElementById('galA-wrap');
-const geddesWrap = document.getElementById('geddesplan-wrap');
-const geddesText = document.getElementById('geddesplan-text');
 const s3Wrap=document.getElementById('s3-wrap');
 const s4Wrap=document.getElementById('s4-wrap');
 const sMapAWrap=document.getElementById('sMapA-wrap'); /* NEW */
@@ -1003,7 +934,6 @@ const s13Text=document.getElementById('s13-text');
 const s14Text=document.getElementById('s14-text');
 const s15Text=document.getElementById('s15-text');
 
-let geddesStartY = 0, geddesEndY = 0;
 let s1StartY=0, s1EndY=0;
 let s2StartY=0, s2EndY=0;
 let s4StartY=0, s4EndY=0;
@@ -1016,13 +946,6 @@ let s15StartY=0, s15EndY=0;
 
 function measureS1(){ const vh=window.innerHeight; const h=s1Text.scrollHeight; s1StartY=vh; s1EndY=-h; root.style.setProperty('--s1Y', s1StartY+'px'); }
 function measureS2(){ const vh=window.innerHeight; const h=s2Text.scrollHeight; s2StartY=vh; s2EndY=-h; root.style.setProperty('--s2Y', s2StartY+'px'); }
-function measureGeddes(){
-    const vh = window.innerHeight;
-    const h  = geddesText.scrollHeight;
-    geddesStartY = vh;
-    geddesEndY   = -h;
-    root.style.setProperty('--geddesplanY', geddesStartY + 'px');
-}
 function measureS4(){ const vh=window.innerHeight; const h=s4Text.scrollHeight; s4StartY=vh; s4EndY=-h; root.style.setProperty('--s4Y', s4StartY+'px'); }
 function measureS5(){ const vh=window.innerHeight; const h=s5Text.scrollHeight; s5StartY=vh; s5EndY=-h; root.style.setProperty('--s5Y', s5StartY+'px'); }
 function measureS9(){ const vh=window.innerHeight; const h=s9Text.scrollHeight; s9StartY=vh; s9EndY=-h; root.style.setProperty('--s9Y', s9StartY+'px'); }
@@ -1078,7 +1001,6 @@ root.style.setProperty('--linksOpacity',pSlide.toFixed(3));
 const s1=progressOf(s1Wrap);
 const s2=progressOf(s2Wrap);
 const galA=progressOf(galAWrap);
-const geddes = progressOf(geddesWrap);
 const s3=progressOf(s3Wrap);
 const s4=progressOf(s4Wrap);
 const sMapA=progressOf(sMapAWrap); /* NEW */
@@ -1096,7 +1018,6 @@ const s15=progressOf(s15Wrap);
 root.style.setProperty('--s1',s1.toFixed(3));
 root.style.setProperty('--s2',s2.toFixed(3));
 root.style.setProperty('--galA',galA.toFixed(3));
-root.style.setProperty('--geddesplan', geddes.toFixed(3));
 root.style.setProperty('--s3',s3.toFixed(3));
 root.style.setProperty('--s4',s4.toFixed(3));
 root.style.setProperty('--sMapA',sMapA.toFixed(3)); /* NEW */
@@ -1113,7 +1034,6 @@ root.style.setProperty('--s15',s15.toFixed(3));
 
 /* Overlays & hero */
 root.style.setProperty('--s1Overlay',(s1>0 && s1<1)?1:0);
-root.style.setProperty('--geddesplanOverlay', (geddes > 0 && geddes < 1) ? 1 : 0);
 root.style.setProperty('--s2Overlay',(s2>0 && s2<1)?1:0);
 root.style.setProperty('--s4Overlay',(s4>0 && s4<1)?1:0);
 root.style.setProperty('--s5Overlay',(s5>0 && s5<1)?1:0);
@@ -1125,10 +1045,6 @@ root.style.setProperty('--s15Overlay',(s15>0 && s15<1)?1:0);
 
 root.style.setProperty('--heroAlpha',(1-s1).toFixed(3));
 root.style.setProperty('--heroBlur',(s1*0.8).toFixed(3));
-
-/* GEDDESPLAN text sweep */
-const gedRaw = clamp((geddes - 0.25) / 0.75, 0, 1);
-root.style.setProperty('--geddesplanY', (geddesStartY + (geddesEndY - geddesStartY) * easePow(gedRaw, E)) + 'px');
 
 /* Text sweeps (consistent curves) */
 const E=0.8;
@@ -1171,15 +1087,6 @@ const x2A = clamp(galA/FADE_FRAC, 0, 1);
 let galAGroup = 0;
 if (gateS2A && getComputedStyle(root).getPropertyValue('--galAReady')==='1') galAGroup = x2A;
 if (gateS2A) s2Alpha = s2Alpha * (1 - x2A);
-
-/* S2 → GEDDESPLAN */
-const x2G = clamp(geddes/FADE_FRAC, 0, 1);
-let geddesAlpha = x2G;
-s2Alpha = s2Alpha * (1 - x2G);
-
-/* GEDDESPLAN → S3 */
-const xG3 = clamp(s3/FADE_FRAC, 0, 1);
-const geddesAlphaOut = geddesAlpha * (1 - xG3);
 
 /* gallery-A → S3 */
 const xA3 = clamp(s3/FADE_FRAC, 0, 1);
@@ -1334,8 +1241,6 @@ root.style.setProperty('--galCImg5Opacity', (c5 * galCGroup2 * galCOut2).toFixed
 /* ===== Apply section frame opacities ===== */
 root.style.setProperty('--s1ImgOpacity', s1Alpha.toFixed(3));
 root.style.setProperty('--s2ImgOpacity', s2Alpha.toFixed(3));
-root.style.setProperty('--geddesplanImgOpacity', geddesAlphaOut.toFixed(3));
-root.style.setProperty('--geddesplanOverlay', geddesAlpha.toFixed(3));
 root.style.setProperty('--s3ImgOpacity', s3AlphaOut.toFixed(3));
 root.style.setProperty('--s4ImgOpacity', s4Alpha.toFixed(3));
 root.style.setProperty('--sMapAImgOpacity', sMapAAlphaOut.toFixed(3)); /* NEW */
@@ -1357,7 +1262,7 @@ async function init() {
   measureS1(); measureS2(); measureS4(); measureS5(); measureS9(); measureS11(); measureS13(); measureS14(); measureS15();
 
   addEventListener('load',  ()=> {
-    measureHero(); measureS1(); measureS2();  measureGeddes(); measureS4(); measureS5();
+    measureHero(); measureS1(); measureS2(); measureS4(); measureS5();
     measureS9(); measureS11(); measureS13(); measureS14(); measureS15();
     update();
   }, { once:true });
@@ -1408,4 +1313,3 @@ toggleMapPointer();
 
 </body>
 </html>
-

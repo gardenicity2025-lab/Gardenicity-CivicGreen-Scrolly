@@ -1,4 +1,4 @@
-19-11-25 Civic Green - Map Scroll + Geddes Plan 
+17-11-25 Civic Green - Map Scroll
 <!doctype html>
 <html lang="en" data-baseline="stable-2025-10-01__rails-460px__galC-6-only">
 <head>
@@ -176,61 +176,19 @@ will-change:opacity;
 /* S3 full-bleed */
 .s3-frame{ top:0; right:0; bottom:0; left:0; opacity:var(--s3ImgOpacity); }
 .frame.s3-frame>img{
-    width:100%; height:100%;
-    object-fit:cover !important; object-position:center;
-    transform: scale(var(--s3Scale));
-    transform-origin: center center;
-    will-change: transform;
-}
-
-/* ===== GEDDESPLAN (mirrors Section 2: image left, text right) ===== */
-
-/* Image frame on the LEFT */
-.geddesplan-frame {
-    top: 96px;
-    bottom: 96px;
-    left: 96px;
-    right: calc(82px + 96px + 460px); /* matches S2 left-image layout */
-    opacity: var(--geddesplanImgOpacity, 0);
-}
-
-/* Right-side text overlay */
-.geddesplan-overlay {
-    position: fixed;
-    inset: 0;
-    z-index: 2;
-    pointer-events: none;
-    opacity: var(--geddesplanOverlay, 0);
-}
-
-/* Right-side rail (460px) */
-.geddesplan-rail {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    right: 96px;
-    width: 460px;
-    overflow: hidden;
-}
-
-/* Text block */
-.geddesplan-text {
-    transform: translateY(var(--geddesplanY, 0px));
-    color: #111;
-}
-
-.geddesplan-text p {
-    margin: 0 0 14px 0;
-    font-size: 20px;
-    line-height: 28px;
+width:100%; height:100%;
+object-fit:cover !important; object-position:center;
+transform: scale(var(--s3Scale));
+transform-origin: center center;
+will-change: transform;
 }
 
 /* S4 image RIGHT */
 .s4-frame{
-    top:96px; bottom:96px;
-    left: calc(96px + 460px + 96px);
-    right: 82px;
-    opacity: var(--s4ImgOpacity);
+top:96px; bottom:96px;
+left: calc(96px + 460px + 96px);
+right: 82px;
+opacity: var(--s4ImgOpacity);
 }
 
 /* MapA full-bleed */
@@ -705,22 +663,14 @@ body, html {
 <figure class="frame s2-frame" aria-hidden="true"><img id="s2-img" src="assets/section2.jpg" alt=""></figure>
 
 <figure class="frame galA-left-frame" aria-hidden="true">
-    <img id="galA-img0" src="assets/gallery-A.jpg" alt="">
-    <img id="galA-img1" src="assets/gallery-A1.jpg" alt="">
-    <img id="galA-img2" src="assets/gallery-A2.jpg" alt="">
-    <img id="galA-img3" src="assets/gallery-A3.jpg" alt="">
+<img id="galA-img0" src="assets/gallery-A.jpg" alt="">
+<img id="galA-img1" src="assets/gallery-A1.jpg" alt="">
+<img id="galA-img2" src="assets/gallery-A2.jpg" alt="">
+<img id="galA-img3" src="assets/gallery-A3.jpg" alt="">
 </figure>
-
-<!-- ========== GEDDESPLAN PINNED FRAME (IMAGE LEFT) ========== -->
-<figure class="frame geddesplan-frame" aria-hidden="true">
-    <img id="geddesplan-img" src="assets/geddesplan.jpg" alt="">
-</figure>
-<!-- =========================================================== -->
 
 <figure class="frame s3-frame" aria-hidden="true"><img id="s3-img" src="assets/section3.jpg" alt=""></figure>
 <figure class="frame s4-frame" aria-hidden="true"><img id="s4-img" src="assets/section4.jpg" alt=""></figure>
-
-
 
 <figure class="frame sMapA-frame" aria-hidden="true">
     <iframe id="sMapA-map" src="https://api.mapbox.com/styles/v1/kavni/cmhkpt4uz00et01pjheur1zc1.html?title=false&access_token=pk.eyJ1Ijoia2F2bmkiLCJhIjoiY2s5YjBqNGY1MGV4aTNobnk0amJncWZweCJ9.gZK_r9CYmb6ZN_mZVmgjNg&zoomwheel=true#15.99/32.079031/34.770081" title="MapA" style="border:none; width:100%; height:100%;"></iframe>
@@ -806,22 +756,7 @@ Fusce quis magna elit. Aenean mi tellus, fermentum eu pharetra id, fermentum non
 
 <section class="galA-left-wrap" id="galA-wrap"></section>
 
-<!-- ========== GEDDESPLAN DRIVER SECTION ========== -->
-<section class="geddesplan-wrap" id="geddesplan-wrap"></section>
-
-<!-- ========== GEDDESPLAN TEXT OVERLAY (RIGHT RAIL) ========== -->
-<div class="geddesplan-overlay">
-    <div class="geddesplan-rail">
-        <div class="geddesplan-text" id="geddesplan-text">
-            <p><strong>GEDDES PLAN</strong></p>
-            <p>As one of the few built manifestations of Geddes’ social-evolutionary ideas, Tel-Aviv’s layout warrants closer inspection because it provided a non-determinant, adaptive and resilient development framework, introducing a design strategy that has exhibited relative ‘competitive-strength’ despite the plan’s small size, provincial location and absence of any local architectural or spatial precedent for its layout.</p>
-        </div>
-    </div>
-</div>
-<!-- =========================================================== -->
-
 <section class="s3-wrap" id="s3-wrap"></section>
-
 
 <section class="s4-wrap" id="s4-wrap"></section>
 <div class="s4-overlay">
@@ -974,16 +909,8 @@ return clamp(-r.top/total,0,1);
 const s1Wrap=document.getElementById('s1-wrap');
 const s2Wrap=document.getElementById('s2-wrap');
 const galAWrap=document.getElementById('galA-wrap');
-const s3Wrap = document.getElementById('s3-wrap');
-
-/* ===== GEDDESPLAN (NEW SECTION) ===== */
-const geddesWrap = document.getElementById('geddesplan-wrap');
-const geddesText = document.getElementById('geddesplan-text');
-let geddesStartY = 0, geddesEndY = 0;
-/* ==================================== */
-
-const s4Wrap = document.getElementById('s4-wrap');
-
+const s3Wrap=document.getElementById('s3-wrap');
+const s4Wrap=document.getElementById('s4-wrap');
 const sMapAWrap=document.getElementById('sMapA-wrap'); /* NEW */
 const s5Wrap=document.getElementById('s5-wrap');
 const galBWrap=document.getElementById('galB-wrap');
@@ -1019,24 +946,12 @@ let s15StartY=0, s15EndY=0;
 function measureS1(){ const vh=window.innerHeight; const h=s1Text.scrollHeight; s1StartY=vh; s1EndY=-h; root.style.setProperty('--s1Y', s1StartY+'px'); }
 function measureS2(){ const vh=window.innerHeight; const h=s2Text.scrollHeight; s2StartY=vh; s2EndY=-h; root.style.setProperty('--s2Y', s2StartY+'px'); }
 function measureS4(){ const vh=window.innerHeight; const h=s4Text.scrollHeight; s4StartY=vh; s4EndY=-h; root.style.setProperty('--s4Y', s4StartY+'px'); }
-
-/* ===== GEDDESPLAN MEASUREMENT (NEW) ===== */
-function measureGeddes(){
-    const vh = window.innerHeight;
-    const h  = geddesText.scrollHeight;
-    geddesStartY = vh;
-    geddesEndY   = -h;
-    root.style.setProperty('--geddesplanY', geddesStartY + 'px');
-}
-/* ======================================== */
-
 function measureS5(){ const vh=window.innerHeight; const h=s5Text.scrollHeight; s5StartY=vh; s5EndY=-h; root.style.setProperty('--s5Y', s5StartY+'px'); }
 function measureS9(){ const vh=window.innerHeight; const h=s9Text.scrollHeight; s9StartY=vh; s9EndY=-h; root.style.setProperty('--s9Y', s9StartY+'px'); }
 function measureS11(){ const vh=window.innerHeight; const h=s11Text.scrollHeight; s11StartY=vh; s11EndY=-h; root.style.setProperty('--s11Y', s11StartY+'px'); }
 function measureS13(){ const vh=window.innerHeight; const h=s13Text.scrollHeight; s13StartY=vh; s13EndY=-h; root.style.setProperty('--s13Y', s13StartY+'px'); }
 function measureS14(){ const vh=window.innerHeight; const h=s14Text.scrollHeight; s14StartY=vh; s14EndY=-h; root.style.setProperty('--s14Y', s14StartY+'px'); }
 function measureS15(){ const vh=window.innerHeight; const h=s15Text.scrollHeight; s15StartY=vh; s15EndY=-h; root.style.setProperty('--s15Y', s15StartY+'px'); }
-
 
 /* --- Load gates (first images) --- */
 const galAImg0 = document.getElementById('galA-img0');
@@ -1085,14 +1000,8 @@ root.style.setProperty('--linksOpacity',pSlide.toFixed(3));
 const s1=progressOf(s1Wrap);
 const s2=progressOf(s2Wrap);
 const galA=progressOf(galAWrap);
-const s3 = progressOf(s3Wrap);
-
-/* ===== GEDDESPLAN (NEW) ===== */
-const geddes = progressOf(geddesWrap);
-/* ============================= */
-
-const s4 = progressOf(s4Wrap);
-
+const s3=progressOf(s3Wrap);
+const s4=progressOf(s4Wrap);
 const sMapA=progressOf(sMapAWrap); /* NEW */
 const s5=progressOf(s5Wrap);
 const galB=progressOf(galBWrap);
@@ -1108,14 +1017,8 @@ const s15=progressOf(s15Wrap);
 root.style.setProperty('--s1',s1.toFixed(3));
 root.style.setProperty('--s2',s2.toFixed(3));
 root.style.setProperty('--galA',galA.toFixed(3));
-root.style.setProperty('--s3', s3.toFixed(3));
-
-/* ===== GEDDESPLAN (NEW) ===== */
-root.style.setProperty('--geddesplan', geddes.toFixed(3));
-/* ============================= */
-
-root.style.setProperty('--s4', s4.toFixed(3));
-
+root.style.setProperty('--s3',s3.toFixed(3));
+root.style.setProperty('--s4',s4.toFixed(3));
 root.style.setProperty('--sMapA',sMapA.toFixed(3)); /* NEW */
 root.style.setProperty('--s5',s5.toFixed(3));
 root.style.setProperty('--galB',galB.toFixed(3));
@@ -1143,55 +1046,15 @@ root.style.setProperty('--heroAlpha',(1-s1).toFixed(3));
 root.style.setProperty('--heroBlur',(s1*0.8).toFixed(3));
 
 /* Text sweeps (consistent curves) */
-const E = 0.8;
-
-const s1Raw  = clamp((s1 - 0.75) / 0.25, 0, 1);
-root.style.setProperty('--s1Y',
-    (s1StartY + (s1EndY - s1StartY) * easePow(s1Raw, E)) + 'px'
-);
-
-const s2Raw  = clamp((s2 - 0.25) / 0.75, 0, 1);
-root.style.setProperty('--s2Y',
-    (s2StartY + (s2EndY - s2StartY) * easePow(s2Raw, E)) + 'px'
-);
-
-const s4Raw  = clamp((s4 - 0.75) / 0.25, 0, 1);
-root.style.setProperty('--s4Y',
-    (s4StartY + (s4EndY - s4StartY) * easePow(s4Raw, E)) + 'px'
-);
-
-/* ===== GeddesPlan text scroll (NEW) ===== */
-const gRaw = clamp((geddes - 0.25) / 0.75, 0, 1);
-root.style.setProperty('--geddesplanY',
-    (geddesStartY + (geddesEndY - geddesStartY) * easePow(gRaw, E)) + 'px'
-);
-/* ======================================== */
-
-const s5Raw  = clamp((s5 - 0.25) / 0.75, 0, 1);
-root.style.setProperty('--s5Y',
-    (s5StartY + (s5EndY - s5StartY) * easePow(s5Raw, E)) + 'px'
-);
-
-const s9Raw  = clamp((s9 - 0.75) / 0.25, 0, 1);
-root.style.setProperty('--s9Y',
-    (s9StartY + (s9EndY - s9StartY) * easePow(s9Raw, E)) + 'px'
-);
-
-const s11Raw = clamp((s11 - 0.75) / 0.25, 0, 1);
-root.style.setProperty('--s11Y',
-    (s11StartY + (s11EndY - s11StartY) * easePow(s11Raw, E)) + 'px'
-);
-
-const s13Raw = clamp((s13 - 0.75) / 0.25, 0, 1);
-root.style.setProperty('--s13Y',
-    (s13StartY + (s13EndY - s13StartY) * easePow(s13Raw, E)) + 'px'
-);
-
-const s14Raw = clamp((s14 - 0.25) / 0.75, 0, 1);
-root.style.setProperty('--s14Y',
-    (s14StartY + (s14EndY - s14StartY) * easePow(s14Raw, E)) + 'px'
-);
-
+const E=0.8;
+const s1Raw=clamp((s1-0.75)/0.25,0,1); root.style.setProperty('--s1Y', (s1StartY +(s1EndY -s1StartY )*easePow(s1Raw,E))+'px');
+const s2Raw=clamp((s2-0.25)/0.75,0,1); root.style.setProperty('--s2Y', (s2StartY +(s2EndY -s2StartY )*easePow(s2Raw,E))+'px');
+const s4Raw=clamp((s4-0.75)/0.25,0,1); root.style.setProperty('--s4Y', (s4StartY +(s4EndY -s4StartY )*easePow(s4Raw,E))+'px');
+const s5Raw=clamp((s5-0.25)/0.75,0,1); root.style.setProperty('--s5Y', (s5StartY +(s5EndY -s5StartY )*easePow(s5Raw,E))+'px');
+const s9Raw=clamp((s9-0.75)/0.25,0,1); root.style.setProperty('--s9Y', (s9StartY +(s9EndY -s9StartY )*easePow(s9Raw,E))+'px');
+const s11Raw=clamp((s11-0.75)/0.25,0,1); root.style.setProperty('--s11Y',(s11StartY+(s11EndY-s11StartY)*easePow(s11Raw,E))+'px');
+const s13Raw=clamp((s13-0.75)/0.25,0,1); root.style.setProperty('--s13Y',(s13StartY+(s13EndY-s13StartY)*easePow(s13Raw,E))+'px');
+const s14Raw=clamp((s14-0.25)/0.75,0,1); root.style.setProperty('--s14Y',(s14StartY+(s14EndY-s14StartY)*easePow(s14Raw,E))+'px');
 
 /* S15 timing */
 const s15Raw=clamp((s15-0.25)/0.75,0,1);
@@ -1229,24 +1092,10 @@ const xA3 = clamp(s3/FADE_FRAC, 0, 1);
 const s3Alpha = xA3;
 const galAOut = (1 - xA3);
 
-/* ===== GalleryA → GeddesPlan (fade in) ===== */
-const xA_G = clamp(geddes / FADE_FRAC, 0, 1);
-const geddesAlphaIn = xA_G;
-
-/* ===== GeddesPlan → S3 (fade out) ===== */
-const xG_3 = clamp(s3 / FADE_FRAC, 0, 1);
-const geddesAlphaOut = geddesAlphaIn * (1 - xG_3);
-
-/* expose to CSS */
-root.style.setProperty('--geddesplanImgOpacity', geddesAlphaOut.toFixed(3));
-root.style.setProperty('--geddesplanOverlay', geddesAlphaIn.toFixed(3));
-/* ========================================== */
-
 /* S3 → S4 */
 const x34 = clamp(s4/FADE_FRAC, 0, 1);
 let s4Alpha = x34;
 const s3AlphaOut = s3Alpha * (1 - x34);
-
 
 /* S4 → MapA */
 const x4MapA = clamp(sMapA/FADE_FRAC, 0, 1);
@@ -1393,13 +1242,7 @@ root.style.setProperty('--s1ImgOpacity', s1Alpha.toFixed(3));
 root.style.setProperty('--s2ImgOpacity', s2Alpha.toFixed(3));
 root.style.setProperty('--s3ImgOpacity', s3AlphaOut.toFixed(3));
 root.style.setProperty('--s4ImgOpacity', s4Alpha.toFixed(3));
-
-/* NEW — GeddesPlan frame opacity */
-root.style.setProperty('--geddesplanImgOpacity', geddesAlphaOut.toFixed(3));
-
-/* MapA opacity (already correct) */
-root.style.setProperty('--sMapAImgOpacity', sMapAAlphaOut.toFixed(3));
-
+root.style.setProperty('--sMapAImgOpacity', sMapAAlphaOut.toFixed(3)); /* NEW */
 root.style.setProperty('--s5ImgOpacity', s5Alpha.toFixed(3));
 root.style.setProperty('--s8ImgOpacity', s8AlphaOut.toFixed(3));
 root.style.setProperty('--s9ImgOpacity', s9Alpha.toFixed(3));
@@ -1408,7 +1251,7 @@ root.style.setProperty('--s12ImgOpacity', s12AlphaOut2.toFixed(3));
 root.style.setProperty('--s13ImgOpacity', s13Alpha.toFixed(3));
 root.style.setProperty('--s14ImgOpacity', s14Alpha.toFixed(3));
 root.style.setProperty('--s15ImgOpacity', s15Group.toFixed(3));
-
+}
 
 async function init() {
   if (document.fonts && document.fonts.ready) {
@@ -1469,4 +1312,3 @@ toggleMapPointer();
 
 </body>
 </html>
-

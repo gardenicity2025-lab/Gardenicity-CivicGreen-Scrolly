@@ -1,10 +1,10 @@
-V7 Mapboxgl
+V8 MapboxGL
 <!doctype html>
 <html lang="en" data-baseline="stable-2025-10-01__rails-460px__galC-6-only">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Gardenicity — Hero → S1 → S2 → gallery-A → Geddes → S3 → S4 → MapA (GL JS V7) → S5 → gallery-B → S8 → S9 → gallery-C → S11 → S12 → S13 → S14 → S15</title>
+<title>Gardenicity — Hero → S1 → S2 → gallery-A → Geddes → S3 → S4 → MapA (GL JS V8) → S5 → gallery-B → S8 → S9 → gallery-C → S11 → S12 → S13 → S14 → S15</title>
 
 <link href="https://api.mapbox.com/mapbox-gl-js/v3.1.2/mapbox-gl.css" rel="stylesheet" />
 
@@ -123,8 +123,9 @@ figure.frame { margin: 0; }
   width: 100%;
   height: 100%;
   position: relative; 
-  /* Starts disabled, JS enables when visible */
-  pointer-events: none;
+  /* V8 FIX: Apply CSS hard lock by default. Overridden by JS on click. */
+  pointer-events: none; 
+  z-index: 10 !important;
 }
 /* IMPORTANT: Mapbox GL JS map container must have a fixed size */
 .sMapA-frame, #mapA-container {
@@ -946,12 +947,19 @@ function disableMapInteractions() {
     map.dragPan.disable();
     map.doubleClickZoom.disable();
     map.touchZoomRotate.disable();
-    // Re-show the overlay (curtain) to prevent interaction
+    
+    // V8 FIX: Apply CSS hard lock
+    mapContainer.style.pointerEvents = 'none'; 
+    
+    // Re-show the overlay (curtain) to block new interactions
     mapOverlay.style.display = 'flex'; 
 }
 
 // Helper function to enable only scrollZoom and drag for exploration
 function enableMapInteractions() {
+    // V8 FIX: Release CSS hard lock
+    mapContainer.style.pointerEvents = 'auto'; 
+
     map.scrollZoom.enable();
     map.dragPan.enable();
     // Hide the overlay (curtain)
@@ -966,14 +974,13 @@ map.on('load', () => {
 
 // 1. Explicit Engagement Click Handler
 mapEngageBtn.addEventListener('click', (e) => {
-    e.stopPropagation(); // Prevents clicks from propagating if overlay is flex
+    e.stopPropagation(); 
     enableMapInteractions();
-    // Optional: Add focus to map container for keyboard navigation
     mapContainer.focus();
 });
 
 
-// 2. Global Visibility Toggle (Standard Scrollytelling control - Modified)
+// 2. Global Visibility Toggle (Standard Scrollytelling control)
 function toggleMapPointer() {
     if (!mapFrame || !mapSection) return;
 
@@ -983,6 +990,8 @@ function toggleMapPointer() {
     
     if (visible) {
         mapFrame.classList.add('active');
+        // Note: The map state (enabled/disabled) is managed by the click handler, 
+        // not the scrollytelling visibility. We don't enable/disable anything here.
         
     } else {
         mapFrame.classList.remove('active');

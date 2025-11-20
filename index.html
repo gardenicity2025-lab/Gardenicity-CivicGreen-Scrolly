@@ -1,4 +1,4 @@
-Copy-20-11-Civic-Green-MapboxGl-Gemini V2
+20-11-Civic-Green-MapboxGl-Gemini V2
 <!doctype html>
 <html lang="en" data-baseline="stable-2025-10-01__rails-460px__galC-6-only">
 <head>
@@ -208,30 +208,6 @@ opacity: var(--s4ImgOpacity);
 .sMapA-frame{
     top:0; right:0; bottom:0; left:0;
     opacity:var(--sMapAImgOpacity);
-}
-
-/* === Exit button (minimal black pill) === */
-.exit-mapA-btn {
-  position: absolute;
-  top: 40px;
-  left: 40px;
-  z-index: 20;
-  padding: 8px 16px;
-  font-size: 15px;
-  background: rgba(0,0,0,0.65);
-  color: #fff;
-  border: none;
-  border-radius: 999px;
-  cursor: pointer;
-
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity .25s ease;
-}
-
-.sMapA-frame.active .exit-mapA-btn {
-  opacity: 1;
-  pointer-events: auto;
 }
 
 /* S5 image LEFT */
@@ -707,12 +683,8 @@ body, html {
 
 <figure class="frame sMapA-frame" aria-hidden="true">
     <div id="mapA-container"></div>
-
-    <!-- Exit Map Button -->
-    <button id="exit-mapA" class="exit-mapA-btn" aria-label="Exit Map">
-      Close
-    </button>
 </figure>
+<figure class="frame s5-frame" aria-hidden="true"><img id="s5-img" src="assets/section5.jpg" alt=""></figure>
 
 <figure class="frame galB-center-frame" aria-hidden="true">
 <img id="galB-img0" src="assets/gallery-B.jpg" alt="">
@@ -1359,17 +1331,6 @@ const map = new mapboxgl.Map({
     center: MAP_START_CENTER,
     zoom: MAP_START_ZOOM,
     interactive: false // Start non-interactive
-});
-
-const mapAContainer = document.getElementById("mapA-container");
-const exitBtn = document.getElementById("exit-mapA");
-
-exitBtn.addEventListener("click", () => {
-  mapAContainer.style.pointerEvents = "none"; 
-  window.scrollBy({
-    top: window.innerHeight * 0.6,
-    behavior: "smooth"
-  });
 });
 
 // Disable interaction methods initially

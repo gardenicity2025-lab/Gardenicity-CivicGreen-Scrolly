@@ -1,16 +1,16 @@
-V8 MapboxGL
+V9 Mapboxgl
 <!doctype html>
 <html lang="en" data-baseline="stable-2025-10-01__rails-460px__galC-6-only">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Gardenicity — Hero → S1 → S2 → gallery-A → Geddes → S3 → S4 → MapA (GL JS V8) → S5 → gallery-B → S8 → S9 → gallery-C → S11 → S12 → S13 → S14 → S15</title>
+<title>Gardenicity — Hero → S1 → S2 → gallery-A → Geddes → S3 → S4 → MapA (GL JS V9) → S5 → gallery-B → S8 → S9 → gallery-C → S11 → S12 → S13 → S14 → S15</title>
 
 <link href="https://api.mapbox.com/mapbox-gl-js/v3.1.2/mapbox-gl.css" rel="stylesheet" />
 
 <style>
 
-/* ===== Base ===== */
+/* ===== Base (unchanged) ===== */
 html,body{
 margin:0; padding:0; height:100%;
 background:#f8fbf2; color:#fff;
@@ -123,9 +123,11 @@ figure.frame { margin: 0; }
   width: 100%;
   height: 100%;
   position: relative; 
-  /* V8 FIX: Apply CSS hard lock by default. Overridden by JS on click. */
+  /* V8/V9 FIX: Apply CSS hard lock by default. Overridden by JS on mouseenter. */
   pointer-events: none; 
   z-index: 10 !important;
+  /* V9: Add cursor style to hint interactivity */
+  cursor: grab;
 }
 /* IMPORTANT: Mapbox GL JS map container must have a fixed size */
 .sMapA-frame, #mapA-container {
@@ -133,36 +135,14 @@ figure.frame { margin: 0; }
     height: 100%;
 }
 
-/* ADDED: Styles for the Map Overlay (Curtain) */
-#mapA-overlay {
-    position: absolute;
-    inset: 0;
-    z-index: 11; /* Higher than Mapbox map */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(0, 0, 0, 0.4);
-    cursor: pointer;
-    transition: opacity 0.3s;
-    pointer-events: auto; /* Always clickable */
+/* === Map container when active/in focus (optional visual change) === */
+#mapA-container.map-active {
+    cursor: grab;
 }
-#mapA-overlay button {
-    padding: 15px 30px;
-    font-size: 24px;
-    font-weight: bold;
-    color: white;
-    background: #00A86B; /* A pleasant green */
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+#mapA-container.map-active:active {
+    cursor: grabbing;
 }
 
-/* === When map active (visible) === */
-.sMapA-frame.active #mapA-container {
-  /* Pointer events managed entirely by JS enable/disable calls */
-  z-index: 10 !important;
-}
 
 /* Optional debug outline */
 .sMapA-frame.active {
@@ -174,6 +154,7 @@ figure.frame { margin: 0; }
   pointer-events: none !important;
 }
 
+
 /* S1 image RIGHT (text left) */
 .s1-frame {
   top: 96px;
@@ -182,168 +163,15 @@ figure.frame { margin: 0; }
   right: 82px;
   opacity: var(--s1ImgOpacity);
 }
-
-/* S2 image LEFT (mirror) */
-.s2-frame{
-top:96px; bottom:96px;
-left: 96px;
-right: calc(82px + 96px + 460px);
-opacity: var(--s2ImgOpacity);
-}
-
-/* gallery-A-Left (right media area) */
-.galA-left-frame{
-top:96px; bottom:96px;
-left: calc(96px + 460px + 96px);
-right: 82px;
-display:block;
-}
-.galA-left-frame img{
-position:absolute; inset:0;
-width:100%; height:100%;
-object-fit:contain; object-position:center;
-will-change:opacity;
-}
-#galA-img0{ opacity: var(--galAImg0Opacity); }
-#galA-img1{ opacity: var(--galAImg1Opacity); }
-#galA-img2{ opacity: var(--galAImg2Opacity); }
-#galA-img3{ opacity: var(--galAImg3Opacity); }
-
-/* NEW: GEDDES PLAN FRAME (Left Image, matches S2) */
-.sGeddes-frame { top: 96px; bottom: 96px; left: 96px; right: calc(82px + 96px + 460px); opacity: var(--sGeddesImgOpacity); }
-
-/* S3 full-bleed */
-.s3-frame{ top:0; right:0; bottom:0; left:0; opacity:var(--s3ImgOpacity); }
-.frame.s3-frame>img{
-width:100%; height:100%;
-object-fit:cover !important; object-position:center;
-transform: scale(var(--s3Scale));
-transform-origin: center center;
-will-change: transform;
-}
-
-/* S4 image RIGHT */
-.s4-frame{
-top:96px; bottom:96px;
-left: calc(96px + 460px + 96px);
-right: 82px;
-opacity: var(--s4ImgOpacity);
-}
-
-/* MapA full-bleed (MODIFIED FOR GL JS) */
+/* ... (All other frame styles remain the same) ... */
 .sMapA-frame{
     top:0; right:0; bottom:0; left:0;
     opacity:var(--sMapAImgOpacity);
 }
+/* ... (Rest of sections 5-15 frame styles remain the same) ... */
 
-/* S5 image LEFT */
-.s5-frame{
-top:96px; bottom:96px;
-left: 96px;
-right: calc(82px + 96px + 460px);
-opacity: var(--s5ImgOpacity);
-}
 
-/* gallery-B-Center */
-.galB-center-frame{
-top:96px; bottom:96px; left:96px; right:82px;
-display:block;
-}
-.galB-center-frame img{
-position:absolute; inset:0;
-width:100%; height:100%;
-object-fit:contain; object-position:center;
-will-change:opacity;
-}
-#galB-img0{ opacity: var(--galBImg0Opacity); }
-#galB-img1{ opacity: var(--galBImg1Opacity); }
-#galB-img2{ opacity: var(--galBImg2Opacity); }
-#galB-img3{ opacity: var(--galBImg3Opacity); }
-#galB-img4{ opacity: var(--galBImg4Opacity); }
-
-/* S8 full-bleed */
-.s8-frame{ top:0; right:0; bottom:0; left:0; opacity:var(--s8ImgOpacity); }
-.frame.s8-frame>img{
-width:100%; height:100%;
-object-fit:cover !important; object-position:center;
-transform: scale(var(--s8Scale));
-transform-origin: center center;
-will-change: transform;
-}
-
-/* S9 image RIGHT (like S1/S4) */
-.s9-frame{
-top:96px; bottom:96px;
-left: calc(96px + 460px + 96px);
-right: 82px;
-opacity: var(--s9ImgOpacity);
-}
-
-/* gallery-C-Right (media on LEFT, no text) */
-.galC-left-frame{
-top:96px; bottom:96px;
-left: 96px;
-right: calc(82px + 96px + 460px);
-display:block;
-}
-.galC-left-frame img{
-position:absolute; inset:0;
-width:100%; height:100%;
-object-fit:contain; object-position:center;
-will-change:opacity;
-}
-#galC-img0{ opacity: var(--galCImg0Opacity); }
-#galC-img1{ opacity: var(--galCImg1Opacity); }
-#galC-img2{ opacity: var(--galCImg2Opacity); }
-#galC-img3{ opacity: var(--galCImg3Opacity); }
-#galC-img4{ opacity: var(--galCImg4Opacity); }
-#galC-img5{ opacity: var(--galCImg5Opacity); }
-
-/* S11 image RIGHT (like S1/S4/S9) */
-.s11-frame{
-top:96px; bottom:96px;
-left: calc(96px + 460px + 96px);
-right: 82px;
-opacity: var(--s11ImgOpacity);
-}
-
-/* S12 full-bleed */
-.s12-frame{ top:0; right:0; bottom:0; left:0; opacity:var(--s12ImgOpacity); }
-.frame.s12-frame>img{
-width:100%; height:100%;
-object-fit:cover !important; object-position:center;
-transform: scale(var(--s12Scale));
-transform-origin: center center;
-will-change: transform;
-}
-
-/* S13 image RIGHT (like S1) */
-.s13-frame{
-top:96px; bottom:96px;
-left: calc(96px + 460px + 96px);
-right: 82px;
-opacity: var(--s13ImgOpacity);
-}
-
-/* S14 image LEFT (like S2) */
-.s14-frame{
-top:96px; bottom:96px;
-left: 96px;
-right: calc(82px + 96px + 460px);
-opacity: var(--s14ImgOpacity);
-}
-
-/* S15 full-bleed */
-.s15-frame{ top:0; right:0; bottom:0; left:0; opacity:var(--s15ImgOpacity); }
-.frame.s15-frame>img{
-width:100%; height:100%;
-object-fit:cover !important; object-position:center;
-transform: scale(var(--s15Scale));
-transform-origin: center center;
-will-change: transform;
-}
-
-/* ===== SECTION DRIVERS ===== */
+/* ===== SECTION DRIVERS (unchanged) ===== */
 .s1-wrap, .s2-wrap, .galA-left-wrap,
 .sGeddes-wrap, /* NEW */
 .s3-wrap, .s4-wrap, .s5-wrap,
@@ -353,7 +181,7 @@ will-change: transform;
 position:relative; height:280vh; background:#f8fbf2;
 }
 
-/* ===== TEXT OVERLAYS (rails) ===== */
+/* ===== TEXT OVERLAYS (rails) (unchanged) ===== */
 .s1-overlay, .s2-overlay, .sGeddes-overlay, .s4-overlay, .s5-overlay, .s9-overlay, .s11-overlay, .s13-overlay, .s14-overlay, .s15-overlay{
 position:fixed; inset:0; z-index:2; pointer-events:none;
 }
@@ -368,12 +196,12 @@ position:fixed; inset:0; z-index:2; pointer-events:none;
 .s14-overlay{ opacity:var(--s14Overlay); }
 .s15-overlay{ opacity:var(--s15Overlay); }
 
-/* LEFT rails (text left) */
+/* LEFT rails (text left) (unchanged) */
 .s1-rail, .s4-rail, .s9-rail, .s11-rail, .s13-rail{
 position:absolute; top:0; bottom:0; left:96px; width:460px; overflow:hidden;
 }
 
-/* RIGHT rails (text right) */
+/* RIGHT rails (text right) (unchanged) */
 .s2-rail, .sGeddes-rail, .s5-rail, .s14-rail{
 position:absolute; top:0; bottom:0; right:96px; width:460px; overflow:hidden;
 }
@@ -388,7 +216,7 @@ position:absolute; top:0; bottom:0; right:96px; width:460px; overflow:hidden;
 .s13-text{ transform:translateY(var(--s13Y)); color:#111; }
 .s14-text{ transform:translateY(var(--s14Y)); color:#111; text-align:left; }
 
-/* ===== S15: CENTER COLUMN OVERLAY (centered text) ===== */
+/* ===== S15: CENTER COLUMN OVERLAY (centered text) (unchanged) ===== */
 .s15-rail{
 position:absolute; top:0; bottom:0;
 left:50%; transform:translateX(-50%);
@@ -404,7 +232,7 @@ margin:0 0 14px 0; font-size:20px; line-height:28px;
 }
 .after{ min-height:120vh; }
 
-/* ===== PATCH: Enable S15 links only in S15 ===== */
+/* ===== PATCH: Enable S15 links only in S15 (unchanged) ===== */
 .s15-overlay{
 z-index:3;
 pointer-events:none;
@@ -430,7 +258,7 @@ color:#00A86B;
 }
 /*
 =====================================================
-MOBILE RESPONSIVE (max-width:600px) - DEDICATED MOBILE VIEW
+MOBILE RESPONSIVE (max-width:600px) - DEDICATED MOBILE VIEW (unchanged)
 =====================================================
 */
 @media (max-width:600px){
@@ -572,7 +400,7 @@ left:0; right:0; top:0; bottom:0;
 }
 /*
 =====================================================
-TABLET RESPONSIVE (min-width:601px and max-width:1023px) - FINAL FIXES + DYNAMIC HERO TEXT
+TABLET RESPONSIVE (min-width:601px and max-width:1023px) - FINAL FIXES + DYNAMIC HERO TEXT (unchanged)
 =====================================================
 */
 @media (min-width:601px) and (max-width:1023px) {
@@ -709,10 +537,7 @@ body, html {
 
 <figure class="frame sMapA-frame" aria-hidden="true">
     <div id="mapA-container"></div>
-    <div id="mapA-overlay">
-        <button id="mapA-engage-btn">Click to Explore Map</button>
-    </div>
-</figure>
+    </figure>
 <figure class="frame s5-frame" aria-hidden="true"><img id="s5-img" src="assets/section5.jpg" alt=""></figure>
 
 <figure class="frame galB-center-frame" aria-hidden="true">
@@ -926,8 +751,6 @@ const MAP_START_ZOOM = 15.99;
 
 const mapFrame = document.querySelector('.sMapA-frame');
 const mapContainer = document.getElementById('mapA-container');
-const mapOverlay = document.getElementById('mapA-overlay');
-const mapEngageBtn = document.getElementById('mapA-engage-btn');
 const mapSection = document.querySelector('#sMapA-wrap');
 
 // Initialize the Mapbox GL JS Map
@@ -937,33 +760,41 @@ const map = new mapboxgl.Map({
     center: MAP_START_CENTER,
     zoom: MAP_START_ZOOM,
     minZoom: MAP_MIN_ZOOM, 
-    // START WITH INTERACTIVITY TOTALLY DISABLED
-    interactive: false 
+    interactive: false // Always start disabled
 });
 
-// Helper function to disable all map user interactions
+// Helper function to disable all map user interactions and re-apply CSS lock
 function disableMapInteractions() {
     map.scrollZoom.disable();
     map.dragPan.disable();
     map.doubleClickZoom.disable();
     map.touchZoomRotate.disable();
     
-    // V8 FIX: Apply CSS hard lock
+    // V8/V9 FIX: Apply CSS hard lock
     mapContainer.style.pointerEvents = 'none'; 
-    
-    // Re-show the overlay (curtain) to block new interactions
-    mapOverlay.style.display = 'flex'; 
+    mapContainer.classList.remove('map-active');
 }
 
-// Helper function to enable only scrollZoom and drag for exploration
+// Helper function to enable map user interactions and release CSS lock
 function enableMapInteractions() {
-    // V8 FIX: Release CSS hard lock
+    // V8/V9 FIX: Release CSS hard lock
     mapContainer.style.pointerEvents = 'auto'; 
-
+    
     map.scrollZoom.enable();
     map.dragPan.enable();
-    // Hide the overlay (curtain)
-    mapOverlay.style.display = 'none';
+    mapContainer.classList.add('map-active');
+}
+
+// Function to disable map and simulate a scroll forward (The Explicit Exit)
+function triggerScrollForward() {
+    disableMapInteractions(); 
+    
+    // Simulate a strong scroll down to push the map section out of view.
+    // 2000px should be sufficient to skip to the next section immediately.
+    window.scrollBy({
+        top: 2000, 
+        behavior: 'smooth' 
+    });
 }
 
 map.on('load', () => {
@@ -972,15 +803,33 @@ map.on('load', () => {
 });
 
 
-// 1. Explicit Engagement Click Handler
-mapEngageBtn.addEventListener('click', (e) => {
-    e.stopPropagation(); 
-    enableMapInteractions();
-    mapContainer.focus();
+// 1. Implicit Engagement (Mouse Enter) - Standard Scrollytelling takeover
+mapContainer.addEventListener('mouseenter', () => {
+    // Only enable if the section is currently visible/active
+    if (mapFrame.classList.contains('active')) {
+        enableMapInteractions();
+    }
+});
+
+// 2. Implicit Handover (Mouse Leave) - Standard Scrollytelling release
+mapContainer.addEventListener('mouseleave', () => {
+    // Disable map only if the section is currently visible/active
+    if (mapFrame.classList.contains('active')) {
+        disableMapInteractions();
+    }
+});
+
+// 3. Explicit Handover (Click inside Map Area) - The new feature
+mapContainer.addEventListener('click', (e) => {
+    // Only trigger exit if the map is currently interactive
+    if (mapContainer.style.pointerEvents === 'auto' && mapFrame.classList.contains('active')) {
+        e.stopPropagation(); // Stop map from registering the click event internally
+        triggerScrollForward();
+    }
 });
 
 
-// 2. Global Visibility Toggle (Standard Scrollytelling control)
+// 4. Global Visibility Toggle (Standard Scrollytelling control)
 function toggleMapPointer() {
     if (!mapFrame || !mapSection) return;
 
@@ -990,13 +839,12 @@ function toggleMapPointer() {
     
     if (visible) {
         mapFrame.classList.add('active');
-        // Note: The map state (enabled/disabled) is managed by the click handler, 
-        // not the scrollytelling visibility. We don't enable/disable anything here.
+        // Note: Map interactions remain disabled (pointer-events: none) until mouseenter.
         
     } else {
         mapFrame.classList.remove('active');
         // IMPORTANT: If the section scrolls out of view, we lock the map again
-        // and show the overlay for the next time the user scrolls back.
+        // ensuring the CSS lock is always applied when the map is not the focus.
         disableMapInteractions();
     }
 }

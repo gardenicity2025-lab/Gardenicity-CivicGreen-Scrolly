@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Gardenicity — Hero → S1 → S2 → gallery-A → Geddes → S3 → S4 → MapA (GL JS V17 - Clean Button Exit) → S5 → gallery-B → S8 → S9 → gallery-C → S11 → S12 → S13 → S14 → S15</title>
+<title>Gardenicity — Hero → S1 → S2 → gallery-A → Geddes → S3 → S4 → MapA (GL JS V18 - Final Clean Fix) → S5 → gallery-B → S8 → S9 → gallery-C → S11 → S12 → S13 → S14 → S15</title>
 
 <link href="https://api.mapbox.com/mapbox-gl-js/v3.1.2/mapbox-gl.css" rel="stylesheet" />
 
@@ -127,7 +127,7 @@ z-index: 10 !important;
 cursor: default;
 }
 
-/* Cursor when map is active (V17 addition) */
+/* Cursor when map is active (V17/V18 addition) */
 #mapA-container.map-active {
     cursor: grab;
 }
@@ -135,7 +135,7 @@ cursor: default;
     cursor: grabbing;
 }
 
-/* --- V17 Button CSS --- */
+/* --- V18 Button CSS --- */
 #map-exit-button {
     position: absolute;
     bottom: 20px;
@@ -169,7 +169,7 @@ width: 100%;
 height: 100%;
 }
 
-/* === When map active (visible) === */
+/* === When map active (visible) (V2 base CSS) === */
 .sMapA-frame.active #mapA-container {
 pointer-events: auto;
 z-index: 10 !important;
@@ -858,22 +858,26 @@ const map = new mapboxgl.Map({
     interactive: false // Always start disabled
 });
 
-// V17 NEW: Helper function for the explicit exit button
+// V18 NEW: Helper function for the explicit exit button
 function triggerScrollForward() {
-    // 1. Immediately disable map interactions (same logic as V2's mouseleave, but explicit)
+    // 1. Immediately disable map interactions (same as V2's mouseleave)
     if (map) {
         map.scrollZoom.disable();
+    }
+    
+    // 2. Disable all non-scroll map interactions to force scroll handoff
+    if (map) {
         map.dragPan.disable();
         map.doubleClickZoom.disable();
         map.touchZoomRotate.disable();
     }
     
-    // 2. Visually disengage (hides button/cursor)
+    // 3. Visually disengage (hides button/cursor)
     if (mapContainer) {
         mapContainer.classList.remove('map-active');
     }
     
-    // 3. Force scroll down (explicit exit action)
+    // 4. Force scroll down (explicit exit action)
     window.scrollBy({
         top: MAP_SCROLL_AMOUNT, 
         behavior: 'smooth' 
@@ -897,7 +901,7 @@ mapContainer.addEventListener('mouseenter', () => {
     
     if (map && visible) {
         map.scrollZoom.enable(); 
-        // V17 Addition: Show the button and cursor change when engaged
+        // V18 Addition: Show the button and cursor change when engaged
         mapContainer.classList.add('map-active');
     }
 });
@@ -907,11 +911,11 @@ mapContainer.addEventListener('mouseleave', () => {
     if (map) {
         map.scrollZoom.disable(); // V2 core scroll release mechanism
     }
-    // V17 Addition: Hide the button when disengaged
+    // V18 Addition: Hide the button when disengaged
     mapContainer.classList.remove('map-active');
 });
 
-// 3. Explicit Exit (Button Click) - V17 NEW LOGIC
+// 3. Explicit Exit (Button Click) - V18 NEW LOGIC
 if (mapExitButton) {
     mapExitButton.addEventListener('click', (e) => {
         // Prevent event propagation that might trigger Mapbox zoom/pan
@@ -923,7 +927,7 @@ if (mapExitButton) {
 }
 
 
-// 4. Global Visibility Toggle (Standard Scrollytelling control) - V2 Logic
+// 4. Global Visibility Toggle (Standard Scrollytelling control) - V2 Logic RESTORED
 function toggleMapPointer() {
     if (!mapFrame || !mapSection) return;
 
@@ -933,20 +937,26 @@ function toggleMapPointer() {
     
     if (visible) {
         mapFrame.classList.add('active');
-        // V2: Enable ALL interactions (drag/pan/zoom) when section is visible
+        // V2 RESTORED: Enable ALL interactions (drag/pan/zoom) when section is visible
+        // scrollZoom state is controlled by mouseenter/mouseleave
         map.dragPan.enable();
         map.doubleClickZoom.enable();
         map.touchZoomRotate.enable();
-        // Note: scrollZoom state is controlled by mouseenter/mouseleave
+        
+        // V18: If visible, check if mouse is over to show button, otherwise it relies on mouseenter
+        if (mapContainer.matches(':hover')) {
+             mapContainer.classList.add('map-active');
+        }
+        
     } else {
         mapFrame.classList.remove('active');
-        // V2: Disable ALL interactions when section is hidden (guaranteed lock)
+        // V2 RESTORED: Disable ALL interactions when section is hidden (guaranteed lock)
         map.scrollZoom.disable();
         map.dragPan.disable();
         map.doubleClickZoom.disable();
         map.touchZoomRotate.disable();
         
-        // V17: Hide the button when the map scrolls out of view.
+        // V18: Hide the button when the map scrolls out of view.
         mapContainer.classList.remove('map-active');
     }
 }

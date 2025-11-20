@@ -1,3 +1,4 @@
+20-11-iframe-scroll-gemini
 <!doctype html>
 <html lang="en" data-baseline="stable-2025-10-01__rails-460px__galC-6-only">
 <head>
@@ -1328,12 +1329,37 @@ function toggleMapPointer() {
 
   if (visible) {
     mapFrame.classList.add('active');
-    mapIframe.style.pointerEvents = 'auto';
+    // We let the mouseenter handler below manage the pointer-events for immediate interaction
+    // if the map is already visible. Otherwise, the class/style is handled here.
+    if (!mapFrame.isMouseOver) {
+        mapIframe.style.pointerEvents = 'auto';
+    }
   } else {
     mapFrame.classList.remove('active');
     mapIframe.style.pointerEvents = 'none';
   }
 }
+
+// NEW: Aggressively re-enable pointer events when mouse enters, if the section is visible
+mapFrame?.addEventListener('mouseenter', () => {
+    mapFrame.isMouseOver = true; // Flag added to prevent race conditions
+    // Check if the map is currently visible based on its scroll position
+    const rect = mapSection.getBoundingClientRect();
+    const visible = rect.top < window.innerHeight * 0.8 && rect.bottom > window.innerHeight * 0.2;
+    if (visible && mapIframe) {
+        mapIframe.style.pointerEvents = 'auto';
+        mapFrame.classList.add('active');
+    }
+});
+
+// NEW: Aggressively disable pointer events when mouse leaves the map frame, fixing the scroll trap
+mapFrame?.addEventListener('mouseleave', () => {
+    mapFrame.isMouseOver = false;
+    if (mapIframe) {
+        mapIframe.style.pointerEvents = 'none';
+        mapFrame.classList.remove('active');
+    }
+});
 
 // reset map interactivity when window loses focus
 window.addEventListener('blur', () => {

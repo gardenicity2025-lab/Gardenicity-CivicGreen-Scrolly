@@ -1,9 +1,10 @@
+20-11-Civic-Green-MapboxGl-Gemini V2
 <!doctype html>
 <html lang="en" data-baseline="stable-2025-10-01__rails-460px__galC-6-only">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Gardenicity — Hero → S1 → S2 → gallery-A → Geddes → S3 → S4 → MapA (GL JS V22 - Layout Fix) → S5 → gallery-B → S8 → S9 → gallery-C → S11 → S12 → S13 → S14 → S15</title>
+<title>Gardenicity — Hero → S1 → S2 → gallery-A → Geddes → S3 → S4 → MapA (GL JS) → S5 → gallery-B → S8 → S9 → gallery-C → S11 → S12 → S13 → S14 → S15</title>
 
 <link href="https://api.mapbox.com/mapbox-gl-js/v3.1.2/mapbox-gl.css" rel="stylesheet" />
 
@@ -35,7 +36,7 @@ font-family:"Acumin Pro",system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial
 /* S4 */
 --s4:0; --s4Overlay:0; --s4Y:0px; --s4ImgOpacity:0;
 /* NEW MAP SECTION */
---sMapA:0; --sMapAImgOpacity:0;
+--sMapA:0; --sMapAImgOpacity:0; /* --sMapAScale removed */
 /* S5 */
 --s5:0; --s5Overlay:0; --s5Y:0px; --s5ImgOpacity:0;
 /* gallery-B-Center */
@@ -91,109 +92,69 @@ display:flex; align-items:flex-end; justify-content:flex-start; overflow:hidden;
 figure.frame { margin: 0; }
 
 .frame {
-position: fixed;
-z-index: 1;
-pointer-events: none;
-display: flex;
-align-items: center;
-justify-content: center;
-overflow: hidden;
+  position: fixed;
+  z-index: 1;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
 }
 
 .frame img {
-width: 100%;
-height: 100%;
-object-fit: contain;
-display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
 }
 
 /* === MapA: base state (MODIFIED for GL JS DIV) === */
 .sMapA-frame {
-top: 0;
-right: 0;
-bottom: 0;
-left: 0;
-opacity: var(--sMapAImgOpacity);
-z-index: 4;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  opacity: var(--sMapAImgOpacity);
+  z-index: 4;
 }
 
 /* === Map container (GL JS DIV) === */
 #mapA-container { /* TARGETING THE NEW DIV */
-width: 100%;
-height: 100%;
-position: relative; /* Mapbox needs a defined size */
-/* Starts disabled, JS enables when visible */
-pointer-events: none;
+  width: 100%;
+  height: 100%;
+  position: relative; /* Mapbox needs a defined size */
+  /* Starts disabled, JS enables when visible */
+  pointer-events: none;
 }
 /* IMPORTANT: Mapbox GL JS map container must have a fixed size */
 .sMapA-frame, #mapA-container {
-width: 100%;
-height: 100%;
+    width: 100%;
+    height: 100%;
 }
 
 /* === When map active (visible) === */
 .sMapA-frame.active #mapA-container {
-pointer-events: auto;
-z-index: 10 !important;
+  pointer-events: auto;
+  z-index: 10 !important;
 }
 
 /* Optional debug outline */
 .sMapA-frame.active {
-outline: 3px solid limegreen;
+  outline: 3px solid limegreen;
 }
 
 /* === Disable map when faded === */
 .sMapA-frame[style*="opacity:0"] {
-pointer-events: none !important;
+  pointer-events: none !important;
 }
-
-/* ===================================================== */
-/* ADDED: Simple HTML Exit Button Styling (FIXED POSITION) */
-/* ===================================================== */
-#exit-map-button {
-    position: fixed; /* Changed to fixed to overlay everything */
-    top: 20px;
-    left: 20px;
-    z-index: 9999; /* Very high z-index to be on top of everything */
-    
-    /* Styling */
-    background-color: #00A86B; /* Civic Green primary color */
-    color: white;
-    border: none;
-    border-radius: 4px;
-    padding: 10px 15px;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: 600;
-    line-height: 1;
-    text-transform: none;
-    transition: background-color 0.2s ease, opacity 0.3s ease;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-    
-    /* Initially hidden */
-    display: none;
-    pointer-events: none;
-}
-
-#exit-map-button:hover {
-    background-color: #007A50;
-}
-
-/* Show the button ONLY when the 'visible' class is added via JS */
-#exit-map-button.visible {
-    display: block;
-    pointer-events: auto;
-}
-/* ===================================================== */
-
 
 /* S1 image RIGHT (text left) */
 .s1-frame {
-top: 96px;
-bottom: 96px;
-left: calc(96px + 460px + 96px);
-right: 82px;
-opacity: var(--s1ImgOpacity);
+  top: 96px;
+  bottom: 96px;
+  left: calc(96px + 460px + 96px);
+  right: 82px;
+  opacity: var(--s1ImgOpacity);
 }
 
 /* S2 image LEFT (mirror) */
@@ -245,8 +206,8 @@ opacity: var(--s4ImgOpacity);
 
 /* MapA full-bleed (MODIFIED FOR GL JS) */
 .sMapA-frame{
-top:0; right:0; bottom:0; left:0;
-opacity:var(--sMapAImgOpacity);
+    top:0; right:0; bottom:0; left:0;
+    opacity:var(--sMapAImgOpacity);
 }
 
 /* S5 image LEFT */
@@ -661,31 +622,28 @@ transform: translateX(-50%) !important;
 
 /* 5. Galleries and Full-bleed remain full-bleed */
 .galA-left-frame, .galB-center-frame, .galC-left-frame {
-  /* No change, they naturally expand to fill the area around the text rail */
+  /* No change, they naturally expand to fill the area around the text rail */
 }
 
 .frame.s3-frame, .frame.s8-frame, .frame.s12-frame, .frame.s15-frame, .frame.sMapA-frame {
-  left: 0 !important;
-  right: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
 }
 
 /* === Global scroll restore === */
 body, html {
-  overscroll-behavior: auto;
+  overscroll-behavior: auto;
 }
 
 /* Prevent invisible fixed frames (like MapA when faded) from blocking mouse scroll */
 .frame[style*="opacity:0"],
 .frame[style*="opacity: 0"] {
-  pointer-events: none !important;
+  pointer-events: none !important;
 }
 
-}
 </style>
 </head>
 <body>
-
-<button id="exit-map-button">Exit Map ↓</button>
 
 <div class="hero-fixed" id="hero">
 <div class="hero-bg" aria-hidden="true"></div>
@@ -723,8 +681,8 @@ body, html {
 <figure class="frame s3-frame" aria-hidden="true"><img id="s3-img" src="assets/section3.jpg" alt=""></figure>
 <figure class="frame s4-frame" aria-hidden="true"><img id="s4-img" src="assets/section4.jpg" alt=""></figure>
 
-<figure class="frame sMapA-frame" aria-hidden="true" id="mapSection">
-    <div id="mapA-container"></div>
+<figure class="frame sMapA-frame" aria-hidden="true">
+    <div id="mapA-container"></div>
 </figure>
 <figure class="frame s5-frame" aria-hidden="true"><img id="s5-img" src="assets/section5.jpg" alt=""></figure>
 
@@ -809,13 +767,13 @@ Fusce quis magna elit. Aenean mi tellus, fermentum eu pharetra id, fermentum non
 
 <section class="sGeddes-wrap" id="sGeddes-wrap"></section>
 <div class="sGeddes-overlay">
-<div class="sGeddes-rail">
-<div class="sGeddes-text" id="sGeddes-text">
-<p><strong>GEDDES PLAN</strong></p>
-<p>Your text content for the Geddes Plan goes here...</p>
-<p>It behaves exactly like Section 2 (Right Rail / Left Image).</p>
-</div>
-</div>
+  <div class="sGeddes-rail">
+    <div class="sGeddes-text" id="sGeddes-text">
+      <p><strong>GEDDES PLAN</strong></p>
+      <p>Your text content for the Geddes Plan goes here...</p>
+      <p>It behaves exactly like Section 2 (Right Rail / Left Image).</p>
+    </div>
+  </div>
 </div>
 
 <section class="s3-wrap" id="s3-wrap"></section>
@@ -1331,65 +1289,32 @@ root.style.setProperty('--s15ImgOpacity', s15Group.toFixed(3));
 }
 
 async function init() {
-  if (document.fonts && document.fonts.ready) {
-    try { await document.fonts.ready; } catch (e) {}
-  }
-  measureHero();
-  measureS1(); measureS2(); measureSGeddes(); measureS4(); measureS5(); measureS9(); measureS11(); measureS13(); measureS14(); measureS15();
+  if (document.fonts && document.fonts.ready) {
+    try { await document.fonts.ready; } catch (e) {}
+  }
+  measureHero();
+  measureS1(); measureS2(); measureSGeddes(); measureS4(); measureS5(); measureS9(); measureS11(); measureS13(); measureS14(); measureS15();
 
-  addEventListener('load',  ()=> {
-    measureHero(); measureS1(); measureS2(); measureSGeddes(); measureS4(); measureS5();
-    measureS9(); measureS11(); measureS13(); measureS14(); measureS15();
-    update();
-  }, { once:true });
+  addEventListener('load',  ()=> {
+    measureHero(); measureS1(); measureS2(); measureSGeddes(); measureS4(); measureS5();
+    measureS9(); measureS11(); measureS13(); measureS14(); measureS15();
+    update();
+  }, { once:true });
 
-  addEventListener('resize', ()=> {
-    measureHero(); measureS1(); measureS2(); measureSGeddes(); measureS4(); measureS5();
-    measureS9(); measureS11(); measureS13(); measureS14(); measureS15();
-    update();
-  });
+  addEventListener('resize', ()=> {
+    measureHero(); measureS1(); measureS2(); measureSGeddes(); measureS4(); measureS5();
+    measureS9(); measureS11(); measureS13(); measureS14(); measureS15();
+    update();
+  });
 
-  addEventListener('scroll', update, { passive:true });
-  update();
+  addEventListener('scroll', update, { passive:true });
+  update();
 }
 init();
 })();
 </script>
 
 <script>
-/* ---------------------------------------------------- */
-/* ADDED: EXPLICIT EXIT BUTTON LOGIC */
-/* ---------------------------------------------------- */
-function handleExitClickSimple() {
-    if (!map) return;
-    const nextSectionElement = document.getElementById('s5-wrap'); // Target S5
-
-    // 1. Disable ALL map controls (explicitly releases the scroll lock)
-    map.scrollZoom.disable();
-    map.dragPan.disable();
-    map.doubleClickZoom.disable();
-    map.touchZoomRotate.disable();
-    map.getCanvas().style.cursor = ''; // Reset cursor
-    
-    // 2. Force scroll down to the next section (S5)
-    if (nextSectionElement) {
-        window.scrollTo({
-            top: nextSectionElement.offsetTop,
-            behavior: 'smooth'
-        });
-        
-        // 3. Safety: Remove 'active' class from map frame
-        // This ensures the implicit scroll listeners don't re-engage the map.
-        if (mapFrame) {
-            mapFrame.classList.remove('active');
-        }
-        // Also hide the button immediately
-        if (exitButton) {
-             exitButton.classList.remove('visible');
-        }
-    }
-}
-
 mapboxgl.accessToken = 'pk.eyJ1Ijoia2F2bmkiLCJhIjoiY2s5YjBqNGY1MGV4aTNobnk0amJncWZweCJ9.gZK_r9CYmb6ZN_mZVmgjNg';
 
 const MAP_START_CENTER = [34.770081, 32.079031]; // Lon, Lat
@@ -1397,7 +1322,6 @@ const MAP_START_ZOOM = 15.99;
 
 const mapFrame = document.querySelector('.sMapA-frame');
 const mapContainer = document.getElementById('mapA-container');
-const exitButton = document.getElementById('exit-map-button'); // NEW: Get button
 const mapSection = document.querySelector('#sMapA-wrap');
 
 // Initialize the Mapbox GL JS Map
@@ -1418,10 +1342,6 @@ map.on('load', () => {
 });
 
 
-if (exitButton) {
-    exitButton.addEventListener('click', handleExitClickSimple);
-}
-
 function toggleMapPointer() {
     if (!mapFrame || !mapSection) return;
 
@@ -1431,9 +1351,6 @@ function toggleMapPointer() {
 
     if (visible) {
         mapFrame.classList.add('active');
-        // Show button (via class 'visible' on the button itself, not frame)
-        if(exitButton) exitButton.classList.add('visible');
-
         // Enable map interactions when visible
         map.scrollZoom.enable();
         map.dragPan.enable();
@@ -1441,9 +1358,6 @@ function toggleMapPointer() {
         map.touchZoomRotate.enable();
     } else {
         mapFrame.classList.remove('active');
-        // Hide button
-        if(exitButton) exitButton.classList.remove('visible');
-
         // Disable map interactions when hidden, releasing the scroll lock
         map.scrollZoom.disable();
         map.dragPan.disable();
@@ -1480,3 +1394,4 @@ toggleMapPointer();
 
 </body>
 </html>
+

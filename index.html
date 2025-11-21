@@ -1,4 +1,4 @@
-20-11-Civic-Green-MapboxGl-Gemini V2
+21-11-25-MapboxGL-Button-Test
 <!doctype html>
 <html lang="en" data-baseline="stable-2025-10-01__rails-460px__galC-6-only">
 <head>
@@ -147,6 +147,45 @@ figure.frame { margin: 0; }
 .sMapA-frame[style*="opacity:0"] {
   pointer-events: none !important;
 }
+
+/* ===================================================== */
+/* ADDED: Simple HTML Exit Button Styling */
+/* ===================================================== */
+#exit-map-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 100; /* Ensure it is above the map */
+    
+    /* Styling */
+    background-color: #00A86B; /* Civic Green primary color */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1;
+    text-transform: none; /* Regular text, not all caps */
+    transition: background-color 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    
+    /* Initially hidden */
+    display: none; 
+}
+
+#exit-map-button:hover {
+    background-color: #007A50;
+}
+
+/* Show the button ONLY when the Map Frame has the 'active' class */
+.sMapA-frame.active #exit-map-button {
+    display: block;
+    pointer-events: auto; /* Ensure it's clickable */
+}
+/* ===================================================== */
+
 
 /* S1 image RIGHT (text left) */
 .s1-frame {
@@ -683,6 +722,7 @@ body, html {
 
 <figure class="frame sMapA-frame" aria-hidden="true">
     <div id="mapA-container"></div>
+    <button id="exit-map-button">Exit map ↓</button>
 </figure>
 <figure class="frame s5-frame" aria-hidden="true"><img id="s5-img" src="assets/section5.jpg" alt=""></figure>
 
@@ -767,13 +807,13 @@ Fusce quis magna elit. Aenean mi tellus, fermentum eu pharetra id, fermentum non
 
 <section class="sGeddes-wrap" id="sGeddes-wrap"></section>
 <div class="sGeddes-overlay">
-  <div class="sGeddes-rail">
-    <div class="sGeddes-text" id="sGeddes-text">
-      <p><strong>GEDDES PLAN</strong></p>
-      <p>Your text content for the Geddes Plan goes here...</p>
-      <p>It behaves exactly like Section 2 (Right Rail / Left Image).</p>
-    </div>
-  </div>
+<div class="sGeddes-rail">
+<div class="sGeddes-text" id="sGeddes-text">
+<p><strong>GEDDES PLAN</strong></p>
+<p>Your text content for the Geddes Plan goes here...</p>
+<p>It behaves exactly like Section 2 (Right Rail / Left Image).</p>
+</div>
+</div>
 </div>
 
 <section class="s3-wrap" id="s3-wrap"></section>
@@ -1315,6 +1355,35 @@ init();
 </script>
 
 <script>
+/* ---------------------------------------------------- */
+/* ADDED: EXPLICIT EXIT BUTTON LOGIC */
+/* ---------------------------------------------------- */
+function handleExitClickSimple() {
+    if (!map) return;
+    const nextSectionElement = document.getElementById('s5-wrap'); // Target S5
+
+    // 1. Disable ALL map controls (explicitly releases the scroll lock)
+    map.scrollZoom.disable();
+    map.dragPan.disable();
+    map.doubleClickZoom.disable();
+    map.touchZoomRotate.disable();
+    map.getCanvas().style.cursor = ''; // Reset cursor
+    
+    // 2. Force scroll down to the next section (S5)
+    if (nextSectionElement) {
+        window.scrollTo({
+            top: nextSectionElement.offsetTop,
+            behavior: 'smooth'
+        });
+        
+        // 3. Safety: Remove 'active' class from map frame
+        // This ensures the implicit scroll listeners don't re-engage the map.
+        if (mapFrame) {
+            mapFrame.classList.remove('active');
+        }
+    }
+}
+
 mapboxgl.accessToken = 'pk.eyJ1Ijoia2F2bmkiLCJhIjoiY2s5YjBqNGY1MGV4aTNobnk0amJncWZweCJ9.gZK_r9CYmb6ZN_mZVmgjNg';
 
 const MAP_START_CENTER = [34.770081, 32.079031]; // Lon, Lat
@@ -1322,6 +1391,7 @@ const MAP_START_ZOOM = 15.99;
 
 const mapFrame = document.querySelector('.sMapA-frame');
 const mapContainer = document.getElementById('mapA-container');
+const exitButton = document.getElementById('exit-map-button'); // NEW: Get button
 const mapSection = document.querySelector('#sMapA-wrap');
 
 // Initialize the Mapbox GL JS Map
@@ -1341,6 +1411,10 @@ map.on('load', () => {
     map.touchZoomRotate.disable();
 });
 
+
+if (exitButton) {
+    exitButton.addEventListener('click', handleExitClickSimple);
+}
 
 function toggleMapPointer() {
     if (!mapFrame || !mapSection) return;

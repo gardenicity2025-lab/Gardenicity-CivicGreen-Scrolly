@@ -1,3 +1,4 @@
+20-11-Civic-Green-MapboxGl-Gemini V2
 <!doctype html>
 <html lang="en" data-baseline="stable-2025-10-01__rails-460px__galC-6-only">
 <head>
@@ -35,7 +36,7 @@ font-family:"Acumin Pro",system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial
 /* S4 */
 --s4:0; --s4Overlay:0; --s4Y:0px; --s4ImgOpacity:0;
 /* NEW MAP SECTION */
---sMapA:0; --sMapAImgOpacity:0;
+--sMapA:0; --sMapAImgOpacity:0; /* --sMapAScale removed */
 /* S5 */
 --s5:0; --s5Overlay:0; --s5Y:0px; --s5ImgOpacity:0;
 /* gallery-B-Center */
@@ -91,69 +92,69 @@ display:flex; align-items:flex-end; justify-content:flex-start; overflow:hidden;
 figure.frame { margin: 0; }
 
 .frame {
-position: fixed;
-z-index: 1;
-pointer-events: none;
-display: flex;
-align-items: center;
-justify-content: center;
-overflow: hidden;
+  position: fixed;
+  z-index: 1;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
 }
 
 .frame img {
-width: 100%;
-height: 100%;
-object-fit: contain;
-display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
 }
 
 /* === MapA: base state (MODIFIED for GL JS DIV) === */
 .sMapA-frame {
-top: 0;
-right: 0;
-bottom: 0;
-left: 0;
-opacity: var(--sMapAImgOpacity);
-z-index: 4;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  opacity: var(--sMapAImgOpacity);
+  z-index: 4;
 }
 
 /* === Map container (GL JS DIV) === */
 #mapA-container { /* TARGETING THE NEW DIV */
-width: 100%;
-height: 100%;
-position: relative; /* Mapbox needs a defined size */
-/* Starts disabled, JS enables when visible */
-pointer-events: none;
+  width: 100%;
+  height: 100%;
+  position: relative; /* Mapbox needs a defined size */
+  /* Starts disabled, JS enables when visible */
+  pointer-events: none;
 }
 /* IMPORTANT: Mapbox GL JS map container must have a fixed size */
 .sMapA-frame, #mapA-container {
-width: 100%;
-height: 100%;
+    width: 100%;
+    height: 100%;
 }
 
 /* === When map active (visible) === */
 .sMapA-frame.active #mapA-container {
-pointer-events: auto;
-z-index: 10 !important;
+  pointer-events: auto;
+  z-index: 10 !important;
 }
 
 /* Optional debug outline */
 .sMapA-frame.active {
-outline: 3px solid limegreen;
+  outline: 3px solid limegreen;
 }
 
 /* === Disable map when faded === */
 .sMapA-frame[style*="opacity:0"] {
-pointer-events: none !important;
+  pointer-events: none !important;
 }
 
 /* S1 image RIGHT (text left) */
 .s1-frame {
-top: 96px;
-bottom: 96px;
-left: calc(96px + 460px + 96px);
-right: 82px;
-opacity: var(--s1ImgOpacity);
+  top: 96px;
+  bottom: 96px;
+  left: calc(96px + 460px + 96px);
+  right: 82px;
+  opacity: var(--s1ImgOpacity);
 }
 
 /* S2 image LEFT (mirror) */
@@ -205,8 +206,8 @@ opacity: var(--s4ImgOpacity);
 
 /* MapA full-bleed (MODIFIED FOR GL JS) */
 .sMapA-frame{
-top:0; right:0; bottom:0; left:0;
-opacity:var(--sMapAImgOpacity);
+    top:0; right:0; bottom:0; left:0;
+    opacity:var(--sMapAImgOpacity);
 }
 
 /* S5 image LEFT */
@@ -401,55 +402,12 @@ z-index:5;
 .s15-text a:focus-visible{
 color:#00A86B;
 }
-
-/*
-=====================================================
-ADDED: Simple HTML Exit Button Styling (Top-Left)
-=====================================================
-*/
-#exit-map-button {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    z-index: 100; /* Ensure it is above the map */
-    
-    /* Styling */
-    background-color: #00A86B; /* Civic Green primary color */
-    color: white;
-    border: none;
-    border-radius: 4px;
-    padding: 10px 15px;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: 600;
-    line-height: 1;
-    text-transform: uppercase;
-    transition: background-color 0.2s ease;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-}
-
-#exit-map-button:hover {
-    background-color: #007A50;
-}
-
-/* Initially hide the button (default state) */
-.sMapA-frame #exit-map-button {
-    display: none;
-}
-
-/* Show the button ONLY when the Map Frame has the 'active' class */
-.sMapA-frame.active #exit-map-button {
-    display: block;
-}
-
 /*
 =====================================================
 MOBILE RESPONSIVE (max-width:600px) - DEDICATED MOBILE VIEW
-... (omitted for brevity, but full file contains the rest of the original CSS)
 =====================================================
 */
 @media (max-width:600px){
-/* ... mobile styles ... */
 body {
 margin:0;
 padding:0;
@@ -510,124 +468,341 @@ background:#f8fbf2 !important; /* Base background for S1-S14 */
 z-index:2;
 }
 
-/* ==== TEXT RAIL (No changes) ==== */
-.s1-rail, .s2-rail, .sGeddes-rail, .s4-rail, .s5-rail, .s9-rail, .s11-rail, .s13-rail, .s14-rail, .s15-rail {
-position:relative !important; width:100% !important; margin:0 !important; left:auto !important;
-right:auto !important; transform: none !important; }
-.s15-rail { left: 0 !important; right: 0 !important; transform: none !important;
-margin: 0 auto !important; }
-
-/* ==== TEXT (Margins & Color) ==== */
-.s1-text, .s2-text, .sGeddes-text, .s4-text, .s5-text, .s9-text, .s11-text, .s13-text, .s14-text, .s15-text { transform:none !important;
-color:#111; text-align:left; font-size:18px; line-height:26px; margin:80px 0 80px 0; }
-/* S15 Text and Link Styling */
-.s15-text { color:#fff !important;
-text-align:center !important; padding:0 !important; margin: 80px auto 80px auto !important; max-width: 100% !important; width: 100% !important; position: relative !important;
-left: 50% !important; transform: translateX(-50%) !important; }
-/* S15 Link Fixes */
-.s15-text a { color:#fff !important;
-text-decoration: none !important; transition: color .2s ease; display: inline-block !important; position: relative !important; z-index: 100 !important;
-}
-.s15-text a:hover, .s15-text a:focus, .s15-text a:focus-visible, .s15-text a:active { color: #00A86B !important; opacity: 1 !important;
+/* S15 Overlay Overrides */
+.s15-overlay {
+background: transparent !important;
+max-width: 100% !important;
+padding: 80px 20px 80px !important; /* 80px Top/Bottom, 20px Left/Right */
+margin: 0 auto !important;
+position: relative !important;
+z-index: 5 !important;
 }
 
-/* ==== GALLERIES & FULL BLEEDS (Updated to include MapA) ==== */
-.galA-left-frame, .galB-center-frame, .galC-left-frame { left:20px;
-right:20px; }
-.frame.s3-frame, .frame.s8-frame, .frame.s12-frame, .frame.s15-frame, .frame.sMapA-frame { left: 0 !important;
-right: 0 !important; }
-
-/* === MapA fix on mobile: It must be full-bleed and fixed (it is by default, but ensuring max safety) === */
-.sMapA-frame {
+/* S15 Rail Structural Reset */
+.s1-rail, .s2-rail, .sGeddes-rail, .s4-rail, .s5-rail,
+.s9-rail, .s11-rail, .s13-rail, .s14-rail, .s15-rail {
+position:relative !important;
+width:100% !important;
+margin:0 !important;
+left:auto !important;
+right:auto !important;
+transform: none !important;
+}
+.s15-rail {
 left: 0 !important;
 right: 0 !important;
-top: 0 !important;
-bottom: 0 !important;
+transform: none !important;
+margin: 0 auto !important;
 }
 
-/* === Scrollytelling frames that need positioning for mobile text to scroll over them === */
-.s1-frame, .s2-frame, .sGeddes-frame, .s4-frame, .s5-frame, .s9-frame, .s11-frame, .s13-frame, .s14-frame { position: absolute !important; left: 50% !important; transform: translateX(-50%) !important;
-width: 600px !important; margin: 0 auto !important; top: 0 !important; bottom: 0 !important; padding: 20px !important;
+
+/* ==== TEXT (Margins & Color) ==== */
+.s1-text, .s2-text, .sGeddes-text, .s4-text, .s5-text,
+.s9-text, .s11-text, .s13-text, .s14-text, .s15-text {
+transform:none !important;
+color:#111;
+text-align:left;
+font-size:18px;
+line-height:26px;
+margin:80px 0 80px 0;
+}
+
+/* S15 Text and Link Styling */
+.s15-text {
+color:#fff !important;
+text-align:center !important;
+padding:0 !important;
+margin: 80px auto 80px auto !important;
+max-width: 100% !important;
+width: 100% !important;
+
+position: relative !important;
+left: 50% !important;
+transform: translateX(-50%) !important;
+}
+
+/* S15 Link Fixes */
+.s15-text a {
+color:#fff !important;
+text-decoration: none !important;
+transition: color .2s ease;
+display: inline-block !important;
+position: relative !important;
+z-index: 100 !important;
+}
+.s15-text a:hover, .s15-text a:focus, .s15-text a:focus-visible, .s15-text a:active {
+color: #00A86B !important;
+opacity: 1 !important;
+}
+
+
+/* ==== GALLERIES & FULL BLEEDS (Updated to include MapA) ==== */
+.galA-left-frame, .galB-center-frame, .galC-left-frame {
+left:20px; right:20px;
+}
+.frame.s3-frame, .frame.s8-frame, .frame.s12-frame, .frame.s15-frame, .frame.sMapA-frame {
+left:0; right:0; top:0; bottom:0;
+}
+}
+/*
+=====================================================
+TABLET RESPONSIVE (min-width:601px and max-width:1023px) - FINAL FIXES + DYNAMIC HERO TEXT
+=====================================================
+*/
+@media (min-width:601px) and (max-width:1023px) {
+
+/* Hero Text Scaling (New Addition) */
+.hero-title {
+/* Title remains Dynamic and scales smoothly */
+font-size: clamp(80px, 12vw, 100px) !important;
+line-height: 1.05 !important;
+}
+.hero-links {
+/* Links are now Static (Fixed Jump) for predictability */
+font-size: 24px !important;
+line-height: 28px !important;
+}
+
+/* Structural & Containment Fixes (From previous successful steps) */
+
+/* 1. Ensure sections are scrollable and have background */
+.s1-wrap, .s2-wrap, .sGeddes-wrap, .s4-wrap, .s5-wrap,
+.s9-wrap, .s11-wrap, .s13-wrap, .s14-wrap {
+min-height: 200vh !important;
+background: #f8fbf2 !important;
+}
+
+/* 2. Base content wrappers are restricted and centered (Text/Overlay Column) */
+.s1-overlay, .s2-overlay, .sGeddes-overlay, .s4-overlay, .s5-overlay,
+.s9-overlay, .s11-overlay, .s13-overlay, .s14-overlay, .s15-overlay {
+max-width: 600px !important;
+padding:0 !important;
+margin:0 auto !important;
+background:#f8fbf2 !important;
+position: relative !important;
+opacity: 1 !important;
+pointer-events: auto !important;
+transform: none !important;
+}
+.s15-overlay {
+background: transparent !important;
+padding: 80px 0 80px 0 !important;
+z-index: 5 !important;
+}
+
+/* 3. Section Images - Constrain them to the 600px column */
+.s1-frame, .s2-frame, .sGeddes-frame, .s4-frame, .s5-frame,
+.s9-frame, .s11-frame, .s13-frame, .s14-frame {
+position: absolute !important;
+left: 50% !important;
+transform: translateX(-50%) !important;
+width: 600px !important;
+margin: 0 auto !important;
+top: 0 !important; bottom: 0 !important;
+padding: 20px !important;
 }
 
 /* 4. Text Rail and Inner Text */
-.s1-text, .s2-text, .sGeddes-text, .s4-text, .s5-text, .s9-text, .s11-text, .s13-text, .s14-text, .s15-text { padding: 0 20px !important;
-margin: 80px auto 80px auto !important; left: auto !important; transform: none !important; max-width: 100% !important; width: auto !important;
-text-align: left !important; }
+.s1-text, .s2-text, .sGeddes-text, .s4-text, .s5-text, .s9-text, .s11-text, .s13-text, .s14-text, .s15-text {
+padding: 0 20px !important;
+margin: 80px auto 80px auto !important;
+left: auto !important;
+transform: none !important;
+max-width: 100% !important;
+width: auto !important;
+text-align: left !important;
+}
 /* S15 Text (Centering Fix) */
-.s15-text { text-align: center !important; color: #fff !important;
-left: 50% !important; transform: translateX(-50%) !important; }
+.s15-text {
+text-align: center !important;
+color: #fff !important;
+left: 50% !important;
+transform: translateX(-50%) !important;
+}
 
 /* 5. Galleries and Full-bleed remain full-bleed */
-.galA-left-frame, .galB-center-frame, .galC-left-frame { /* No change, they naturally expand to fill the area around the text rail */ }
+.galA-left-frame, .galB-center-frame, .galC-left-frame {
+  /* No change, they naturally expand to fill the area around the text rail */
+}
 
-.frame.s3-frame, .frame.s8-frame, .frame.s12-frame, .frame.s15-frame, .frame.sMapA-frame { left: 0 !important;
-right: 0 !important; }
+.frame.s3-frame, .frame.s8-frame, .frame.s12-frame, .frame.s15-frame, .frame.sMapA-frame {
+  left: 0 !important;
+  right: 0 !important;
+}
 
 /* === Global scroll restore === */
-body, html { overscroll-behavior: auto;
+body, html {
+  overscroll-behavior: auto;
 }
 
 /* Prevent invisible fixed frames (like MapA when faded) from blocking mouse scroll */
-.frame[style*="opacity:0"], .frame[style*="opacity: 0"] { pointer-events: none !important;
+.frame[style*="opacity:0"],
+.frame[style*="opacity: 0"] {
+  pointer-events: none !important;
 }
 
-/* Fix mobile position for the button */
-.sMapA-frame #exit-map-button {
-    left: 20px !important;
-    right: auto !important;
-}
-}
 </style>
 </head>
 <body>
 
 <div class="hero-fixed" id="hero">
-    <div class="hero-bg"></div>
-    <div class="hero-media" id="hero-media">
-        <div class="col" id="hero-col">
-            <h1 class="hero-title" id="hero-title">
-                <span class="line">Gardenicity</span>
-                <span class="line">An Urban Story</span>
-            </h1>
-            <div class="hero-links" id="hero-links">
-                <a href="#sMapA-wrap" id="toMapLink">View Map</a>
-                <a href="#s1-wrap">Read Story</a>
-            </div>
-        </div>
-    </div>
+<div class="hero-bg" aria-hidden="true"></div>
+<div class="hero-media" id="hero-media">
+<div class="col" id="hero-col">
+<h1 class="hero-title" id="hero-title">
+<span class="line">Gardenicity</span>
+<span class="line">Civic Green</span>
+</h1>
+<nav class="hero-links" id="hero-links" aria-label="Primary">
+<a href="https://www.megama.net">What Did Geddes See</a>
+<a href="https://www.megama.net">Growth</a>
+<a href="https://www.megama.net">Sustenance</a>
+<a href="https://www.megama.net">Leafy SDGs</a>
+<a href="https://www.megama.net">EN/עב</a>
+</nav>
+</div>
+</div>
 </div>
 
-<figure class="frame sMapA-frame" aria-hidden="true" id="mapSection">
-    <div id="mapA-container"></div>
-    <button id="exit-map-button">Exit Map ↓</button>
-</figure>
+<section class="driver" id="driver"></section>
 
-<figure class="frame s1-frame" aria-hidden="true"><img id="s1-img" src="assets/section01.jpg" alt=""></figure>
-<figure class="frame s2-frame" aria-hidden="true"><img id="s2-img" src="assets/section02.jpg" alt=""></figure>
+<figure class="frame s1-frame" aria-hidden="true"><img id="s1-img" src="assets/section1.jpg" alt=""></figure>
+<figure class="frame s2-frame" aria-hidden="true"><img id="s2-img" src="assets/section2.jpg" alt=""></figure>
 
 <figure class="frame galA-left-frame" aria-hidden="true">
-    <img id="galA-img0" src="assets/gallery-A0.jpg" alt="">
-    <img id="galA-img1" src="assets/gallery-A1.jpg" alt="">
-    <img id="galA-img2" src="assets/gallery-A2.jpg" alt="">
-    <img id="galA-img3" src="assets/gallery-A3.jpg" alt="">
+<img id="galA-img0" src="assets/gallery-A.jpg" alt="">
+<img id="galA-img1" src="assets/gallery-A1.jpg" alt="">
+<img id="galA-img2" src="assets/gallery-A2.jpg" alt="">
+<img id="galA-img3" src="assets/gallery-A3.jpg" alt="">
 </figure>
 
-<figure class="frame sGeddes-frame" aria-hidden="true"><img id="sGeddes-img" src="assets/geddes-plan.jpg" alt=""></figure>
-<figure class="frame s3-frame" aria-hidden="true"> <img id="s3-img" src="assets/section03.jpg" alt=""> </figure>
-<figure class="frame s4-frame" aria-hidden="true"><img id="s4-img" src="assets/section04.jpg" alt=""></figure>
+<figure class="frame sGeddes-frame" aria-hidden="true"><img id="sGeddes-img" src="assets/geddesplan.jpg" alt=""></figure>
 
+<figure class="frame s3-frame" aria-hidden="true"><img id="s3-img" src="assets/section3.jpg" alt=""></figure>
+<figure class="frame s4-frame" aria-hidden="true"><img id="s4-img" src="assets/section4.jpg" alt=""></figure>
+
+<figure class="frame sMapA-frame" aria-hidden="true">
+    <div id="mapA-container"></div>
+</figure>
+<figure class="frame s5-frame" aria-hidden="true"><img id="s5-img" src="assets/section5.jpg" alt=""></figure>
+
+<figure class="frame galB-center-frame" aria-hidden="true">
+<img id="galB-img0" src="assets/gallery-B.jpg" alt="">
+<img id="galB-img1" src="assets/gallery-B1.jpg" alt="">
+<img id="galB-img2" src="assets/gallery-B2.jpg" alt="">
+<img id="galB-img3" src="assets/gallery-B3.jpg" alt="">
+<img id="galB-img4" src="assets/gallery-B4.jpg" alt="">
+</figure>
+
+<figure class="frame s8-frame" aria-hidden="true">
+<img id="s8-img" src="assets/section8.jpg" alt="">
+</figure>
+
+<figure class="frame s9-frame" aria-hidden="true"><img id="s9-img" src="assets/section9.jpg" alt=""></figure>
+
+<figure class="frame galC-left-frame" aria-hidden="true">
+<img id="galC-img0" src="assets/gallery-C.jpg" alt="">
+<img id="galC-img1" src="assets/gallery-C1.jpg" alt="">
+<img id="galC-img2" src="assets/gallery-C2.jpg" alt="">
+<img id="galC-img3" src="assets/gallery-C3.jpg" alt="">
+<img id="galC-img4" src="assets/gallery-C4.jpg" alt="">
+<img id="galC-img5" src="assets/gallery-C5.jpg" alt="">
+</figure>
+
+<figure class="frame s11-frame" aria-hidden="true"><img id="s11-img" src="assets/section11.jpg" alt=""></figure>
+
+<figure class="frame s12-frame" aria-hidden="true">
+<img id="s12-img" src="assets/section12.jpg" alt="">
+</figure>
+
+<figure class="frame s13-frame" aria-hidden="true"><img id="s13-img" src="assets/section13.jpg" alt=""></figure>
+
+<figure class="frame s14-frame" aria-hidden="true"><img id="s14-img" src="assets/section14.jpg" alt=""></figure>
+
+<figure class="frame s15-frame" aria-hidden="true">
+<img id="s15-img" src="assets/section15.jpg" alt="">
+</figure>
+
+<section class="s1-wrap" id="s1-wrap"></section>
+<div class="s1-overlay">
+<div class="s1-rail">
+<div class="s1-text" id="s1-text">
+<p><strong>HOURS AFTER MY</strong> mother took her last breath on earth…</p>
+<p>After we opened the windows to let the spirits out…</p>
+<p>After we lit incense stick after incense stick…</p>
+<p>After we watched MMA fighters on TV in the basement…</p>
+<p>And the smoke kept rising. The chain must not be broken. **\*Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+Aliquam varius, metus nec tincidunt tincidunt, nunc erat tincidunt sapien, vel laoreet lacus nisi eget justo. Nullam ut placerat odio.
+Nulla vitae eros nec mi rutrum eleifend at nec dui. Duis ultricies consequat lobortis.
+Fusce a aliquam lorem, ac lacinia est. Praesent rutrum odio eget tellus mattis, at malesuada lorem dapibus.
+Pellentesque accumsan dui a lectus porttitor vestibulum. Nam venenatis urna elit, at condimentum eros elementum interdum. Proin sed semper nulla.
+Mauris placerat non dui at pretium. Ut aliquam tellus ipsum, non porta ex congue a.
+Vestibulum molestie egestas tellus, vitae tincidunt nibh mollis nec.
+Fusce quis magna elit. Aenean mi tellus, fermentum eu pharetra id, fermentum non turpis. **\*</p>
+</div>
+</div>
+</div>
+
+<section class="s2-wrap" id="s2-wrap"></section>
+<div class="s2-overlay">
+<div class="s2-rail">
+<div class="s2-text" id="s2-text">
+<p><strong>SECTION TWO</strong> opens as the previous memory fades…</p>
+<p>Now the perspective widens to a new frame…</p>
+<p>The city’s edge meets the garden…</p>
+<p>We follow the lines of growth and care…</p>
+<p>And learn how places hold time. **\*Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+Aliquam varius, metus nec tincidunt tincidunt, nunc erat tincidunt sapien, vel laoreet lacus nisi eget justo. Nullam ut placerat odio.
+Nulla vitae eros nec mi rutrum eleifend at nec dui. Duis ultricies consequat lobortis.
+Fusce a aliquam lorem, ac lacinia est. Praesent rutrum odio eget tellus mattis, at malesuada lorem dapibus.
+Pellentesque accumsan dui a lectus porttitor vestibulum. Nam venenatis urna elit, at condimentum eros elementum interdum. Proin sed semper nulla.
+Mauris placerat non dui at pretium. Ut aliquam tellus ipsum, non porta ex congue a.
+Vestibulum molestie egestas tellus, vitae tincidunt nibh mollis nec.
+Fusce quis magna elit. Aenean mi tellus, fermentum eu pharetra id, fermentum non turpis. **\*</p>
+</div>
+</div>
+</div>
+
+<section class="galA-left-wrap" id="galA-wrap"></section>
+
+<section class="sGeddes-wrap" id="sGeddes-wrap"></section>
+<div class="sGeddes-overlay">
+  <div class="sGeddes-rail">
+    <div class="sGeddes-text" id="sGeddes-text">
+      <p><strong>GEDDES PLAN</strong></p>
+      <p>Your text content for the Geddes Plan goes here...</p>
+      <p>It behaves exactly like Section 2 (Right Rail / Left Image).</p>
+    </div>
+  </div>
+</div>
+
+<section class="s3-wrap" id="s3-wrap"></section>
+
+<section class="s4-wrap" id="s4-wrap"></section>
+<div class="s4-overlay">
+<div class="s4-rail">
+<div class="s4-text" id="s4-text">
+<p><strong>SECTION FOUR</strong> returns to the tight frame…</p>
+<p>Left-rail narration continues the thread…</p>
+<p>The horizontal image sits steady at right…</p>
+<p>Margins and rhythm match Section One…</p>
+<p>And the cycle of views goes on.</p>
+</div>
+</div>
+</div>
+
+<section class="sMapA-wrap" id="sMapA-wrap"></section>
 <section class="s5-wrap" id="s5-wrap"></section>
 <div class="s5-overlay">
-    <div class="s5-rail">
-        <div class="s5-text" id="s5-text">
-            <p><strong>SECTION FIVE</strong> shifts the rail again…</p>
-            <p>Now the narration hugs the right margin…</p>
-            <p>While the image holds the left field of view…</p>
-            <p>Framing the next turn in the story…</p>
-            <p>With the same cadence and pace.</p>
-        </div>
-    </div>
+<div class="s5-rail">
+<div class="s5-text" id="s5-text">
+<p><strong>SECTION FIVE</strong> shifts the rail again…</p>
+<p>Now the narration hugs the right margin…</p>
+<p>While the image holds the left field of view…</p>
+<p>Framing the next turn in the story…</p>
+<p>With the same cadence and pace.</p>
+</div>
+</div>
 </div>
 
 <section class="galB-center-wrap" id="galB-wrap"></section>
@@ -636,74 +811,78 @@ body, html { overscroll-behavior: auto;
 
 <section class="s9-wrap" id="s9-wrap"></section>
 <div class="s9-overlay">
-    <div class="s9-rail">
-        <div class="s9-text" id="s9-text">
-            <p><strong>SECTION NINE</strong> brings us back to the close frame…</p>
-            <p>The left rail carries the narration forward…</p>
-            <p>On the right, the image steadies the scene…</p>
-            <p>Margins, rhythm, and pacing mirror Section One…</p>
-            <p>So the story breathes in familiar cadence.</p>
-        </div>
-    </div>
+<div class="s9-rail">
+<div class="s9-text" id="s9-text">
+<p><strong>SECTION NINE</strong> brings us back to the close frame…</p>
+<p>The left rail carries the narration forward…</p>
+<p>On the right, the image steadies the scene…</p>
+<p>Margins, rhythm, and pacing mirror Section One…</p>
+<p>So the story breathes in familiar cadence.</p>
+</div>
+</div>
 </div>
 
 <section class="galC-left-wrap" id="galC-wrap"></section>
 
 <section class="s11-wrap" id="s11-wrap"></section>
 <div class="s11-overlay">
-    <div class="s11-rail">
-        <div class="s11-text" id="s11-text">
-            <p><strong>SECTION ELEVEN</strong></p>
-            <p>Left rail. Right image. Steady pacing…</p>
-            <p>Onward to the next view…</p>
-            <p>This continues the standard layout rhythm.</p>
-        </div>
-    </div>
+<div class="s11-rail">
+<div class="s11-text" id="s11-text">
+<p><strong>SECTION ELEVEN</strong> continues the thread…</p>
+<p>Back to the left rail; image anchors the right…</p>
+<p>Margins and rhythm unchanged…</p>
+<p>Standard crossfades keep the cadence…</p>
+<p>As the story settles into focus.</p>
+</div>
+</div>
 </div>
 
 <section class="s12-wrap" id="s12-wrap"></section>
 
 <section class="s13-wrap" id="s13-wrap"></section>
 <div class="s13-overlay">
-    <div class="s13-rail">
-        <div class="s13-text" id="s13-text">
-            <p><strong>SECTION THIRTEEN</strong> is a pause…</p>
-            <p>A moment of stillness before the conclusion…</p>
-            <p>The left rail holds the thread…</p>
-            <p>The right image holds the scene…</p>
-            <p>The cadence returns to the primary rhythm.</p>
-        </div>
-    </div>
+<div class="s13-rail">
+<div class="s13-text" id="s13-text">
+<p><strong>SECTION THIRTEEN</strong> returns to the close frame…</p>
+<p>Left-rail narration pulls us forward…</p>
+<p>The right-side image steadies the scene…</p>
+<p>Margins and rhythm echo Section One…</p>
+<p>Breathing at the familiar pace.</p>
+</div>
+</div>
 </div>
 
 <section class="s14-wrap" id="s14-wrap"></section>
 <div class="s14-overlay">
-    <div class="s14-rail">
-        <div class="s14-text" id="s14-text">
-            <p><strong>SECTION FOURTEEN</strong> is the penultimate scene…</p>
-            <p>The final shift to the right rail…</p>
-            <p>The left image closes the visual sequence…</p>
-            <p>As the view widens and settles…</p>
-            <p>Into the next cadence.</p>
-        </div>
-    </div>
+<div class="s14-rail">
+<div class="s14-text" id="s14-text">
+<p><strong>SECTION FOURTEEN</strong> flips the rail…</p>
+<p>Text to the right, image to the left…</p>
+<p>Pacing and fades match Section Two…</p>
+<p>As the view widens and settles…</p>
+<p>Into the next cadence.</p>
+</div>
+</div>
 </div>
 
 <section class="s15-wrap" id="s15-wrap"></section>
 <div class="s15-overlay">
-    <div class="s15-rail">
-        <div class="s15-text" id="s15-text">
-            <p><strong>Gardenicity</strong> Writing, Design, Curation:<br> Megama/Rebecca Sternberg, Keren Avni</p>
-            <p><strong>Photo Credits:</strong><br> 1 - Survey of Israel (MAPI);
-            2-10, 15-25 - Matson (G. Eric and Edith) Photograph Collection, LOC; 11-14 - NLI Boris Carmi;
-            26 - Tomer Appelbaum</p>
-            <p> <a href="https://www.megama.net" target="_blank">Gardencity what did Geddes See?</a><br>
-            <a href="https://www.megama.net" target="_blank">Civic Green</a><br>
-            <a href="https://www.megama.net" target="_blank">Growth</a><br>
-            <a href="https://www.megama.net" target="_blank">Leafy SDGs</a><br>
-            <a href="https://www.megama.net" target="_blank">EN/עב</a> </p>
-        </div>
-    </div>
+<div class="s15-rail">
+<div class="s15-text" id="s15-text">
+<p><strong>Gardenicity</strong> Writing, Design, Curation:<br>
+Megama/Rebecca Sternberg, Keren Avni</p>
+<p><strong>Photo Credits:</strong><br>
+1 - Survey of Israel (MAPI); 2-10, 15-25 - Matson (G. Eric and Edith) Photograph Collection, LOC;
+11-14 - NLI Boris Carmi; 26 - Tomer Appelbaum</p>
+<p>
+<a href="https://www.megama.net" target="_blank">Gardencity what did Geddes See?</a><br>
+<a href="https://www.megama.net" target="_blank">Civic Green</a><br>
+<a href="https://www.megama.net" target="_blank">Growth</a><br>
+<a href="https://www.megama.net" target="_blank">Leafy SDGs</a><br>
+<a href="https://www.megama.net" target="_blank">EN/עב</a>
+</p>
+</div>
+</div>
 </div>
 
 <section class="after"></section>
@@ -711,612 +890,508 @@ body, html { overscroll-behavior: auto;
 <script src="https://api.mapbox.com/mapbox-gl-js/v3.1.2/mapbox-gl.js"></script>
 <script>
 (function(){
-    const root=document.documentElement;
-    const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
-    const easeInOutCubic=t=>t<0.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
-    const easePow=(t,p)=>Math.pow(t,p);
-
-    /* ---------- HERO ---------- */
-    const driver=document.getElementById('driver');
-    const heroMedia=document.getElementById('hero-media');
-    const heroCol=document.getElementById('hero-col');
-    const heroTitle=document.getElementById('hero-title');
-    const heroLinks=document.getElementById('hero-links');
-    let startShift=0,endShift=0;
-
-    function measureHero(){
-        const prev=heroCol.style.transform;
-        heroCol.style.transform='translateY(0px)';
-        const lines=heroTitle.querySelectorAll('.line');
-        const third=lines[2]||lines[lines.length-1];
-        const thirdRect=third.getBoundingClientRect();
-        const lastLinkRect=(heroLinks.lastElementChild||heroLinks).getBoundingClientRect();
-        const mediaRect=heroMedia.getBoundingClientRect();
-        const mediaBaseline=mediaRect.bottom;
-        startShift=mediaBaseline-thirdRect.bottom;
-        endShift=mediaBaseline-lastLinkRect.bottom;
-        heroCol.style.transform=prev||'';
-        root.style.setProperty('--shift',startShift.toFixed(1)+'px');
-    }
-
-    function progressOf(el){
-        const r=el.getBoundingClientRect();
-        const vh=window.innerHeight||document.documentElement.clientHeight;
-        const total=r.height-vh;
-        if(total<=0) return 0;
-        return clamp(-r.top/total,0,1);
-    }
-
-    /* ---------- WRAPS ---------- */
-    const s1Wrap=document.getElementById('s1-wrap');
-    const s2Wrap=document.getElementById('s2-wrap');
-    const galAWrap=document.getElementById('galA-wrap');
-    const sGeddesWrap=document.getElementById('sGeddes-wrap'); /* NEW */
-    const s3Wrap=document.getElementById('s3-wrap');
-    const s4Wrap=document.getElementById('s4-wrap');
-    const sMapAWrap=document.getElementById('sMapA-wrap'); /* NEW */
-    const s5Wrap=document.getElementById('s5-wrap');
-    
-    // Target element for explicit exit
-    const nextSectionElement = document.getElementById('s5-wrap'); 
-    
-    const galBWrap=document.getElementById('galB-wrap');
-    const s8Wrap=document.getElementById('s8-wrap');
-    const s9Wrap=document.getElementById('s9-wrap');
-    const galCWrap=document.getElementById('galC-wrap');
-    const s11Wrap=document.getElementById('s11-wrap');
-    const s12Wrap=document.getElementById('s12-wrap');
-    const s13Wrap=document.getElementById('s13-wrap');
-    const s14Wrap=document.getElementById('s14-wrap');
-    const s15Wrap=document.getElementById('s15-wrap');
-    const afterWrap=document.querySelector('.after');
-
-    /* ---------- TEXT ELEMENTS ---------- */
-    const s1Text=document.getElementById('s1-text'); let s1StartY=0,s1EndY=0;
-    const s2Text=document.getElementById('s2-text'); let s2StartY=0,s2EndY=0;
-    const sGeddesText=document.getElementById('sGeddes-text'); let sGeddesStartY=0,sGeddesEndY=0; /* NEW */
-    const s4Text=document.getElementById('s4-text'); let s4StartY=0,s4EndY=0;
-    const s5Text=document.getElementById('s5-text'); let s5StartY=0,s5EndY=0;
-    const s9Text=document.getElementById('s9-text'); let s9StartY=0,s9EndY=0;
-    const s11Text=document.getElementById('s11-text'); let s11StartY=0,s11EndY=0;
-    const s13Text=document.getElementById('s13-text'); let s13StartY=0,s13EndY=0;
-    const s14Text=document.getElementById('s14-text'); let s14StartY=0,s14EndY=0;
-    const s15Text=document.getElementById('s15-text'); let s15StartY=0,s15EndY=0;
-
-    function measureS1(){ const vh=window.innerHeight; const h=s1Text.scrollHeight; s1StartY=vh; s1EndY=-h; root.style.setProperty('--s1Y', s1StartY+'px'); }
-    function measureS2(){ const vh=window.innerHeight; const h=s2Text.scrollHeight; s2StartY=vh; s2EndY=-h; root.style.setProperty('--s2Y', s2StartY+'px'); }
-    function measureSGeddes(){ const vh=window.innerHeight; const h=sGeddesText.scrollHeight; sGeddesStartY=vh; sGeddesEndY=-h; root.style.setProperty('--sGeddesY', sGeddesStartY+'px'); } /* NEW */
-    function measureS4(){ const vh=window.innerHeight; const h=s4Text.scrollHeight; s4StartY=vh; s4EndY=-h; root.style.setProperty('--s4Y', s4StartY+'px'); }
-    function measureS5(){ const vh=window.innerHeight; const h=s5Text.scrollHeight; s5StartY=vh; s5EndY=-h; root.style.setProperty('--s5Y', s5StartY+'px'); }
-    function measureS9(){ const vh=window.innerHeight; const h=s9Text.scrollHeight; s9StartY=vh; s9EndY=-h; root.style.setProperty('--s9Y', s9StartY+'px'); }
-    function measureS11(){ const vh=window.innerHeight; const h=s11Text.scrollHeight; s11StartY=vh; s11EndY=-h; root.style.setProperty('--s11Y', s11StartY+'px'); }
-    function measureS13(){ const vh=window.innerHeight; const h=s13Text.scrollHeight; s13StartY=vh; s13EndY=-h; root.style.setProperty('--s13Y', s13StartY+'px'); }
-    function measureS14(){ const vh=window.innerHeight; const h=s14Text.scrollHeight; s14StartY=vh; s14EndY=-h; root.style.setProperty('--s14Y', s14StartY+'px'); }
-    function measureS15(){ const vh=window.innerHeight; const h=s15Text.scrollHeight; s15StartY=vh; s15EndY=-h; root.style.setProperty('--s15Y', s15StartY+'px'); }
-
-    /* --- Load gates (first images) --- */
-    const galAImg0 = document.getElementById('galA-img0');
-    function markGalAReady(){ root.style.setProperty('--galAReady','1'); }
-    if (galAImg0 && galAImg0.complete && galAImg0.naturalWidth > 0) markGalAReady(); else if (galAImg0) galAImg0.addEventListener('load', markGalAReady, { once:true });
-
-    const galBImg0 = document.getElementById('galB-img0');
-    function markGalBReady(){ root.style.setProperty('--galBReady','1'); }
-    if (galBImg0 && galBImg0.complete && galBImg0.naturalWidth > 0) markGalBReady(); else if (galBImg0) galBImg0.addEventListener('load', markGalBReady, { once:true });
-
-    const s8Img = document.getElementById('s8-img');
-    function markS8Ready(){ root.style.setProperty('--s8Ready','1'); }
-    if (s8Img && s8Img.complete && s8Img.naturalWidth > 0) markS8Ready(); else if (s8Img) s8Img.addEventListener('load', markS8Ready, { once:true });
-
-    const galCImg0 = document.getElementById('galC-img0');
-    function markGalCReady(){ root.style.setProperty('--galCReady','1'); }
-    if (galCImg0 && galCImg0.complete && galCImg0.naturalWidth > 0) markGalCReady(); else if (galCImg0) galCImg0.addEventListener('load', markGalCReady, { once:true });
-
-    const s12Img = document.getElementById('s12-img');
-    function markS12Ready(){ root.style.setProperty('--s12Ready','1'); }
-    if (s12Img && s12Img.complete && s12Img.naturalWidth > 0) markS12Ready(); else if (s12Img) s12Img.addEventListener('load', markS12Ready, { once:true });
-
-    /* S15 gate */
-    const s15Img = document.getElementById('s15-img');
-    function markS15Ready(){ root.style.setProperty('--s15Ready','1'); }
-    if (s15Img && s15Img.complete && s15Img.naturalWidth > 0) markS15Ready(); else if (s15Img) s15Img.addEventListener('load', markS15Ready, { once:true });
-
-    /* ---------- MAPBOX GL JS SETUP ---------- */
-    const mapSection = document.getElementById('mapSection');
-    const mapContainer = document.getElementById('mapA-container');
-    let map = null;
-
-    function initMap() {
-        if (!mapboxgl.supported()) {
-            console.error('Mapbox GL is not supported by your browser.');
-            return;
-        }
-
-        mapboxgl.accessToken = 'YOUR_MAPBOX_ACCESS_TOKEN'; // !!! REPLACE WITH YOUR TOKEN !!!
-
-        map = new mapboxgl.Map({
-            container: 'mapA-container',
-            style: 'mapbox://styles/mapbox/light-v11', // Or your custom style
-            center: [35.2105, 31.777], // Initial Jerusalem center (example)
-            zoom: 12,
-            bearing: 0,
-            pitch: 0,
-            interactive: false // Start non-interactive
-        });
-
-        // Disable all interaction by default, they are managed by scrollytelling
-        map.dragPan.disable();
-        map.scrollZoom.disable();
-        map.doubleClickZoom.disable();
-        map.touchZoomRotate.disable();
-
-        map.on('load', () => {
-            // Add any custom layers, sources, or initial flyTos here.
-        });
-    }
-
-    /* ---------- MAIN LOOP ---------- */
-    function loop(){
-        // Get progress for each section
-        const hero=progressOf(driver);
-        const s1=progressOf(s1Wrap);
-        const s2=progressOf(s2Wrap);
-        const galA=progressOf(galAWrap);
-        const sGeddes=progressOf(sGeddesWrap); /* NEW */
-        const s3=progressOf(s3Wrap);
-        const s4=progressOf(s4Wrap);
-        const sMapA=progressOf(sMapAWrap); /* NEW */
-        const s5=progressOf(s5Wrap);
-        const galB=progressOf(galBWrap);
-        const s8=progressOf(s8Wrap);
-        const s9=progressOf(s9Wrap);
-        const galC=progressOf(galCWrap);
-        const s11=progressOf(s11Wrap);
-        const s12=progressOf(s12Wrap);
-        const s13=progressOf(s13Wrap);
-        const s14=progressOf(s14Wrap);
-        const s15=progressOf(s15Wrap);
-
-        // Constants
-        const E=3; // Easing power
-
-        /* ---------- MAPBOX SCROLLYTELLING LOGIC (Simplified) ---------- */
-        if (sMapA > 0 && sMapA < 1) {
-            if (!map) initMap();
-
-            const p = clamp(sMapA, 0, 1);
-            let targetCenter, targetZoom;
-
-            if (p < 0.25) {
-                // Step 1: Fly to initial view
-                targetCenter = [35.2105, 31.777];
-                targetZoom = 12;
-            } else if (p < 0.5) {
-                // Step 2: Zoom in on a specific area
-                targetCenter = [35.216, 31.78];
-                targetZoom = 14;
-            } else if (p < 0.75) {
-                // Step 3: Move to another area
-                targetCenter = [35.2, 31.765];
-                targetZoom = 13;
-            } else {
-                // Step 4: Final view before exit
-                targetCenter = [35.2105, 31.777];
-                targetZoom = 12.5;
-            }
-
-            if (map) {
-                map.flyTo({
-                    center: targetCenter,
-                    zoom: targetZoom,
-                    speed: 0.1, // Slower speed for smoother scrollytelling
-                    curve: 1,
-                    easing: easeInOutCubic
-                });
-            }
-        }
-        /* ----------------------------------------------------------- */
-
-        // Hero timing (0 to 1)
-        const heroRaw=clamp(hero*1.2,0,1);
-        root.style.setProperty('--shift', (startShift + (endShift - startShift) * heroRaw)+'px');
-        root.style.setProperty('--titleOpacity', clamp(1-heroRaw*4,0,1).toFixed(3));
-        root.style.setProperty('--linksOpacity', clamp(heroRaw*2-1,0,1).toFixed(3));
-        root.style.setProperty('--heroAlpha', clamp(1-s1*1.5,0,1).toFixed(3));
-        root.style.setProperty('--heroBlur', clamp(s1*2,0,1).toFixed(3));
-
-        // S1 timing
-        const s1Raw=clamp(s1*1.2,0,1);
-        root.style.setProperty('--s1Overlay', clamp(s1*2,0,1).toFixed(3));
-        root.style.setProperty('--s1ImgOpacity', clamp(s1Raw,0,1).toFixed(3));
-        root.style.setProperty('--s1Y',(s1StartY+(s1EndY-s1StartY)*easePow(s1Raw,E))+'px');
-
-        // S2 timing
-        const s2Raw=clamp(s2*1.2,0,1);
-        root.style.setProperty('--s2Overlay', clamp(s2*2,0,1).toFixed(3));
-        root.style.setProperty('--s2ImgOpacity', clamp(s2Raw,0,1).toFixed(3));
-        root.style.setProperty('--s2Y',(s2StartY+(s2EndY-s2StartY)*easePow(s2Raw,E))+'px');
-
-        // gallery-A timing
-        const galARaw=clamp(galA,0,1);
-        root.style.setProperty('--galA', galARaw.toFixed(3));
-
-        // sGeddes timing
-        const sGeddesRaw=clamp(sGeddes*1.2,0,1);
-        root.style.setProperty('--sGeddesOverlay', clamp(sGeddes*2,0,1).toFixed(3));
-        root.style.setProperty('--sGeddesImgOpacity', clamp(sGeddesRaw,0,1).toFixed(3));
-        root.style.setProperty('--sGeddesY',(sGeddesStartY+(sGeddesEndY-sGeddesStartY)*easePow(sGeddesRaw,E))+'px');
-
-        // S3 timing (full bleed)
-        const s3Raw=clamp(s3,0,1);
-        root.style.setProperty('--s3', s3Raw.toFixed(3));
-
-        // S4 timing
-        const s4Raw=clamp(s4*1.2,0,1);
-        root.style.setProperty('--s4Overlay', clamp(s4*2,0,1).toFixed(3));
-        root.style.setProperty('--s4ImgOpacity', clamp(s4Raw,0,1).toFixed(3));
-        root.style.setProperty('--s4Y',(s4StartY+(s4EndY-s4StartY)*easePow(s4Raw,E))+'px');
-
-        // SMapA timing (full bleed)
-        const sMapARaw=clamp(sMapA,0,1);
-        root.style.setProperty('--sMapA', sMapARaw.toFixed(3));
-
-        // S5 timing
-        const s5Raw=clamp(s5*1.2,0,1);
-        root.style.setProperty('--s5Overlay', clamp(s5*2,0,1).toFixed(3));
-        root.style.setProperty('--s5ImgOpacity', clamp(s5Raw,0,1).toFixed(3));
-        root.style.setProperty('--s5Y',(s5StartY+(s5EndY-s5StartY)*easePow(s5Raw,E))+'px');
-
-        // gallery-B timing
-        const galBRaw=clamp(galB,0,1);
-        root.style.setProperty('--galB', galBRaw.toFixed(3));
-
-        // S8 timing (full bleed)
-        const s8Raw=clamp(s8,0,1);
-        root.style.setProperty('--s8', s8Raw.toFixed(3));
-
-        // S9 timing
-        const s9Raw=clamp(s9*1.2,0,1);
-        root.style.setProperty('--s9Overlay', clamp(s9*2,0,1).toFixed(3));
-        root.style.setProperty('--s9ImgOpacity', clamp(s9Raw,0,1).toFixed(3));
-        root.style.setProperty('--s9Y',(s9StartY+(s9EndY-s9StartY)*easePow(s9Raw,E))+'px');
-
-        // gallery-C timing
-        const galCRaw=clamp(galC,0,1);
-        root.style.setProperty('--galC', galCRaw.toFixed(3));
-
-        // S11 timing
-        const s11Raw=clamp(s11*1.2,0,1);
-        root.style.setProperty('--s11Overlay', clamp(s11*2,0,1).toFixed(3));
-        root.style.setProperty('--s11ImgOpacity', clamp(s11Raw,0,1).toFixed(3));
-        root.style.setProperty('--s11Y',(s11StartY+(s11EndY-s11StartY)*easePow(s11Raw,E))+'px');
-
-        // S12 timing (full bleed)
-        const s12Raw=clamp(s12,0,1);
-        root.style.setProperty('--s12', s12Raw.toFixed(3));
-
-        // S13 timing
-        const s13Raw=clamp(s13*1.2,0,1);
-        root.style.setProperty('--s13Overlay', clamp(s13*2,0,1).toFixed(3));
-        root.style.setProperty('--s13ImgOpacity', clamp(s13Raw,0,1).toFixed(3));
-        root.style.setProperty('--s13Y',(s13StartY+(s13EndY-s13StartY)*easePow(s13Raw,E))+'px');
-
-        // S14 timing
-        const s14Raw=clamp(s14*1.2,0,1);
-        root.style.setProperty('--s14Overlay', clamp(s14*2,0,1).toFixed(3));
-        root.style.setProperty('--s14ImgOpacity', clamp(s14Raw,0,1).toFixed(3));
-        root.style.setProperty('--s14Y',(s14StartY+(s14EndY-s14StartY)*easePow(s14Raw,E))+'px');
-
-        // S15 timing
-        const s15Raw=clamp((s15-0.25)/0.75,0,1);
-        root.style.setProperty('--s15Y',(s15StartY+(s15EndY-s15StartY)*easePow(s15Raw,E))+'px');
-
-        /* End zooms (full-bleed S3, S8, S12, S15) */
-        const s3ZoomRaw = clamp((s3 - 0.82) / 0.18, 0, 1);
-        root.style.setProperty('--s3Scale', (1 + 0.08 * easeInOutCubic(s3ZoomRaw)).toFixed(3));
-        /* MapA: Scale calculation removed per user request */
-        const s8ZoomRaw = clamp((s8 - 0.82) / 0.18, 0, 1);
-        root.style.setProperty('--s8Scale', (1 + 0.08 * easeInOutCubic(s8ZoomRaw)).toFixed(3));
-        const s12ZoomRaw = clamp((s12 - 0.82) / 0.18, 0, 1);
-        root.style.setProperty('--s12Scale', (1 + 0.08 * easeInOutCubic(s12ZoomRaw)).toFixed(3));
-        const s15ZoomRaw = clamp((s15 - 0.82) / 0.18, 0, 1);
-        root.style.setProperty('--s15Scale', (1 + 0.08 * easeInOutCubic(s15ZoomRaw)).toFixed(3));
-
-
-        /* ===== Crossfades (standardized) ===== */
-        const FADE_FRAC = 0.35;
-        const LEAD_FRAC = 0.15;
-
-        // S1 -> S2
-        const x12 = clamp(s2/FADE_FRAC, 0, 1);
-        let s2Alpha = x12;
-        let s1Alpha = 1 - x12;
-
-        // S2 -> galA
-        const textBottomS2 = (parseFloat(getComputedStyle(root).getPropertyValue('--s2Y'))||0) + s2Text.scrollHeight;
-        const gateS2A = (textBottomS2 <= window.innerHeight * LEAD_FRAC) || (s2 >= 0.999);
-        const x2A = clamp(galA/FADE_FRAC, 0, 1);
-        let galAGroup = 0;
-        if (gateS2A) galAGroup = x2A;
-        if (gateS2A) s2Alpha = s2Alpha * (1 - x2A);
-
-        // galA -> sGeddes
-        const xA_G = clamp(sGeddes/FADE_FRAC, 0, 1);
-        let sGeddesAlpha = xA_G;
-        const galAOut = (1 - xA_G);
-
-        // sGeddes -> S3 (full bleed)
-        const xG3 = clamp(s3/FADE_FRAC, 0, 1);
-        let s3Alpha = xG3;
-        let sGeddesAlphaOut = sGeddesAlpha * (1 - xG3);
-
-        // S3 -> S4
-        const x34 = clamp(s4/FADE_FRAC, 0, 1);
-        let s4Alpha = x34;
-        const s3AlphaOut = s3Alpha * (1 - x34);
-
-        // S4 -> MapA (full bleed)
-        const x4M = clamp(sMapA/FADE_FRAC, 0, 1);
-        let sMapAAlpha = x4M;
-        const s4AlphaOut = s4Alpha * (1 - x4M);
-
-        // MapA -> S5
-        const xM5 = clamp(s5/FADE_FRAC, 0, 1);
-        let s5Alpha = xM5;
-        const sMapAAlphaOut = sMapAAlpha * (1 - xM5);
-
-        // S5 -> gallery-B
-        const textBottomS5 = (parseFloat(getComputedStyle(root).getPropertyValue('--s5Y'))||0) + s5Text.scrollHeight;
-        const gateS5B = (textBottomS5 <= window.innerHeight * LEAD_FRAC) || (s5 >= 0.999);
-        const x5B = clamp(galB/FADE_FRAC, 0, 1);
-        let galBGroup = 0;
-        if (gateS5B && getComputedStyle(root).getPropertyValue('--galBReady')==='1') galBGroup = x5B;
-        if (gateS5B) s5Alpha = s5Alpha * (1 - x5B);
-
-        // gallery-B -> S8 (full-bleed)
-        const xB8 = clamp(s8/FADE_FRAC, 0, 1);
-        const s8Group = (getComputedStyle(root).getPropertyValue('--s8Ready')==='1') ? xB8 : 0;
-        const galBOut = (1 - s8Group);
-
-        // S8 -> S9
-        const x89 = clamp(s9/FADE_FRAC, 0, 1);
-        let s9Alpha = x89;
-        const s8AlphaOut = s8Group * (1 - x89);
-
-        // S9 -> gallery-C
-        const textBottomS9 = (parseFloat(getComputedStyle(root).getPropertyValue('--s9Y'))||0) + s9Text.scrollHeight;
-        const gateS9C = (textBottomS9 <= window.innerHeight * LEAD_FRAC) || (s9 >= 0.999);
-        const x9C = clamp(galC/FADE_FRAC, 0, 1);
-        let galCGroup = 0;
-        if (gateS9C && getComputedStyle(root).getPropertyValue('--galCReady')==='1') galCGroup = x9C;
-        if (gateS9C) s9Alpha = s9Alpha * (1 - x9C);
-
-        // gallery-C -> S11
-        const xC11 = clamp(s11/FADE_FRAC, 0, 1);
-        let s11Alpha = xC11;
-        const galCOut = (1 - xC11);
-
-        // S11 -> S12 (full-bleed, load-gated)
-        const x11_12 = clamp(s12/FADE_FRAC, 0, 1);
-        const s12Group = (getComputedStyle(root).getPropertyValue('--s12Ready')==='1') ? x11_12 : 0;
-        let s11AlphaOut = s11Alpha * (1 - x11_12);
-
-        // S12 -> S13
-        const x12_13 = clamp(s13/FADE_FRAC, 0, 1);
-        let s13Alpha = x12_13;
-        const s12AlphaOut = s12Group * (1 - x12_13);
-
-        // S13 -> S14
-        const x13_14 = clamp(s14/FADE_FRAC, 0, 1);
-        let s14Alpha = x13_14;
-        let s13AlphaOut = s13Alpha * (1 - x13_14);
-
-        // S14 -> S15 (full bleed, load-gated)
-        const x14_15 = clamp(s15/FADE_FRAC, 0, 1);
-        const s15Group = (getComputedStyle(root).getPropertyValue('--s15Ready')==='1') ? x14_15 : 0;
-        let s14AlphaOut = s14Alpha * (1 - x14_15);
-
-
-        // gallery-A (4 images, stepped crossfade)
-        const INTERNAL_START_A = FADE_FRAC;
-        const tA = clamp(((galA - INTERNAL_START_A) / (1 - INTERNAL_START_A)) * 1.3, 0, 1);
-        const A_FADE = 0.25, A_HOLD = (1 - 3 * A_FADE) / 4 * 1.3;
-        const normA = 1 / (4 * A_HOLD + 3 * A_FADE);
-        const AF = A_FADE * normA, AH = A_HOLD * normA;
-        const TA1 = AH, TA2 = TA1 + AF + AH, TA3 = TA2 + AF + AH;
-        let a0 = 1, a1 = 0, a2 = 0, a3 = 0;
-        const step = (t, s, w) => clamp((t - s) / w, 0, 1);
-
-        const g1=step(tA, TA1, A_FADE); a0*= (1 - g1); a1 = Math.max(a1, g1);
-        const g2=step(tA, TA2, A_FADE); a1*= (1 - g2); a2 = Math.max(a2, g2);
-        const g3=step(tA, TA3, A_FADE); a2*= (1 - g3); a3 = Math.max(a3, g3);
-        const galAGroup2 = (getComputedStyle(root).getPropertyValue('--galAReady')==='1') ? clamp(galA/FADE_FRAC,0,1) : 0;
-        const galAOut2 = (1 - clamp(sGeddes/FADE_FRAC,0,1)); /* MODIFIED: fades out on sGeddes */
-
-        root.style.setProperty('--galAImg0Opacity', (a0 * galAGroup2 * galAOut2).toFixed(3));
-        root.style.setProperty('--galAImg1Opacity', (a1 * galAGroup2 * galAOut2).toFixed(3));
-        root.style.setProperty('--galAImg2Opacity', (a2 * galAGroup2 * galAOut2).toFixed(3));
-        root.style.setProperty('--galAImg3Opacity', (a3 * galAGroup2 * galAOut2).toFixed(3));
-
-        // gallery-B (5 imgs, stepped crossfade)
-        const INTERNAL_START_B = FADE_FRAC;
-        const tB = clamp(((galB - INTERNAL_START_B) / (1 - INTERNAL_START_B)) * 1.25, 0, 1);
-        const B_FADE = 0.22, B_HOLD = (1 - 4*B_FADE)/5 * 1.25;
-        const normB = 1/(5*B_HOLD + 4*B_FADE);
-        const BF=B_FADE*normB, BH=B_HOLD*normB;
-        const TB1=BH, TB2=TB1+BF+BH, TB3=TB2+BF+BH, TB4=TB3+BF+BH;
-        let b0=1,b1=0,b2=0,b3=0,b4=0;
-        const h=(t,s,w)=>clamp((t-s)/w,0,1);
-
-        const gB1=h(tB, TB1, BF); b0*= (1 - gB1); b1 = Math.max(b1, gB1);
-        const gB2=h(tB, TB2, BF); b1*= (1 - gB2); b2 = Math.max(b2, gB2);
-        const gB3=h(tB, TB3, BF); b2*= (1 - gB3); b3 = Math.max(b3, gB3);
-        const gB4=h(tB, TB4, BF); b3*= (1 - gB4); b4 = Math.max(b4, gB4);
-        const galBGroup2 = (getComputedStyle(root).getPropertyValue('--galBReady')==='1') ? clamp(galB/FADE_FRAC,0,1) : 0;
-        const galBOut2 = (1 - clamp(s8/FADE_FRAC,0,1));
-
-        root.style.setProperty('--galBImg0Opacity', (b0 * galBGroup2 * galBOut2).toFixed(3));
-        root.style.setProperty('--galBImg1Opacity', (b1 * galBGroup2 * galBOut2).toFixed(3));
-        root.style.setProperty('--galBImg2Opacity', (b2 * galBGroup2 * galBOut2).toFixed(3));
-        root.style.setProperty('--galBImg3Opacity', (b3 * galBGroup2 * galBOut2).toFixed(3));
-        root.style.setProperty('--galBImg4Opacity', (b4 * galBGroup2 * galBOut2).toFixed(3));
-
-        // gallery-C (6 images, stepped crossfade)
-        const INTERNAL_START_C = FADE_FRAC;
-        const tC = clamp(((galC - INTERNAL_START_C) / (1 - INTERNAL_START_C)) * 1.25, 0, 1);
-        const C_FADE = 0.18, C_HOLD = (1 - 5*C_FADE)/6 * 1.25;
-        const normC = 1/(6*C_HOLD + 5*C_FADE);
-        const CF=C_FADE*normC, CH=C_HOLD*normC;
-        const TC1=CH, TC2=TC1+CF+CH, TC3=TC2+CF+CH, TC4=TC3+CF+CH, TC5=TC4+CF+CH;
-        let c0=1,c1=0,c2=0,c3=0,c4=0,c5=0;
-        const gC1=h(tC, TC1, CF); c0*= (1 - gC1); c1 = Math.max(c1, gC1);
-        const gC2=h(tC, TC2, CF); c1*= (1 - gC2); c2 = Math.max(c2, gC2);
-        const gC3=h(tC, TC3, CF); c2*= (1 - gC3); c3 = Math.max(c3, gC3);
-        const gC4=h(tC, TC4, CF); c3*= (1 - gC4); c4 = Math.max(c4, gC4);
-        const gC5=h(tC, TC5, CF); c4*= (1 - gC5); c5 = Math.max(c5, gC5);
-        const galCGroup2 = (getComputedStyle(root).getPropertyValue('--galCReady')==='1') ? clamp(galC/FADE_FRAC,0,1) : 0;
-        const galCOut2 = (1 - clamp(s11/FADE_FRAC,0,1));
-
-        root.style.setProperty('--galCImg0Opacity', (c0 * galCGroup2 * galCOut2).toFixed(3));
-        root.style.setProperty('--galCImg1Opacity', (c1 * galCGroup2 * galCOut2).toFixed(3));
-        root.style.setProperty('--galCImg2Opacity', (c2 * galCGroup2 * galCOut2).toFixed(3));
-        root.style.setProperty('--galCImg3Opacity', (c3 * galCGroup2 * galCOut2).toFixed(3));
-        root.style.setProperty('--galCImg4Opacity', (c4 * galCGroup2 * galCOut2).toFixed(3));
-        root.style.setProperty('--galCImg5Opacity', (c5 * galCGroup2 * galCOut2).toFixed(3));
-
-        /* ===== Apply section frame opacities ===== */
-        root.style.setProperty('--s1ImgOpacity', s1Alpha.toFixed(3));
-        root.style.setProperty('--s2ImgOpacity', s2Alpha.toFixed(3));
-        root.style.setProperty('--sGeddesImgOpacity', sGeddesAlphaOut.toFixed(3)); /* NEW */
-        root.style.setProperty('--s3ImgOpacity', s3AlphaOut.toFixed(3));
-        root.style.setProperty('--s4ImgOpacity', s4AlphaOut.toFixed(3));
-        root.style.setProperty('--sMapAImgOpacity', sMapAAlphaOut.toFixed(3)); /* NEW */
-        root.style.setProperty('--s5ImgOpacity', s5Alpha.toFixed(3));
-        root.style.setProperty('--s8ImgOpacity', s8AlphaOut.toFixed(3));
-        root.style.setProperty('--s9ImgOpacity', s9Alpha.toFixed(3));
-        root.style.setProperty('--s11ImgOpacity', s11AlphaOut.toFixed(3));
-        root.style.setProperty('--s12ImgOpacity', s12AlphaOut.toFixed(3));
-        root.style.setProperty('--s13ImgOpacity', s13AlphaOut.toFixed(3));
-        root.style.setProperty('--s14ImgOpacity', s14AlphaOut.toFixed(3));
-        root.style.setProperty('--s15ImgOpacity', s15Group.toFixed(3));
-
-        /* ===== Apply section overlay opacities ===== */
-        root.style.setProperty('--s1Overlay', s1Alpha.toFixed(3));
-        root.style.setProperty('--s2Overlay', s2Alpha.toFixed(3));
-        root.style.setProperty('--sGeddesOverlay', sGeddesAlphaOut.toFixed(3)); /* NEW */
-        root.style.setProperty('--s4Overlay', s4AlphaOut.toFixed(3));
-        root.style.setProperty('--s5Overlay', s5Alpha.toFixed(3));
-        root.style.setProperty('--s9Overlay', s9Alpha.toFixed(3));
-        root.style.setProperty('--s11Overlay', s11AlphaOut.toFixed(3));
-        root.style.setProperty('--s13Overlay', s13AlphaOut.toFixed(3));
-        root.style.setProperty('--s14Overlay', s14AlphaOut.toFixed(3));
-        root.style.setProperty('--s15Overlay', s15Group.toFixed(3));
-
-        requestAnimationFrame(loop);
-    }
-
-
-    /* ---------- MAP INTERACTION HANDOVER FIX ---------- */
-    const mapFrame = document.querySelector('.sMapA-frame');
-    const exitButton = document.getElementById('exit-map-button'); // NEW
-
-    // Core logic to check visibility and enable map pointer events
-    function toggleMapPointer() {
-        if (!map) return;
-        const rect = mapSection.getBoundingClientRect();
-        // Check if map section is largely in the viewport (adjusting for some padding)
-        const visible = rect.top < window.innerHeight * 0.8 && rect.bottom > window.innerHeight * 0.2;
-
-        if (visible) {
-            mapFrame.classList.add('active');
-            // Enable all map interactions when visible
-            map.scrollZoom.enable();
-            map.dragPan.enable();
-            map.doubleClickZoom.enable();
-            map.touchZoomRotate.enable();
-        } else {
-            mapFrame.classList.remove('active');
-            // Disable all map interactions when hidden, releasing the scroll lock
-            map.scrollZoom.disable();
-            map.dragPan.disable();
-            map.doubleClickZoom.disable();
-            map.touchZoomRotate.disable();
-        }
-    }
-
-    // === HANDOVER FIX (Implicit Behavior: Mouse leaves map container) ===
-    mapContainer.addEventListener('mouseleave', () => {
-        if (map) {
-            map.scrollZoom.disable();
-        }
-    });
-    // When the mouse enters, if the map section is visible, we re-enable scrollZoom
-    mapContainer.addEventListener('mouseenter', () => {
-        const rect = mapSection.getBoundingClientRect();
-        const visible = rect.top < window.innerHeight * 0.8 && rect.bottom > window.innerHeight * 0.2;
-        if (map && visible) {
-            map.scrollZoom.enable();
-        }
-    });
-    
-    /* ---------------------------------------------------- */
-    /* ADDED: EXPLICIT EXIT BUTTON LOGIC */
-    /* ---------------------------------------------------- */
-    function handleExitClickSimple() {
-        if (!map) return;
-        
-        // 1. Disable ALL map controls (explicitly releases the scroll lock)
-        map.scrollZoom.disable();
-        map.dragPan.disable();
-        map.doubleClickZoom.disable();
-        map.touchZoomRotate.disable();
-        map.getCanvas().style.cursor = ''; // Reset cursor
-        
-        // 2. Force scroll down to the next section (S5)
-        if (nextSectionElement) {
-            window.scrollTo({
-                top: nextSectionElement.offsetTop,
-                behavior: 'smooth'
-            });
-            
-            // 3. Safety: Remove 'active' class from map frame
-            if (mapFrame) {
-                mapFrame.classList.remove('active');
-            }
-        }
-    }
-
-    if (exitButton) {
-        exitButton.addEventListener('click', handleExitClickSimple);
-    }
-    /* ---------------------------------------------------- */
-
-
-    // Initial setup and listeners
-    window.addEventListener('load', () => {
-        measureHero();
-        measureS1(); measureS2(); measureSGeddes(); measureS4();
-        measureS5(); measureS9(); measureS11(); measureS13();
-        measureS14(); measureS15();
-    });
-
-    // Add listeners for the main scrollytelling control
-    window.addEventListener('scroll', toggleMapPointer, { passive: true });
-    window.addEventListener('resize', () => {
-        measureHero();
-        measureS1(); measureS2(); measureSGeddes(); measureS4();
-        measureS5(); measureS9(); measureS11(); measureS13();
-        measureS14(); measureS15();
-        toggleMapPointer();
-        if (map) map.resize();
-    });
-
-    // Initial call to set the correct state
-    toggleMapPointer();
-    
-    // Start the loop
-    requestAnimationFrame(loop);
+const root=document.documentElement;
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const easeInOutCubic=t=>t<0.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
+const easePow=(t,p)=>Math.pow(t,p);
+
+/* ---------- HERO ---------- */
+const driver=document.getElementById('driver');
+const heroMedia=document.getElementById('hero-media');
+const heroCol=document.getElementById('hero-col');
+const heroTitle=document.getElementById('hero-title');
+const heroLinks=document.getElementById('hero-links');
+let startShift=0,endShift=0;
+
+function measureHero(){
+const prev=heroCol.style.transform;
+heroCol.style.transform='translateY(0px)';
+const lines=heroTitle.querySelectorAll('.line');
+const third=lines[2]||lines[lines.length-1];
+const thirdRect=third.getBoundingClientRect();
+const lastLinkRect=(heroLinks.lastElementChild||heroLinks).getBoundingClientRect();
+const mediaRect=heroMedia.getBoundingClientRect();
+const mediaBaseline=mediaRect.bottom;
+startShift=mediaBaseline-thirdRect.bottom;
+endShift=mediaBaseline-lastLinkRect.bottom;
+heroCol.style.transform=prev||'';
+root.style.setProperty('--shift',startShift.toFixed(1)+'px');
+}
+
+function progressOf(el){
+const r=el.getBoundingClientRect();
+const vh=window.innerHeight||document.documentElement.clientHeight;
+const total=r.height-vh;
+if(total<=0) return 0;
+return clamp(-r.top/total,0,1);
+}
+
+/* ---------- WRAPS ---------- */
+const s1Wrap=document.getElementById('s1-wrap');
+const s2Wrap=document.getElementById('s2-wrap');
+const galAWrap=document.getElementById('galA-wrap');
+const sGeddesWrap=document.getElementById('sGeddes-wrap'); /* NEW */
+const s3Wrap=document.getElementById('s3-wrap');
+const s4Wrap=document.getElementById('s4-wrap');
+const sMapAWrap=document.getElementById('sMapA-wrap'); /* NEW */
+const s5Wrap=document.getElementById('s5-wrap');
+const galBWrap=document.getElementById('galB-wrap');
+const s8Wrap=document.getElementById('s8-wrap');
+const s9Wrap=document.getElementById('s9-wrap');
+const galCWrap=document.getElementById('galC-wrap');
+const s11Wrap=document.getElementById('s11-wrap');
+const s12Wrap=document.getElementById('s12-wrap');
+const s13Wrap=document.getElementById('s13-wrap');
+const s14Wrap=document.getElementById('s14-wrap');
+const s15Wrap=document.getElementById('s15-wrap');
+
+const s1Text=document.getElementById('s1-text');
+const s2Text=document.getElementById('s2-text');
+const sGeddesText=document.getElementById('sGeddes-text'); /* NEW */
+const s4Text=document.getElementById('s4-text');
+const s5Text=document.getElementById('s5-text');
+const s9Text=document.getElementById('s9-text');
+const s11Text=document.getElementById('s11-text');
+const s13Text=document.getElementById('s13-text');
+const s14Text=document.getElementById('s14-text');
+const s15Text=document.getElementById('s15-text');
+
+let s1StartY=0, s1EndY=0;
+let s2StartY=0, s2EndY=0;
+let sGeddesStartY=0, sGeddesEndY=0; /* NEW */
+let s4StartY=0, s4EndY=0;
+let s5StartY=0, s5EndY=0;
+let s9StartY=0, s9EndY=0;
+let s11StartY=0, s11EndY=0;
+let s13StartY=0, s13EndY=0;
+let s14StartY=0, s14EndY=0;
+let s15StartY=0, s15EndY=0;
+
+function measureS1(){ const vh=window.innerHeight; const h=s1Text.scrollHeight; s1StartY=vh; s1EndY=-h; root.style.setProperty('--s1Y', s1StartY+'px'); }
+function measureS2(){ const vh=window.innerHeight; const h=s2Text.scrollHeight; s2StartY=vh; s2EndY=-h; root.style.setProperty('--s2Y', s2StartY+'px'); }
+function measureSGeddes(){ const vh=window.innerHeight; const h=sGeddesText.scrollHeight; sGeddesStartY=vh; sGeddesEndY=-h; root.style.setProperty('--sGeddesY', sGeddesStartY+'px'); } /* NEW */
+function measureS4(){ const vh=window.innerHeight; const h=s4Text.scrollHeight; s4StartY=vh; s4EndY=-h; root.style.setProperty('--s4Y', s4StartY+'px'); }
+function measureS5(){ const vh=window.innerHeight; const h=s5Text.scrollHeight; s5StartY=vh; s5EndY=-h; root.style.setProperty('--s5Y', s5StartY+'px'); }
+function measureS9(){ const vh=window.innerHeight; const h=s9Text.scrollHeight; s9StartY=vh; s9EndY=-h; root.style.setProperty('--s9Y', s9StartY+'px'); }
+function measureS11(){ const vh=window.innerHeight; const h=s11Text.scrollHeight; s11StartY=vh; s11EndY=-h; root.style.setProperty('--s11Y', s11StartY+'px'); }
+function measureS13(){ const vh=window.innerHeight; const h=s13Text.scrollHeight; s13StartY=vh; s13EndY=-h; root.style.setProperty('--s13Y', s13StartY+'px'); }
+function measureS14(){ const vh=window.innerHeight; const h=s14Text.scrollHeight; s14StartY=vh; s14EndY=-h; root.style.setProperty('--s14Y', s14StartY+'px'); }
+function measureS15(){ const vh=window.innerHeight; const h=s15Text.scrollHeight; s15StartY=vh; s15EndY=-h; root.style.setProperty('--s15Y', s15StartY+'px'); }
+
+/* --- Load gates (first images) --- */
+const galAImg0 = document.getElementById('galA-img0');
+function markGalAReady(){ root.style.setProperty('--galAReady','1'); }
+if (galAImg0 && galAImg0.complete && galAImg0.naturalWidth > 0) markGalAReady();
+else if (galAImg0) galAImg0.addEventListener('load', markGalAReady, { once:true });
+
+const galBImg0 = document.getElementById('galB-img0');
+function markGalBReady(){ root.style.setProperty('--galBReady','1'); }
+if (galBImg0 && galBImg0.complete && galBImg0.naturalWidth > 0) markGalBReady();
+else if (galBImg0) galBImg0.addEventListener('load', markGalBReady, { once:true });
+
+const s8Img = document.getElementById('s8-img');
+function markS8Ready(){ root.style.setProperty('--s8Ready','1'); }
+if (s8Img && s8Img.complete && s8Img.naturalWidth > 0) markS8Ready();
+else if (s8Img) s8Img.addEventListener('load', markS8Ready, { once:true });
+
+const galCImg0 = document.getElementById('galC-img0');
+function markGalCReady(){ root.style.setProperty('--galCReady','1'); }
+if (galCImg0 && galCImg0.complete && galCImg0.naturalWidth > 0) markGalCReady();
+else if (galCImg0) galCImg0.addEventListener('load', markGalCReady, { once:true });
+
+const s12Img = document.getElementById('s12-img');
+function markS12Ready(){ root.style.setProperty('--s12Ready','1'); }
+if (s12Img && s12Img.complete && s12Img.naturalWidth > 0) markS12Ready();
+else if (s12Img) s12Img.addEventListener('load', markS12Ready, { once:true });
+
+/* S15 gate */
+const s15Img = document.getElementById('s15-img');
+function markS15Ready(){ root.style.setProperty('--s15Ready','1'); }
+if (s15Img && s15Img.complete && s15Img.naturalWidth > 0) markS15Ready();
+else if (s15Img) s15Img.addEventListener('load', markS15Ready, { once:true });
+
+
+function update(){
+/* HERO choreography */
+const p=progressOf(driver);
+const pFade=easeInOutCubic(clamp(p/0.60,0,1));
+root.style.setProperty('--titleOpacity',pFade.toFixed(3));
+const pSlide=clamp((p-0.60)/0.40,0,1);
+const shift=startShift+(endShift-startShift)*pSlide;
+root.style.setProperty('--shift',shift.toFixed(1)+'px');
+root.style.setProperty('--linksOpacity',pSlide.toFixed(3));
+
+/* Progress */
+const s1=progressOf(s1Wrap);
+const s2=progressOf(s2Wrap);
+const galA=progressOf(galAWrap);
+const sGeddes=progressOf(sGeddesWrap); /* NEW */
+const s3=progressOf(s3Wrap);
+const s4=progressOf(s4Wrap);
+const sMapA=progressOf(sMapAWrap); /* NEW */
+const s5=progressOf(s5Wrap);
+const galB=progressOf(galBWrap);
+const s8=progressOf(s8Wrap);
+const s9=progressOf(s9Wrap);
+const galC=progressOf(galCWrap);
+const s11=progressOf(s11Wrap);
+const s12=progressOf(s12Wrap);
+const s13=progressOf(s13Wrap);
+const s14=progressOf(s14Wrap);
+const s15=progressOf(s15Wrap);
+
+root.style.setProperty('--s1',s1.toFixed(3));
+root.style.setProperty('--s2',s2.toFixed(3));
+root.style.setProperty('--galA',galA.toFixed(3));
+root.style.setProperty('--sGeddes',sGeddes.toFixed(3)); /* NEW */
+root.style.setProperty('--s3',s3.toFixed(3));
+root.style.setProperty('--s4',s4.toFixed(3));
+root.style.setProperty('--sMapA',sMapA.toFixed(3)); /* NEW */
+root.style.setProperty('--s5',s5.toFixed(3));
+root.style.setProperty('--galB',galB.toFixed(3));
+root.style.setProperty('--s8',s8.toFixed(3));
+root.style.setProperty('--s9',s9.toFixed(3));
+root.style.setProperty('--galC',galC.toFixed(3));
+root.style.setProperty('--s11',s11.toFixed(3));
+root.style.setProperty('--s12',s12.toFixed(3));
+root.style.setProperty('--s13',s13.toFixed(3));
+root.style.setProperty('--s14',s14.toFixed(3));
+root.style.setProperty('--s15',s15.toFixed(3));
+
+/* Overlays & hero */
+root.style.setProperty('--s1Overlay',(s1>0 && s1<1)?1:0);
+root.style.setProperty('--s2Overlay',(s2>0 && s2<1)?1:0);
+root.style.setProperty('--sGeddesOverlay',(sGeddes>0 && sGeddes<1)?1:0); /* NEW */
+root.style.setProperty('--s4Overlay',(s4>0 && s4<1)?1:0);
+root.style.setProperty('--s5Overlay',(s5>0 && s5<1)?1:0);
+root.style.setProperty('--s9Overlay',(s9>0 && s9<1)?1:0);
+root.style.setProperty('--s11Overlay',(s11>0 && s11<1)?1:0);
+root.style.setProperty('--s13Overlay',(s13>0 && s13<1)?1:0);
+root.style.setProperty('--s14Overlay',(s14>0 && s14<1)?1:0);
+root.style.setProperty('--s15Overlay',(s15>0 && s15<1)?1:0);
+
+root.style.setProperty('--heroAlpha',(1-s1).toFixed(3));
+root.style.setProperty('--heroBlur',(s1*0.8).toFixed(3));
+
+/* Text sweeps (consistent curves) */
+const E=0.8;
+const s1Raw=clamp((s1-0.75)/0.25,0,1); root.style.setProperty('--s1Y', (s1StartY +(s1EndY -s1StartY )*easePow(s1Raw,E))+'px');
+const s2Raw=clamp((s2-0.25)/0.75,0,1); root.style.setProperty('--s2Y', (s2StartY +(s2EndY -s2StartY )*easePow(s2Raw,E))+'px');
+const sGeddesRaw=clamp((sGeddes-0.25)/0.75,0,1); root.style.setProperty('--sGeddesY', (sGeddesStartY +(sGeddesEndY -sGeddesStartY )*easePow(sGeddesRaw,E))+'px'); /* NEW */
+const s4Raw=clamp((s4-0.75)/0.25,0,1); root.style.setProperty('--s4Y', (s4StartY +(s4EndY -s4StartY )*easePow(s4Raw,E))+'px');
+const s5Raw=clamp((s5-0.25)/0.75,0,1); root.style.setProperty('--s5Y', (s5StartY +(s5EndY -s5StartY )*easePow(s5Raw,E))+'px');
+const s9Raw=clamp((s9-0.75)/0.25,0,1); root.style.setProperty('--s9Y', (s9StartY +(s9EndY -s9StartY )*easePow(s9Raw,E))+'px');
+const s11Raw=clamp((s11-0.75)/0.25,0,1); root.style.setProperty('--s11Y',(s11StartY+(s11EndY-s11StartY)*easePow(s11Raw,E))+'px');
+const s13Raw=clamp((s13-0.75)/0.25,0,1); root.style.setProperty('--s13Y',(s13StartY+(s13EndY-s13StartY)*easePow(s13Raw,E))+'px');
+const s14Raw=clamp((s14-0.25)/0.75,0,1); root.style.setProperty('--s14Y',(s14StartY+(s14EndY-s14StartY)*easePow(s14Raw,E))+'px');
+
+/* S15 timing */
+const s15Raw=clamp((s15-0.25)/0.75,0,1);
+root.style.setProperty('--s15Y',(s15StartY+(s15EndY-s15StartY)*easePow(s15Raw,E))+'px');
+
+/* End zooms (full-bleed S3, S8, S12, S15) */
+const s3ZoomRaw = clamp((s3 - 0.82) / 0.18, 0, 1); root.style.setProperty('--s3Scale', (1 + 0.08 * easeInOutCubic(s3ZoomRaw)).toFixed(3));
+/* MapA: Scale calculation removed per user request */
+const s8ZoomRaw = clamp((s8 - 0.82) / 0.18, 0, 1); root.style.setProperty('--s8Scale', (1 + 0.08 * easeInOutCubic(s8ZoomRaw)).toFixed(3));
+const s12ZoomRaw = clamp((s12 - 0.82) / 0.18, 0, 1);root.style.setProperty('--s12Scale', (1 + 0.08 * easeInOutCubic(s12ZoomRaw)).toFixed(3));
+const s15ZoomRaw = clamp((s15 - 0.82) / 0.18, 0, 1);root.style.setProperty('--s15Scale', (1 + 0.08 * easeInOutCubic(s15ZoomRaw)).toFixed(3));
+
+/* ===== Crossfades (standardized) ===== */
+const FADE_FRAC = 0.35;
+const LEAD_FRAC = 0.15;
+
+/* S1 → S2 */
+const s1In = clamp(s1/FADE_FRAC, 0, 1);
+const textBottomS1 = (parseFloat(getComputedStyle(root).getPropertyValue('--s1Y'))||0) + s1Text.scrollHeight;
+const gateS1S2 = (textBottomS1 <= window.innerHeight * LEAD_FRAC) ? 1 : 0;
+const x12 = clamp(s2/FADE_FRAC, 0, 1);
+let s1Alpha = Math.min(gateS1S2 ? (1 - x12) : 1, s1In);
+let s2Alpha = gateS1S2 ? x12 : 0;
+
+/* S2 → gallery-A */
+const textBottomS2 = (parseFloat(getComputedStyle(root).getPropertyValue('--s2Y'))||0) + s2Text.scrollHeight;
+const gateS2A = (textBottomS2 <= window.innerHeight * LEAD_FRAC) || (s2 >= 0.999);
+const x2A = clamp(galA/FADE_FRAC, 0, 1);
+let galAGroup = 0;
+if (gateS2A && getComputedStyle(root).getPropertyValue('--galAReady')==='1') galAGroup = x2A;
+if (gateS2A) s2Alpha = s2Alpha * (1 - x2A);
+
+/* gallery-A → Geddes (MODIFIED) */
+const xAGeddes = clamp(sGeddes/FADE_FRAC, 0, 1);
+let sGeddesAlpha = xAGeddes;
+const galAOut = (1 - xAGeddes);
+
+/* Geddes → S3 (MODIFIED) */
+const xGeddes3 = clamp(s3/FADE_FRAC, 0, 1);
+const s3Alpha = xGeddes3;
+sGeddesAlpha = sGeddesAlpha * (1 - xGeddes3);
+
+/* S3 → S4 */
+const x34 = clamp(s4/FADE_FRAC, 0, 1);
+let s4Alpha = x34;
+const s3AlphaOut = s3Alpha * (1 - x34);
+
+/* S4 → MapA */
+const x4MapA = clamp(sMapA/FADE_FRAC, 0, 1);
+const sMapAAlpha = x4MapA;
+s4Alpha = s4Alpha * (1 - x4MapA);
+
+/* MapA → S5 */
+const xMapA5 = clamp(s5/FADE_FRAC, 0, 1);
+let s5Alpha = xMapA5;
+const sMapAAlphaOut = sMapAAlpha * (1 - xMapA5);
+
+/* S5 → gallery-B */
+const textBottomS5 = (parseFloat(getComputedStyle(root).getPropertyValue('--s5Y'))||0) + s5Text.scrollHeight;
+const gateS5B = (textBottomS5 <= window.innerHeight * LEAD_FRAC) || (s5 >= 0.999);
+const x5B = clamp(galB/FADE_FRAC, 0, 1);
+let galBGroup = 0;
+if (gateS5B && getComputedStyle(root).getPropertyValue('--galBReady')==='1') galBGroup = x5B;
+if (gateS5B) s5Alpha = s5Alpha * (1 - x5B);
+
+/* gallery-B → S8 (full-bleed) */
+const xB8 = clamp(s8/FADE_FRAC, 0, 1);
+const s8Group = (getComputedStyle(root).getPropertyValue('--s8Ready')==='1') ? xB8 : 0;
+const galBOut = (1 - s8Group);
+
+/* S8 → S9 */
+const x89 = clamp(s9/FADE_FRAC, 0, 1);
+let s9Alpha = x89;
+const s8AlphaOut = s8Group * (1 - x89);
+
+/* S9 → gallery-C */
+const textBottomS9 = (parseFloat(getComputedStyle(root).getPropertyValue('--s9Y'))||0) + s9Text.scrollHeight;
+const gateS9C = (textBottomS9 <= window.innerHeight * LEAD_FRAC) || (s9 >= 0.999);
+const x9C = clamp(galC/FADE_FRAC, 0, 1);
+let galCGroup = 0;
+if (gateS9C && getComputedStyle(root).getPropertyValue('--galCReady')==='1') galCGroup = x9C;
+if (gateS9C) s9Alpha = s9Alpha * (1 - x9C);
+
+/* gallery-C → S11 */
+const xC11 = clamp(s11/FADE_FRAC, 0, 1);
+let s11Alpha = xC11;
+const galCOut = (1 - xC11);
+
+/* S11 → S12 (full-bleed, load-gated) */
+const x11_12 = clamp(s12/FADE_FRAC, 0, 1);
+const s12Group = (getComputedStyle(root).getPropertyValue('--s12Ready')==='1') ? x11_12 : 0;
+s11Alpha = s11Alpha * ((getComputedStyle(root).getPropertyValue('--s12Ready')==='1') ? (1 - x11_12) : 1);
+
+/* S12 → S13 (full-bleed → framed, like S3→S4) */
+const x12_13 = clamp(s13/FADE_FRAC, 0, 1);
+let s13Alpha = x12_13;
+const s12AlphaOut2 = s12Group * (1 - x12_13);
+
+/* S13 → S14 (like S1→S2) */
+const textBottomS13 = (parseFloat(getComputedStyle(root).getPropertyValue('--s13Y'))||0) + s13Text.scrollHeight;
+const gateS13S14 = (textBottomS13 <= window.innerHeight * LEAD_FRAC) || (s13 >= 0.999);
+const x13_14 = clamp(s14/FADE_FRAC, 0, 1);
+let s14Alpha = gateS13S14 ? x13_14 : 0;
+if (gateS13S14) s13Alpha = s13Alpha * (1 - x13_14);
+
+/* S14 → S15 (full-bleed; load-gated like S11→S12) */
+const x14_15 = clamp(s15/FADE_FRAC, 0, 1);
+const s15Group = (getComputedStyle(root).getPropertyValue('--s15Ready')==='1') ? x14_15 : 0;
+s14Alpha = s14Alpha * ((getComputedStyle(root).getPropertyValue('--s15Ready')==='1') ? (1 - x14_15) : 1);
+
+/* ===== Internal galleries (unchanged) ===== */
+/* gallery-A (4 imgs, stepped crossfade) */
+const INTERNAL_START_A = FADE_FRAC;
+const tA = clamp((galA - INTERNAL_START_A) / (1 - INTERNAL_START_A), 0, 1);
+const A_FADE = 0.22; /* fade segment between images */
+const A_HOLD = (1 - 3*A_FADE) / 4; /* 4 holds, 3 fades -> sums to 1 */
+const step=(t,s,w)=>clamp((t-s)/w,0,1);
+
+let a0=1, a1=0, a2=0, a3=0;
+const TA1=A_HOLD;
+const TA2=TA1 + A_FADE + A_HOLD;
+const TA3=TA2 + A_FADE + A_HOLD;
+
+const g1=step(tA, TA1, A_FADE); a0*= (1 - g1); a1 = Math.max(a1, g1);
+const g2=step(tA, TA2, A_FADE); a1*= (1 - g2); a2 = Math.max(a2, g2);
+const g3=step(tA, TA3, A_FADE); a2*= (1 - g3); a3 = Math.max(a3, g3);
+
+const galAGroup2 = (getComputedStyle(root).getPropertyValue('--galAReady')==='1') ? clamp(galA/FADE_FRAC,0,1) : 0;
+const galAOut2 = (1 - clamp(sGeddes/FADE_FRAC,0,1)); /* MODIFIED: fades out on sGeddes */
+
+root.style.setProperty('--galAImg0Opacity', (a0 * galAGroup2 * galAOut2).toFixed(3));
+root.style.setProperty('--galAImg1Opacity', (a1 * galAGroup2 * galAOut2).toFixed(3));
+root.style.setProperty('--galAImg2Opacity', (a2 * galAGroup2 * galAOut2).toFixed(3));
+root.style.setProperty('--galAImg3Opacity', (a3 * galAGroup2 * galAOut2).toFixed(3));
+
+/* gallery-B (5 imgs, stepped crossfade) */
+const INTERNAL_START_B = FADE_FRAC;
+const tB = clamp(((galB - INTERNAL_START_B) / (1 - INTERNAL_START_B)) * 1.25, 0, 1);
+const B_FADE = 0.22, B_HOLD = (1 - 4*B_FADE)/5 * 1.25;
+const normB = 1/(5*B_HOLD + 4*B_FADE);
+const BF=B_FADE*normB, BH=B_HOLD*normB;
+const TB1=BH, TB2=TB1+BF+BH, TB3=TB2+BF+BH, TB4=TB3+BF+BH;
+
+let b0=1,b1=0,b2=0,b3=0,b4=0;
+const h=(t,s,w)=>clamp((t-s)/w,0,1);
+
+const gB1=h(tB, TB1, BF); b0*= (1 - gB1); b1 = Math.max(b1, gB1);
+const gB2=h(tB, TB2, BF); b1*= (1 - gB2); b2 = Math.max(b2, gB2);
+const gB3=h(tB, TB3, BF); b2*= (1 - gB3); b3 = Math.max(b3, gB3);
+const gB4=h(tB, TB4, BF); b3*= (1 - gB4); b4 = Math.max(b4, gB4);
+
+const galBGroup2 = (getComputedStyle(root).getPropertyValue('--galBReady')==='1') ? clamp(galB/FADE_FRAC,0,1) : 0;
+const galBOut2 = (1 - clamp(s8/FADE_FRAC,0,1));
+
+root.style.setProperty('--galBImg0Opacity', (b0 * galBGroup2 * galBOut2).toFixed(3));
+root.style.setProperty('--galBImg1Opacity', (b1 * galBGroup2 * galBOut2).toFixed(3));
+root.style.setProperty('--galBImg2Opacity', (b2 * galBGroup2 * galBOut2).toFixed(3));
+root.style.setProperty('--galBImg3Opacity', (b3 * galBGroup2 * galBOut2).toFixed(3));
+root.style.setProperty('--galBImg4Opacity', (b4 * galBGroup2 * galBOut2).toFixed(3));
+
+/* gallery-C (now 6 imgs, stepped crossfade) */
+const INTERNAL_START_C = FADE_FRAC;
+const tC = clamp(((galC - INTERNAL_START_C) / (1 - INTERNAL_START_C)) * 1.5, 0, 1);
+const C_FADE = 0.22, C_HOLD = (1 - 5*C_FADE)/6 * 1.25; /* match style of B */
+const normC = 1/(6*C_HOLD + 5*C_FADE);
+const CF=C_FADE*normC, CH=C_HOLD*normC;
+const TC1=CH, TC2=TC1+CF+CH, TC3=TC2+CF+CH, TC4=TC3+CF+CH, TC5=TC4+CF+CH;
+
+let c0=1,c1=0,c2=0,c3=0,c4=0,c5=0;
+const stepC=(t,s,w)=>clamp((t-s)/w,0,1);
+
+const gC1=stepC(tC, TC1, CF); c0*= (1 - gC1); c1 = Math.max(c1, gC1);
+const gC2=stepC(tC, TC2, CF); c1*= (1 - gC2); c2 = Math.max(c2, gC2);
+const gC3=stepC(tC, TC3, CF); c2*= (1 - gC3); c3 = Math.max(c3, gC3);
+const gC4=stepC(tC, TC4, CF); c3*= (1 - gC4); c4 = Math.max(c4, gC4);
+const gC5=stepC(tC, TC5, CF); c4*= (1 - gC5); c5 = Math.max(c5, gC5);
+
+const galCGroup2 = (getComputedStyle(root).getPropertyValue('--galCReady')==='1') ? clamp(galC/FADE_FRAC,0,1) : 0;
+const galCOut2 = (1 - clamp(s11/FADE_FRAC,0,1));
+
+root.style.setProperty('--galCImg0Opacity', (c0 * galCGroup2 * galCOut2).toFixed(3));
+root.style.setProperty('--galCImg1Opacity', (c1 * galCGroup2 * galCOut2).toFixed(3));
+root.style.setProperty('--galCImg2Opacity', (c2 * galCGroup2 * galCOut2).toFixed(3));
+root.style.setProperty('--galCImg3Opacity', (c3 * galCGroup2 * galCOut2).toFixed(3));
+root.style.setProperty('--galCImg4Opacity', (c4 * galCGroup2 * galCOut2).toFixed(3));
+root.style.setProperty('--galCImg5Opacity', (c5 * galCGroup2 * galCOut2).toFixed(3));
+
+/* ===== Apply section frame opacities ===== */
+root.style.setProperty('--s1ImgOpacity', s1Alpha.toFixed(3));
+root.style.setProperty('--s2ImgOpacity', s2Alpha.toFixed(3));
+root.style.setProperty('--sGeddesImgOpacity', sGeddesAlpha.toFixed(3)); /* NEW */
+root.style.setProperty('--s3ImgOpacity', s3AlphaOut.toFixed(3));
+root.style.setProperty('--s4ImgOpacity', s4Alpha.toFixed(3));
+root.style.setProperty('--sMapAImgOpacity', sMapAAlphaOut.toFixed(3)); /* NEW */
+root.style.setProperty('--s5ImgOpacity', s5Alpha.toFixed(3));
+root.style.setProperty('--s8ImgOpacity', s8AlphaOut.toFixed(3));
+root.style.setProperty('--s9ImgOpacity', s9Alpha.toFixed(3));
+root.style.setProperty('--s11ImgOpacity', s11Alpha.toFixed(3));
+root.style.setProperty('--s12ImgOpacity', s12AlphaOut2.toFixed(3));
+root.style.setProperty('--s13ImgOpacity', s13Alpha.toFixed(3));
+root.style.setProperty('--s14ImgOpacity', s14Alpha.toFixed(3));
+root.style.setProperty('--s15ImgOpacity', s15Group.toFixed(3));
+}
+
+async function init() {
+  if (document.fonts && document.fonts.ready) {
+    try { await document.fonts.ready; } catch (e) {}
+  }
+  measureHero();
+  measureS1(); measureS2(); measureSGeddes(); measureS4(); measureS5(); measureS9(); measureS11(); measureS13(); measureS14(); measureS15();
+
+  addEventListener('load',  ()=> {
+    measureHero(); measureS1(); measureS2(); measureSGeddes(); measureS4(); measureS5();
+    measureS9(); measureS11(); measureS13(); measureS14(); measureS15();
+    update();
+  }, { once:true });
+
+  addEventListener('resize', ()=> {
+    measureHero(); measureS1(); measureS2(); measureSGeddes(); measureS4(); measureS5();
+    measureS9(); measureS11(); measureS13(); measureS14(); measureS15();
+    update();
+  });
+
+  addEventListener('scroll', update, { passive:true });
+  update();
+}
+init();
 })();
+</script>
+
+<script>
+mapboxgl.accessToken = 'pk.eyJ1Ijoia2F2bmkiLCJhIjoiY2s5YjBqNGY1MGV4aTNobnk0amJncWZweCJ9.gZK_r9CYmb6ZN_mZVmgjNg';
+
+const MAP_START_CENTER = [34.770081, 32.079031]; // Lon, Lat
+const MAP_START_ZOOM = 15.99;
+
+const mapFrame = document.querySelector('.sMapA-frame');
+const mapContainer = document.getElementById('mapA-container');
+const mapSection = document.querySelector('#sMapA-wrap');
+
+// Initialize the Mapbox GL JS Map
+const map = new mapboxgl.Map({
+    container: 'mapA-container', // HTML element ID
+    style: 'mapbox://styles/kavni/cmhkpt4uz00et01pjheur1zc1', // Your Style URL
+    center: MAP_START_CENTER,
+    zoom: MAP_START_ZOOM,
+    interactive: false // Start non-interactive
+});
+
+// Disable interaction methods initially
+map.on('load', () => {
+    map.scrollZoom.disable();
+    map.dragPan.disable();
+    map.doubleClickZoom.disable();
+    map.touchZoomRotate.disable();
+});
+
+
+function toggleMapPointer() {
+    if (!mapFrame || !mapSection) return;
+
+    // Visibility check (same logic as used in the main JS)
+    const rect = mapSection.getBoundingClientRect();
+    const visible = rect.top < window.innerHeight * 0.8 && rect.bottom > window.innerHeight * 0.2;
+
+    if (visible) {
+        mapFrame.classList.add('active');
+        // Enable map interactions when visible
+        map.scrollZoom.enable();
+        map.dragPan.enable();
+        map.doubleClickZoom.enable();
+        map.touchZoomRotate.enable();
+    } else {
+        mapFrame.classList.remove('active');
+        // Disable map interactions when hidden, releasing the scroll lock
+        map.scrollZoom.disable();
+        map.dragPan.disable();
+        map.doubleClickZoom.disable();
+        map.touchZoomRotate.disable();
+    }
+}
+
+// === HANDOVER FIX ===
+// The core fix: when the mouse leaves the map container, we immediately disable scrollZoom
+// This means the next scroll wheel input will control the main page, not the map.
+mapContainer.addEventListener('mouseleave', () => {
+    if (map) {
+        map.scrollZoom.disable();
+    }
+});
+// When the mouse enters, if the map section is visible, we re-enable scrollZoom
+mapContainer.addEventListener('mouseenter', () => {
+    const rect = mapSection.getBoundingClientRect();
+    const visible = rect.top < window.innerHeight * 0.8 && rect.bottom > window.innerHeight * 0.2;
+    if (map && visible) {
+        map.scrollZoom.enable();
+    }
+});
+
+
+// Add listeners for the main scrollytelling control
+window.addEventListener('scroll', toggleMapPointer, { passive: true });
+window.addEventListener('resize', toggleMapPointer);
+
+// Initial call to set the correct state
+toggleMapPointer();
 </script>
 
 </body>
 </html>
+

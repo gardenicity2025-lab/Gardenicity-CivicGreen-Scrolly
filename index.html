@@ -683,12 +683,7 @@ body, html {
 
 <figure class="frame sMapA-frame" aria-hidden="true">
     <div id="mapA-container"></div>
-    <!-- Exit Map Button -->
-    <button id="exit-mapA" class="exit-mapA-btn" aria-label="Exit Map">
-        Continue ↓
-    </button>
 </figure>
-
 <figure class="frame s5-frame" aria-hidden="true"><img id="s5-img" src="assets/section5.jpg" alt=""></figure>
 
 <figure class="frame galB-center-frame" aria-hidden="true">
@@ -1325,20 +1320,17 @@ mapboxgl.accessToken = 'pk.eyJ1Ijoia2F2bmkiLCJhIjoiY2s5YjBqNGY1MGV4aTNobnk0amJnc
 const MAP_START_CENTER = [34.770081, 32.079031]; // Lon, Lat
 const MAP_START_ZOOM = 15.99;
 
-const mapFrame     = document.querySelector('.sMapA-frame');
+const mapFrame = document.querySelector('.sMapA-frame');
 const mapContainer = document.getElementById('mapA-container');
-const mapSection   = document.querySelector('#sMapA-wrap');
-const exitBtn      = document.getElementById('exit-mapA');
+const mapSection = document.querySelector('#sMapA-wrap');
 
-let mapAClosed = false;  // ← NEW FLAG
-
-// Initialize Mapbox GL
+// Initialize the Mapbox GL JS Map
 const map = new mapboxgl.Map({
-    container: 'mapA-container',
-    style: 'mapbox://styles/kavni/cmhkpt4uz00et01pjheur1zc1',
+    container: 'mapA-container', // HTML element ID
+    style: 'mapbox://styles/kavni/cmhkpt4uz00et01pjheur1zc1', // Your Style URL
     center: MAP_START_CENTER,
     zoom: MAP_START_ZOOM,
-    interactive: false
+    interactive: false // Start non-interactive
 });
 
 // Disable interaction methods initially
@@ -1350,93 +1342,55 @@ map.on('load', () => {
 });
 
 
-/* ============================================================
-   CLOSE BUTTON: Disable map and release scroll
-   ============================================================ */
-exitBtn.addEventListener("click", () => {
-    mapAClosed = true;              // ← prevent automatic reactivation
-    mapFrame.classList.remove('active');
-
-    // Disable all gestures
-    map.scrollZoom.disable();
-    map.dragPan.disable();
-    map.doubleClickZoom.disable();
-    map.touchZoomRotate.disable();
-    mapContainer.style.pointerEvents = "none";
-
-    // Smooth scroll down
-    window.scrollBy({
-        top: window.innerHeight * 0.6,
-        behavior: "smooth"
-    });
-});
-
-
-/* ============================================================
-   toggleMapPointer(): manages map activation during scroll
-   ============================================================ */
 function toggleMapPointer() {
     if (!mapFrame || !mapSection) return;
 
+    // Visibility check (same logic as used in the main JS)
     const rect = mapSection.getBoundingClientRect();
-    const visible = rect.top < window.innerHeight * 0.8 &&
-                    rect.bottom > window.innerHeight * 0.2;
+    const visible = rect.top < window.innerHeight * 0.8 && rect.bottom > window.innerHeight * 0.2;
 
-    // Reset close mode when user fully scrolls past the section
-    if (rect.bottom < 0 || rect.top > window.innerHeight) {
-        mapAClosed = false;
-    }
-
-    if (visible && !mapAClosed) {
-        // Section is visible AND Close not pressed → activate map
+    if (visible) {
         mapFrame.classList.add('active');
+        // Enable map interactions when visible
         map.scrollZoom.enable();
         map.dragPan.enable();
         map.doubleClickZoom.enable();
         map.touchZoomRotate.enable();
-        mapContainer.style.pointerEvents = "auto";
-
     } else {
-        // Section not visible OR Close pressed → deactivate map
         mapFrame.classList.remove('active');
+        // Disable map interactions when hidden, releasing the scroll lock
         map.scrollZoom.disable();
         map.dragPan.disable();
         map.doubleClickZoom.disable();
         map.touchZoomRotate.disable();
-        mapContainer.style.pointerEvents = "none";
     }
 }
 
-
-/* ============================================================
-   Mouse enter/leave — maintain scroll handover UX
-   ============================================================ */
+// === HANDOVER FIX ===
+// The core fix: when the mouse leaves the map container, we immediately disable scrollZoom
+// This means the next scroll wheel input will control the main page, not the map.
 mapContainer.addEventListener('mouseleave', () => {
-    if (map) map.scrollZoom.disable();
+    if (map) {
+        map.scrollZoom.disable();
+    }
 });
-
+// When the mouse enters, if the map section is visible, we re-enable scrollZoom
 mapContainer.addEventListener('mouseenter', () => {
-    if (mapAClosed) return; // Close pressed → do not re-enable
     const rect = mapSection.getBoundingClientRect();
-    const visible = rect.top < window.innerHeight * 0.8 &&
-                    rect.bottom > window.innerHeight * 0.2;
+    const visible = rect.top < window.innerHeight * 0.8 && rect.bottom > window.innerHeight * 0.2;
     if (map && visible) {
         map.scrollZoom.enable();
     }
 });
 
 
-/* ============================================================
-   Scroll / resize listeners
-   ============================================================ */
+// Add listeners for the main scrollytelling control
 window.addEventListener('scroll', toggleMapPointer, { passive: true });
 window.addEventListener('resize', toggleMapPointer);
 
-// Initial state
+// Initial call to set the correct state
 toggleMapPointer();
 </script>
-
-
 
 </body>
 </html>
